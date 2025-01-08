@@ -193,7 +193,7 @@ export default function CallPage() {
                 <X className="h-5 w-5 text-white" />
               </Button>
             </div>
-            <div className="mt-4 h-[calc(100%-8rem)] overflow-y-auto">
+            <div className="mt-4 h-[calc(84vh-12rem)] overflow-y-auto">
               <div className="flex flex-col space-y-4">
                 {messages.map((msg, index) => (
                   <div key={index} className="text-white">

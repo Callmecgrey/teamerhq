@@ -39,6 +39,7 @@ export default function LoginPage() {
       setSubText("Get started with TeamerHQ");
     } else if (step === "team") {
       setStep("invite");
+      setHeaderText(`${teamName} Workspace`);
     } else if (step === "invite") {
       setStep("channels");
     }
@@ -203,7 +204,7 @@ export default function LoginPage() {
                   className="w-full justify-start flex items-center space-x-2"
                   onClick={() => {
                     setStep("team");
-                    setHeaderText("Create Your Workspace");
+                    setHeaderText("Create your workspace");
                     setSubText("Get started with TeamerHQ");
                   }}
                 >
@@ -268,7 +269,7 @@ export default function LoginPage() {
               )}
               {teamMembers.length >= 4 && (
                 <p className="text-sm text-muted-foreground">
-                  Don&apos;t worry, you will be able to add more members once you are all set.
+                  Yatze! you will be able to add more members once you are all set.
                 </p>
               )}
               <Button

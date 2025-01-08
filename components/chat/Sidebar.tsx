@@ -14,9 +14,13 @@ export default function Sidebar({
     { name: "announcements", description: "Important updates and announcements." },
   ];
 
+  const mockUsers = [
+    { name: "John Doe", position: "Senior Developer", role: "Engineering", status: "online" },
+    { name: "Jane Smith", position: "Product Manager", role: "Product", status: "offline" },
+  ];
+
   return (
     <div className="w-64 bg-card border-r flex flex-col">
-      {/* Header */}
       <div className="p-4 border-b">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -34,7 +38,7 @@ export default function Sidebar({
         {/* Channels */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium">Channels</span>
+          <span className="text-sm font-medium">Channels</span>
             <Button variant="ghost" size="icon" className="h-4 w-4">
               <Plus className="h-3 w-3" />
             </Button>
@@ -58,47 +62,28 @@ export default function Sidebar({
         {/* Direct Messages */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium">Direct Messages</span>
+          <span className="text-sm font-medium">Direct Messages</span>
             <Button variant="ghost" size="icon" className="h-4 w-4">
               <Plus className="h-3 w-3" />
             </Button>
           </div>
           <div className="space-y-1">
-            <Button
-              variant="ghost"
-              className="w-full justify-start"
-              size="sm"
-              onClick={() =>
-                onUserClick({
-                  name: "John Doe",
-                  position: "Senior Developer",
-                  role: "Engineering",
-                  status: "online",
-                })
-              }
-            >
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-2" />
-              John Doe
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start"
-              size="sm"
-              onClick={() =>
-                onUserClick({
-                  name: "Jane Smith",
-                  position: "Product Manager",
-                  role: "Product",
-                  status: "offline",
-                })
-              }
-            >
-              <div className="w-2 h-2 bg-gray-500 rounded-full mr-2" />
-              Jane Smith
-            </Button>
+            {mockUsers.map((user, index) => (
+              <Button
+                key={index}
+                variant="ghost"
+                className="w-full justify-start"
+                size="sm"
+                onClick={() => onUserClick(user)}
+              >
+                <div className={`w-2 h-2 ${user.status === "online" ? "bg-green-500" : "bg-gray-500"} rounded-full mr-2`} />
+                {user.name}
+              </Button>
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
 }
+

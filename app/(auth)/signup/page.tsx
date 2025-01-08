@@ -5,12 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MessageSquare, X } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function SignUpPage() {
   const [step, setStep] = useState<"email" | "code" | "team" | "invite" | "channels">("email");
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
+  const [codeParts, setCodeParts] = useState(["", "", "", "", "", ""]);
   const [teamName, setTeamName] = useState("");
   const [teamMembers, setTeamMembers] = useState([""]);
   const [channels, setChannels] = useState([""]);
@@ -25,8 +25,7 @@ export default function SignUpPage() {
     } else if (step === "invite") {
       setStep("channels");
     } else {
-      // Redirect to dashboard or final step
-      window.location.href = "/dashboard"; // Redirect to dashboard
+      handleFinalSubmit();
     }
   };
 
@@ -62,6 +61,45 @@ export default function SignUpPage() {
     const updatedChannels = [...channels];
     updatedChannels[index] = value;
     setChannels(updatedChannels);
+  };
+
+  const handleCodePartChange = (index: number, value: string) => {
+    const updatedCodeParts = [...codeParts];
+    updatedCodeParts[index] = value.slice(0, 1); // Allow only one character
+    setCodeParts(updatedCodeParts);
+
+    // Automatically focus on the next box if input is valid
+    if (value && index < codeParts.length - 1) {
+      const nextInput = document.getElementById(`code-box-${index + 1}`);
+      nextInput?.focus();
+    }
+  };
+
+  const combinedCode = codeParts.join("");
+
+  // Define handleBeforeUnload as a standalone function
+  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = "Information from this point will not be saved. Are you sure?";
+  };
+
+  // Warn user about refreshing after stage 2
+  useEffect(() => {
+    if (step === "code" || step === "team" || step === "invite") {
+      window.addEventListener("beforeunload", handleBeforeUnload);
+
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }
+  }, [step]);
+
+  const handleFinalSubmit = () => {
+    // Remove the unload event listener
+    window.removeEventListener("beforeunload", handleBeforeUnload);
+
+    // Redirect to the dashboard
+    window.location.href = "/dashboard";
   };
 
   return (
@@ -106,23 +144,28 @@ export default function SignUpPage() {
           {step === "code" && (
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="code">Verification code</Label>
-                <Input
-                  id="code"
-                  type="text"
-                  placeholder="Enter 6-digit code"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  maxLength={6}
-                />
+                <Label>Verification Code</Label>
+                <div className="flex space-x-2">
+                  {codeParts.map((part, index) => (
+                    <Input
+                      key={index}
+                      id={`code-box-${index}`}
+                      type="text"
+                      value={part}
+                      onChange={(e) => handleCodePartChange(index, e.target.value)}
+                      maxLength={1}
+                      className="text-center w-12 h-12"
+                    />
+                  ))}
+                </div>
                 <p className="text-sm text-muted-foreground">
-                  We sent a code to {email}
+                  We sent a code to {email}.
                 </p>
               </div>
               <Button
                 className="w-full"
                 onClick={handleContinue}
-                disabled={code.length !== 6}
+                disabled={combinedCode.length !== 6}
               >
                 Verify
               </Button>
@@ -230,7 +273,8 @@ export default function SignUpPage() {
               )}
               <Button
                 className="w-full mt-4"
-                onClick={handleContinue}
+                onClick={handleFinalSubmit}
+                disabled={!channels.some((channel) => channel.trim() !== "")}
               >
                 Yay! Let&apos;s Go
               </Button>

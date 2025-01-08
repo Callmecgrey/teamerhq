@@ -1,0 +1,103 @@
+import { Button } from "@/components/ui/button";
+import { ArrowRight, MessageSquare, Video, Users, Shield } from "lucide-react";
+import Link from "next/link";
+
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary">
+      {/* Navigation */}
+      <nav className="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div className="flex items-center space-x-2">
+          <MessageSquare className="h-8 w-8 text-primary" />
+          <span className="text-2xl font-bold">TeamPHQ</span>
+        </div>
+        <div className="space-x-4">
+          <Link href="/login">
+            <Button variant="ghost">Login</Button>
+          </Link>
+          <Link href="/signup">
+            <Button>Get Started</Button>
+          </Link>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-20 text-center">
+        <h1 className="text-5xl font-bold mb-6">
+          Team Communication,{" "}
+          <span className="text-primary">Reimagined</span>
+        </h1>
+        <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          Connect, collaborate, and communicate with your team in real-time.
+          Experience seamless video calls, instant messaging, and organized channels
+          all in one place.
+        </p>
+        <Link href="/signup">
+          <Button size="lg" className="gap-2">
+            Start for Free <ArrowRight className="h-4 w-4" />
+          </Button>
+        </Link>
+      </section>
+
+      {/* Features */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="bg-card p-6 rounded-lg">
+            <MessageSquare className="h-12 w-12 text-primary mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Instant Messaging</h3>
+            <p className="text-muted-foreground">
+              Real-time chat with powerful formatting, file sharing, and thread
+              support.
+            </p>
+          </div>
+          <div className="bg-card p-6 rounded-lg">
+            <Video className="h-12 w-12 text-primary mb-4" />
+            <h3 className="text-xl font-semibold mb-2">HD Video Calls</h3>
+            <p className="text-muted-foreground">
+              Crystal clear video meetings with screen sharing and recording
+              capabilities.
+            </p>
+          </div>
+          <div className="bg-card p-6 rounded-lg">
+            <Users className="h-12 w-12 text-primary mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Team Channels</h3>
+            <p className="text-muted-foreground">
+              Organized spaces for teams to collaborate on specific projects or
+              topics.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Security Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="flex items-center justify-center space-x-8">
+          <Shield className="h-16 w-16 text-primary" />
+          <div>
+            <h2 className="text-3xl font-bold mb-4">Enterprise-Grade Security</h2>
+            <p className="text-muted-foreground max-w-xl">
+              Your data is protected with end-to-end encryption and compliant with
+              industry standards. We take security seriously so you can focus on
+              what matters most.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-card mt-20">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <MessageSquare className="h-6 w-6 text-primary" />
+              <span className="font-semibold">TeamPHQ</span>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              © 2024 TeamPHQ. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

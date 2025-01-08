@@ -15,8 +15,8 @@ export default function DashboardPage() {
   const [message, setMessage] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedMessage, setSelectedMessage] = useState(null);
-  const [showChannelInfo, setShowChannelInfo] = useState(false);
-  const [showUserProfile, setShowUserProfile] = useState(false); // For user profile sidebar
+  const [showChannelInfo, setShowChannelInfo] = useState(false); // Channel Info Sidebar
+  const [showUserProfileSidebar, setShowUserProfileSidebar] = useState(false); // User Profile Sidebar
   const [selectedChannel, setSelectedChannel] = useState({
     name: "General",
     description: "This is the general discussion channel for all team members.",
@@ -39,47 +39,51 @@ export default function DashboardPage() {
 
   interface User {
     name: string;
-    // Add other user properties as needed
-  }
-
-  interface Message {
-    user: string;
-    time: string;
-    content: string;
+    position?: string;
+    role?: string;
+    status?: string;
   }
 
   const handleChannelSelect = (channel: Channel) => {
     setSelectedChannel(channel);
     setSelectedUser(null);
     setSelectedMessage(null);
-    setShowChannelInfo(false); // Close channel info when selecting a new channel
+    setShowChannelInfo(false); // Reset channel info visibility
+    setShowUserProfileSidebar(false); // Ensure user profile sidebar is closed
   };
 
   const handleUserSelect = (user: User) => {
     setSelectedUser(user);
     setSelectedChannel(null);
-    setShowUserProfile(false); // Close user profile sidebar when selecting a new user
+    setSelectedMessage(null);
+    setShowChannelInfo(false); // Ensure channel info sidebar is closed
+    setShowUserProfileSidebar(false); // Reset user profile sidebar visibility
+  };
+
+  const toggleChannelInfoSidebar = () => {
+    setShowChannelInfo((prev) => !prev);
+    setShowUserProfileSidebar(false); // Ensure only one sidebar is visible
+  };
+
+  const toggleUserProfileSidebar = () => {
+    setShowUserProfileSidebar((prev) => !prev);
+    setShowChannelInfo(false); // Ensure only one sidebar is visible
   };
 
   return (
     <div className="h-screen flex">
       {/* Sidebar */}
-      <Sidebar
-        onChannelClick={handleChannelSelect}
-        onUserClick={handleUserSelect}
-      />
+      <Sidebar onChannelClick={handleChannelSelect} onUserClick={handleUserSelect} />
 
       {/* Main Content */}
-      <div
-        className={`flex-1 flex flex-col ${showChannelInfo || selectedUser || selectedMessage ? "max-w-[75%]" : ""}`}
-      >
+      <div className={`flex-1 flex flex-col ${showChannelInfo || showUserProfileSidebar || selectedMessage ? "max-w-[75%]" : ""}`}>
         {selectedChannel ? (
           <>
             <ChannelHeader
               channelName={selectedChannel.name}
               onVoiceClick={() => console.log("Voice clicked")}
               onVideoClick={() => console.log("Video clicked")}
-              onInfoClick={() => setShowChannelInfo((prev) => !prev)}
+              onInfoClick={toggleChannelInfoSidebar} // Opens channel info sidebar
             />
             <MessagesList
               messages={selectedChannel.messages}
@@ -96,7 +100,7 @@ export default function DashboardPage() {
           <>
             <UserChatHeader
               user={selectedUser}
-              onProfileClick={() => setShowUserProfile((prev) => !prev)}
+              onProfileClick={toggleUserProfileSidebar} // Opens user profile sidebar
             />
             <MessagesList
               messages={[
@@ -119,16 +123,13 @@ export default function DashboardPage() {
       </div>
 
       {/* Sidebars */}
-      {selectedUser && (
-        <UserProfileSidebar user={selectedUser} onClose={() => setShowUserProfile(false)} />
+      {selectedMessage && <MessageThreadSidebar message={selectedMessage} onClose={() => setSelectedMessage(null)} />}
+      {showChannelInfo && selectedChannel && (
+        <ChannelInfoSidebar channel={selectedChannel} onClose={toggleChannelInfoSidebar} />
       )}
-      {selectedMessage && (
-        <MessageThreadSidebar message={selectedMessage} onClose={() => setSelectedMessage(null)} />
-      )}
-      {showChannelInfo && selectedChannel.teamMembers && (
-        <ChannelInfoSidebar channel={selectedChannel} onClose={() => setShowChannelInfo(false)} />
+      {showUserProfileSidebar && selectedUser && (
+        <UserProfileSidebar user={selectedUser} onClose={toggleUserProfileSidebar} />
       )}
     </div>
   );
 }
-

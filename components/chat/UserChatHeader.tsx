@@ -1,3 +1,4 @@
+// components/chat/UserChatHeader.tsx
 import { Button } from "@/components/ui/button";
 import { Info } from "lucide-react";
 

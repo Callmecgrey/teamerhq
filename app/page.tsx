@@ -1,25 +1,14 @@
-import { Button } from "@/components/ui/button";
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
 import { ArrowRight, MessageSquare, Video, Users, Shield } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary">
-      {/* Navigation */}
-      <nav className="container mx-auto px-4 py-6 flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <MessageSquare className="h-8 w-8 text-primary" />
-          <span className="text-2xl font-bold">TeamerHQ</span>
-        </div>
-        <div className="space-x-4">
-          <Link href="/login">
-            <Button variant="ghost">Login</Button>
-          </Link>
-          <Link href="/signup">
-            <Button>Get Started</Button>
-          </Link>
-        </div>
-      </nav>
+      {/* Header */}
+      <Header />
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 text-center">
@@ -85,19 +74,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-card mt-20">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <MessageSquare className="h-6 w-6 text-primary" />
-              <span className="font-semibold">TeamerHQ</span>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              © 2024 TeamerHQ. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

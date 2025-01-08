@@ -12,7 +12,6 @@ import {
   VideoOff,
   PhoneOff,
   Users,
-  MessageCircle,
   ScreenShare,
   Layout,
   X,
@@ -33,6 +32,11 @@ export default function CallPage() {
 
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [layout, setLayout] = useState("grid"); // "grid" or "speaker"
+  const [messages, setMessages] = useState([
+    { user: "John Doe", time: "2:45 PM", content: "Hey, can you all hear me?" },
+    { user: "Jane Smith", time: "2:47 PM", content: "Yes, we can hear you!" },
+    { user: "Mike Johnson", time: "2:48 PM", content: "Loud and clear." },
+  ]);
 
   const toggleVideo = (index: number) => {
     setParticipants((prev) =>
@@ -48,6 +52,10 @@ export default function CallPage() {
         i === index ? { ...participant, isMicEnabled: !participant.isMicEnabled } : participant
       )
     );
+  };
+
+  const sendMessage = (message: string) => {
+    setMessages([...messages, { user: "You", time: new Date().toLocaleTimeString(), content: message }]);
   };
 
   return (
@@ -83,7 +91,7 @@ export default function CallPage() {
 
       {/* Main Content */}
       <div className="flex flex-1">
-        {/* Participant Grid */}
+        {/* Participant Grid or Speaker View */}
         <div className={`flex-1 p-4 ${isChatOpen ? "w-2/3" : "w-full"}`}>
           {layout === "grid" ? (
             <div className={`grid ${isVideo ? "grid-cols-2" : "grid-cols-2 md:grid-cols-4"} gap-4 h-full`}>
@@ -156,8 +164,17 @@ export default function CallPage() {
               ))}
             </div>
           ) : (
-            <div className="h-full flex items-center justify-center text-white">
-              <h3 className="text-lg font-semibold">Speaker View Coming Soon!</h3>
+            <div className="h-full flex flex-col items-center justify-center text-white">
+              <div className="relative w-full h-full bg-primary/10 rounded-lg">
+                {participants.filter((p) => p.isActive).map((activeParticipant) => (
+                  <div
+                    key={activeParticipant.name}
+                    className="absolute inset-0 flex items-center justify-center"
+                  >
+                    <span className="text-3xl text-white">{activeParticipant.name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -176,8 +193,29 @@ export default function CallPage() {
                 <X className="h-5 w-5 text-white" />
               </Button>
             </div>
-            <div className="mt-4 h-[calc(100%-4rem)] overflow-y-auto">
-              <p className="text-white/70 text-sm">Chat functionality coming soon...</p>
+            <div className="mt-4 h-[calc(100%-8rem)] overflow-y-auto">
+              <div className="flex flex-col space-y-4">
+                {messages.map((msg, index) => (
+                  <div key={index} className="text-white">
+                    <p className="font-semibold">{msg.user} <span className="text-sm text-white/60">{msg.time}</span></p>
+                    <p>{msg.content}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="mt-2">
+              <textarea
+                className="w-full bg-white/10 text-white rounded-md p-2"
+                placeholder="Type a message..."
+                rows={2}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage(e.currentTarget.value);
+                    e.currentTarget.value = "";
+                  }
+                }}
+              />
             </div>
           </div>
         )}

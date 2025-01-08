@@ -1,6 +1,6 @@
 // components/chat/ChannelHeader.tsx
 import { Button } from "@/components/ui/button";
-import { Phone, Video, Info, Search, MoreVertical } from "lucide-react"; // Import MoreHorizontal
+import { Phone, Video, Search, MoreVertical } from "lucide-react"; // Import MoreHorizontal
 import { Input } from "@/components/ui/input";
 
 export default function ChannelHeader({

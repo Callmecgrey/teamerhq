@@ -1,7 +1,7 @@
 // components/chat/UserChatHeader.tsx
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Phone, Video, Info, Search, MoreVertical } from "lucide-react";
+import { Phone, Video, Search, MoreVertical } from "lucide-react";
 
 export default function UserChatHeader({
   user,

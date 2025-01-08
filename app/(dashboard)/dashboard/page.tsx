@@ -13,9 +13,9 @@ import UserChatHeader from "@/components/chat/UserChatHeader";
 
 export default function DashboardPage() {
   const [message, setMessage] = useState("");
-  const [selectedUser, setSelectedUser] = useState(null); // Initially no user is selected
-  const [selectedMessage, setSelectedMessage] = useState(null); // Initially no message is selected
-  const [selectedChannel, setSelectedChannel] = useState(null); // Initially no channel is selected
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  const [selectedChannel, setSelectedChannel] = useState(null);
 
   // State to track which sidebar is active
   const [activeSidebar, setActiveSidebar] = useState<"user" | "channel" | "message" | null>(null);
@@ -34,56 +34,33 @@ export default function DashboardPage() {
     status?: string;
   }
 
-  // Example channel data (will be used if a channel is selected)
-  const exampleChannel: Channel = {
-    name: "General",
-    description: "This is the general discussion channel for all team members.",
-    teamMembers: [
-      { name: "John Doe", role: "Team Lead" },
-      { name: "Jane Smith", role: "Developer" },
-    ],
-    messages: [
-      { user: "John Doe", time: "12:34 PM", content: "Hello team! How's everyone doing?" },
-      { user: "Jane Smith", time: "12:36 PM", content: "Doing great, thanks for asking!" },
-    ],
-  };
-
-  // Example user data (will be used if a user is selected)
-  const exampleUser: User = {
-    name: "John Doe",
-    position: "Team Lead",
-  };
-
   const handleChannelSelect = (channel: Channel) => {
     setSelectedChannel(channel);
     setSelectedUser(null);
     setSelectedMessage(null);
-    // No sidebar should open automatically when selecting a channel
   };
 
   const handleUserSelect = (user: User) => {
     setSelectedUser(user);
     setSelectedChannel(null);
     setSelectedMessage(null);
-    // No sidebar should open automatically when selecting a user
   };
 
   const toggleMessageThreadSidebar = (message: any) => {
     setSelectedMessage(message);
-    // Open MessageThreadSidebar
     setActiveSidebar("message");
   };
 
   const openUserProfileSidebar = () => {
-    setActiveSidebar("user"); // Open UserProfileSidebar
+    setActiveSidebar("user");
   };
 
   const openChannelInfoSidebar = () => {
-    setActiveSidebar("channel"); // Open ChannelInfoSidebar
+    setActiveSidebar("channel");
   };
 
   const closeSidebar = () => {
-    setActiveSidebar(null); // Close all sidebars
+    setActiveSidebar(null);
   };
 
   return (
@@ -99,7 +76,7 @@ export default function DashboardPage() {
               channelName={selectedChannel.name}
               onVoiceClick={() => console.log("Voice clicked")}
               onVideoClick={() => console.log("Video clicked")}
-              onInfoClick={openChannelInfoSidebar} // Trigger the sidebar when info button is clicked
+              onInfoClick={openChannelInfoSidebar}
             />
             <MessagesList
               messages={selectedChannel.messages}

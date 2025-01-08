@@ -14,7 +14,7 @@ export default function ChannelInfoSidebar({
   onClose: () => void;
 }) {
   return (
-    <div className="w-[30%] border-l bg-card p-6"> {/* Reduced width */}
+    <div className="w-[30%] border-l bg-card p-6">
       <div className="flex justify-between items-start mb-6">
         <div className="flex items-center space-x-4">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">

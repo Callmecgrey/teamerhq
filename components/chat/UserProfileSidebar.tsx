@@ -27,6 +27,9 @@ export default function UserProfileSidebar({ user, onClose }: { user: any; onClo
               <span className="text-muted-foreground">Role:</span> {user.role}
             </p>
             <p className="text-sm">
+              <span className="text-muted-foreground">Position:</span> {user.position}
+            </p>
+            <p className="text-sm">
               <span className="text-muted-foreground">Status:</span> {user.status}
             </p>
           </div>

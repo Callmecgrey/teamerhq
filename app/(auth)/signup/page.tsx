@@ -17,8 +17,13 @@ export default function SignUpPage() {
   const [countdown, setCountdown] = useState(30); // Timer for step 2
   const [isResendDisabled, setIsResendDisabled] = useState(true); // Manage resend state
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleContinue = () => {
-    if (step === "email") {
+    if (step === "email" && validateEmail(email)) {
       setStep("code");
       setCountdown(30); // Start the countdown for code step
       setIsResendDisabled(true); // Disable resend initially
@@ -68,12 +73,14 @@ export default function SignUpPage() {
   };
 
   const handleCodePartChange = (index: number, value: string) => {
+    const validInput = /^[a-zA-Z0-9]$/.test(value); // Allow only alphanumeric characters
+    if (!validInput && value !== "") return; // Ignore invalid input
     const updatedCodeParts = [...codeParts];
     updatedCodeParts[index] = value.slice(0, 1); // Allow only one character
     setCodeParts(updatedCodeParts);
 
     // Automatically focus on the next box if input is valid
-    if (value && index < codeParts.length - 1) {
+    if (validInput && index < codeParts.length - 1) {
       const nextInput = document.getElementById(`code-box-${index + 1}`);
       nextInput?.focus();
     }
@@ -144,51 +151,53 @@ export default function SignUpPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <Button className="w-full" onClick={handleContinue} disabled={!email}>
+              {!validateEmail(email) && email.length > 0 && (
+                <p className="text-red-500 text-sm">Please enter a valid email address.</p>
+              )}
+              <Button className="w-full" onClick={handleContinue} disabled={!validateEmail(email)}>
                 Continue
               </Button>
             </div>
           )}
 
-{step === "code" && (
-  <div className="space-y-4">
-    <Label>Verification Code</Label>
-    <div className="flex space-x-4">
-      {codeParts.map((part, index) => (
-        <Input
-          key={index}
-          id={`code-box-${index}`}
-          type="text"
-          value={part}
-          onChange={(e) => handleCodePartChange(index, e.target.value)}
-          maxLength={1}
-          className="text-center w-12 h-12"
-        />
-      ))}
-    </div>
-    <p className="text-sm text-muted-foreground">
-      We sent a code to {email}.
-    </p>
-    <Button className="w-full" onClick={handleContinue} disabled={combinedCode.length !== 6}>
-      Verify
-    </Button>
-    <div className="mt-4 flex justify-between items-center">
-      <span className="text-sm text-muted-foreground">
-        Resend code in: {countdown}s
-      </span>
-      <span
-        onClick={isResendDisabled ? undefined : handleResendCode}
-        className={`text-sm cursor-pointer ${
-          isResendDisabled ? "text-muted-foreground cursor-not-allowed" : "text-blue-500 hover:underline"
-        }`}
-        aria-disabled={isResendDisabled}
-      >
-        Resend Code
-      </span>
-    </div>
-  </div>
-)}
-
+          {step === "code" && (
+            <div className="space-y-4">
+              <Label>Verification Code</Label>
+              <div className="flex space-x-4">
+                {codeParts.map((part, index) => (
+                  <Input
+                    key={index}
+                    id={`code-box-${index}`}
+                    type="text"
+                    value={part}
+                    onChange={(e) => handleCodePartChange(index, e.target.value)}
+                    maxLength={1}
+                    className="text-center w-12 h-12"
+                  />
+                ))}
+              </div>
+              <p className="text-sm text-muted-foreground">
+                We sent a code to {email}.
+              </p>
+              <Button className="w-full" onClick={handleContinue} disabled={combinedCode.length !== 6}>
+                Verify
+              </Button>
+              <div className="mt-4 flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">
+                  Resend code in: {countdown}s
+                </span>
+                <span
+                  onClick={isResendDisabled ? undefined : handleResendCode}
+                  className={`text-sm cursor-pointer ${
+                    isResendDisabled ? "text-muted-foreground cursor-not-allowed" : "text-blue-500 hover:underline"
+                  }`}
+                  aria-disabled={isResendDisabled}
+                >
+                  Resend Code
+                </span>
+              </div>
+            </div>
+          )}
 
           {step === "team" && (
             <div className="space-y-4">

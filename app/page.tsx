@@ -11,12 +11,12 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 text-center">
-        <h1 className="text-5xl font-bold mb-6">
+      <section className="container mx-auto px-4 py-20 text-center h-screen flex flex-col justify-center">
+        <h1 className="font-rubik text-4xl sm:text-6xl font-bold mb-6">
           Team Communication,{" "}
           <span className="text-primary">Reimagined</span>
         </h1>
-        <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+        <p className="text-lg font-mono sm:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
           Connect, collaborate, and communicate with your team in real-time.
           Experience seamless video calls, instant messaging, and organized channels
           all in one place.
@@ -30,11 +30,11 @@ export default function Home() {
 
       {/* Features */}
       <section className="container mx-auto px-4 py-20">
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
           <div className="bg-card p-6 rounded-lg">
             <MessageSquare className="h-12 w-12 text-primary mb-4" />
             <h3 className="text-xl font-semibold mb-2">Instant Messaging</h3>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground font-mono">
               Real-time chat with powerful formatting, file sharing, and thread
               support.
             </p>
@@ -42,7 +42,7 @@ export default function Home() {
           <div className="bg-card p-6 rounded-lg">
             <Video className="h-12 w-12 text-primary mb-4" />
             <h3 className="text-xl font-semibold mb-2">HD Video Calls</h3>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground font-mono">
               Crystal clear video meetings with screen sharing and recording
               capabilities.
             </p>
@@ -50,7 +50,7 @@ export default function Home() {
           <div className="bg-card p-6 rounded-lg">
             <Users className="h-12 w-12 text-primary mb-4" />
             <h3 className="text-xl font-semibold mb-2">Team Channels</h3>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground font-mono">
               Organized spaces for teams to collaborate on specific projects or
               topics.
             </p>
@@ -64,7 +64,7 @@ export default function Home() {
           <Shield className="h-16 w-16 text-primary" />
           <div>
             <h2 className="text-3xl font-bold mb-4">Enterprise-Grade Security</h2>
-            <p className="text-muted-foreground max-w-xl">
+            <p className="text-muted-foreground max-w-xl font-mono">
               Your data is protected with end-to-end encryption and compliant with
               industry standards. We take security seriously so you can focus on
               what matters most.

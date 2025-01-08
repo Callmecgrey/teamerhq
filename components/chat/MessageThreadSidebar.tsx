@@ -11,7 +11,7 @@ export default function MessageThreadSidebar({
   onClose: () => void;
 }) {
   return (
-    <div className="w-[40%] border-l bg-card p-6">
+    <div className="w-[30%] border-l bg-card p-6"> {/* Reduced width */}
       <div className="flex justify-between items-start mb-6">
         <h2 className="text-xl font-semibold">Thread</h2>
         <Button variant="ghost" size="icon" onClick={onClose}>

@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 
 export default function UserProfileSidebar({ user, onClose }: { user: any; onClose: () => void }) {
   return (
-    <div className="w-[40%] border-l bg-card p-6">
+    <div className="w-[30%] border-l bg-card p-6"> {/* Reduced width */}
       <div className="flex justify-between items-start mb-6">
         <div className="flex items-center space-x-4">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-2xl">

@@ -8,14 +8,20 @@ import MessagesList from "@/components/chat/MessagesList";
 import MessageInput from "@/components/chat/MessageInput";
 import UserProfileSidebar from "@/components/chat/UserProfileSidebar";
 import MessageThreadSidebar from "@/components/chat/MessageThreadSidebar";
+import ChannelInfoSidebar from "@/components/chat/ChannelInfoSidebar";
 
 export default function DashboardPage() {
   const [message, setMessage] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedMessage, setSelectedMessage] = useState(null);
+  const [showChannelInfo, setShowChannelInfo] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState({
     name: "General",
     description: "This is the general discussion channel for all team members.",
+    teamMembers: [
+      { name: "John Doe", role: "Team Lead" },
+      { name: "Jane Smith", role: "Developer" },
+    ],
     messages: [
       { user: "John Doe", time: "12:34 PM", content: "Hello team! How's everyone doing?" },
       { user: "Jane Smith", time: "12:36 PM", content: "Doing great, thanks for asking!" },
@@ -25,6 +31,7 @@ export default function DashboardPage() {
   interface Channel {
     name: string;
     description: string;
+    teamMembers: { name: string; role: string }[];
     messages: { user: string; time: string; content: string }[];
   }
 
@@ -43,6 +50,7 @@ export default function DashboardPage() {
     setSelectedChannel(channel);
     setSelectedUser(null);
     setSelectedMessage(null);
+    setShowChannelInfo(false); // Close channel info when selecting a new channel
   };
 
   return (
@@ -54,11 +62,12 @@ export default function DashboardPage() {
       />
 
       {/* Main Content */}
-      <div className={`flex-1 flex flex-col ${selectedUser || selectedMessage ? "max-w-[60%]" : ""}`}>
+      <div className={`flex-1 flex flex-col ${showChannelInfo || selectedUser || selectedMessage ? "max-w-[75%]" : ""}`}>
         <ChannelHeader
           channelName={selectedChannel.name}
           onVoiceClick={() => console.log("Voice clicked")}
           onVideoClick={() => console.log("Video clicked")}
+          onInfoClick={() => setShowChannelInfo((prev) => !prev)}
         />
         <MessagesList
           messages={selectedChannel.messages}
@@ -76,6 +85,9 @@ export default function DashboardPage() {
       {selectedUser && <UserProfileSidebar user={selectedUser} onClose={() => setSelectedUser(null)} />}
       {selectedMessage && (
         <MessageThreadSidebar message={selectedMessage} onClose={() => setSelectedMessage(null)} />
+      )}
+      {showChannelInfo && selectedChannel.teamMembers && (
+        <ChannelInfoSidebar channel={selectedChannel} onClose={() => setShowChannelInfo(false)} />
       )}
     </div>
   );

@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'TeamPHQ - Modern Team Communication',
+  title: 'TeamerHQ - Modern Team Communication',
   description: 'Secure, fast, and intuitive team communication platform',
 };
 

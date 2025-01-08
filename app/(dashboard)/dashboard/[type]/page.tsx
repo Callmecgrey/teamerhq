@@ -31,16 +31,16 @@ export default function CallPage() {
         {isVideo ? (
           <div className="grid grid-cols-2 gap-4 h-full">
             <div className="bg-muted rounded-lg relative overflow-hidden">
-              <div className="absolute bottom-4 left-4 text-white font-medium">You</div>
+              <div className="absolute bottom-4 left-4 text-orange-400 font-medium">You</div>
             </div>
             <div className="bg-muted rounded-lg relative overflow-hidden">
-              <div className="absolute bottom-4 left-4 text-white font-medium">John Doe</div>
+              <div className="absolute bottom-4 left-4 text-orange-400 font-medium">John Doe</div>
             </div>
             <div className="bg-muted rounded-lg relative overflow-hidden">
-              <div className="absolute bottom-4 left-4 text-white font-medium">Jane Smith</div>
+              <div className="absolute bottom-4 left-4 text-orange-400 font-medium">Jane Smith</div>
             </div>
             <div className="bg-muted rounded-lg relative overflow-hidden">
-              <div className="absolute bottom-4 left-4 text-white font-medium">Mike Johnson</div>
+              <div className="absolute bottom-4 left-4 text-orange-400 font-medium">Mike Johnson</div>
             </div>
           </div>
         ) : (

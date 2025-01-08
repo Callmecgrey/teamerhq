@@ -9,7 +9,7 @@ export default function Home() {
       <nav className="container mx-auto px-4 py-6 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <MessageSquare className="h-8 w-8 text-primary" />
-          <span className="text-2xl font-bold">TeamPHQ</span>
+          <span className="text-2xl font-bold">TeamerHQ</span>
         </div>
         <div className="space-x-4">
           <Link href="/login">
@@ -90,10 +90,10 @@ export default function Home() {
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <MessageSquare className="h-6 w-6 text-primary" />
-              <span className="font-semibold">TeamPHQ</span>
+              <span className="font-semibold">TeamerHQ</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2024 TeamPHQ. All rights reserved.
+              © 2024 TeamerHQ. All rights reserved.
             </p>
           </div>
         </div>

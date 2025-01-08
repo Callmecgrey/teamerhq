@@ -1,6 +1,13 @@
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
-import { ArrowRight, MessageSquare, Video, Users, Shield } from "lucide-react";
+import {
+  ArrowRight,
+  MessageSquare,
+  Video,
+  Users,
+  Shield,
+  Quote,
+} from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -18,8 +25,8 @@ export default function Home() {
         </h1>
         <p className="text-lg font-mono sm:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
           Connect, collaborate, and communicate with your team in real-time.
-          Experience seamless video calls, instant messaging, and organized channels
-          all in one place.
+          Experience seamless video calls, instant messaging, and organized
+          channels all in one place.
         </p>
         <Link href="/signup">
           <Button size="lg" className="gap-2">
@@ -60,14 +67,16 @@ export default function Home() {
 
       {/* Security Section */}
       <section className="container mx-auto px-4 py-20">
-        <div className="flex items-center justify-center space-x-8">
+        <div className="flex flex-col sm:flex-row items-center justify-center space-x-0 sm:space-x-8 space-y-8 sm:space-y-0">
           <Shield className="h-16 w-16 text-primary" />
           <div>
-            <h2 className="text-3xl font-bold mb-4">Enterprise-Grade Security</h2>
+            <h2 className="text-3xl font-bold mb-4">
+              Enterprise-Grade Security
+            </h2>
             <p className="text-muted-foreground max-w-xl font-mono">
-              Your data is protected with end-to-end encryption and compliant with
-              industry standards. We take security seriously so you can focus on
-              what matters most.
+              Your data is protected with end-to-end encryption and compliant
+              with industry standards. We take security seriously so you can
+              focus on what matters most.
             </p>
           </div>
         </div>

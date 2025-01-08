@@ -14,10 +14,14 @@ export default function SignUpPage() {
   const [teamName, setTeamName] = useState("");
   const [teamMembers, setTeamMembers] = useState([""]);
   const [channels, setChannels] = useState([""]);
+  const [countdown, setCountdown] = useState(30); // Timer for step 2
+  const [isResendDisabled, setIsResendDisabled] = useState(true); // Manage resend state
 
   const handleContinue = () => {
     if (step === "email") {
       setStep("code");
+      setCountdown(30); // Start the countdown for code step
+      setIsResendDisabled(true); // Disable resend initially
     } else if (step === "code") {
       setStep("team");
     } else if (step === "team") {
@@ -77,30 +81,41 @@ export default function SignUpPage() {
 
   const combinedCode = codeParts.join("");
 
-  // Define handleBeforeUnload as a standalone function
+  // Countdown timer logic
+  useEffect(() => {
+    if (step === "code" && countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (countdown === 0) {
+      setIsResendDisabled(false); // Enable resend when countdown reaches 0
+    }
+  }, [step, countdown]);
+
+  const handleResendCode = () => {
+    setCountdown(30); // Restart the timer
+    setIsResendDisabled(true); // Disable the button again
+    // Add logic here to resend the code (e.g., API call)
+    console.log("Code resent to:", email);
+  };
+
+  const handleFinalSubmit = () => {
+    window.removeEventListener("beforeunload", handleBeforeUnload);
+    window.location.href = "/dashboard";
+  };
+
   const handleBeforeUnload = (e: BeforeUnloadEvent) => {
     e.preventDefault();
     e.returnValue = "Information from this point will not be saved. Are you sure?";
   };
 
-  // Warn user about refreshing after stage 2
   useEffect(() => {
     if (step === "code" || step === "team" || step === "invite") {
       window.addEventListener("beforeunload", handleBeforeUnload);
-
       return () => {
         window.removeEventListener("beforeunload", handleBeforeUnload);
       };
     }
   }, [step]);
-
-  const handleFinalSubmit = () => {
-    // Remove the unload event listener
-    window.removeEventListener("beforeunload", handleBeforeUnload);
-
-    // Redirect to the dashboard
-    window.location.href = "/dashboard";
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-secondary p-4">
@@ -121,56 +136,59 @@ export default function SignUpPage() {
         <div className="bg-card p-8 rounded-lg shadow-lg">
           {step === "email" && (
             <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Work email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@company.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <Button
-                className="w-full"
-                onClick={handleContinue}
-                disabled={!email}
-              >
+              <Label htmlFor="email">Work email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="name@company.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Button className="w-full" onClick={handleContinue} disabled={!email}>
                 Continue
               </Button>
             </div>
           )}
 
-          {step === "code" && (
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Verification Code</Label>
-                <div className="flex space-x-2">
-                  {codeParts.map((part, index) => (
-                    <Input
-                      key={index}
-                      id={`code-box-${index}`}
-                      type="text"
-                      value={part}
-                      onChange={(e) => handleCodePartChange(index, e.target.value)}
-                      maxLength={1}
-                      className="text-center w-12 h-12"
-                    />
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  We sent a code to {email}.
-                </p>
-              </div>
-              <Button
-                className="w-full"
-                onClick={handleContinue}
-                disabled={combinedCode.length !== 6}
-              >
-                Verify
-              </Button>
-            </div>
-          )}
+{step === "code" && (
+  <div className="space-y-4">
+    <Label>Verification Code</Label>
+    <div className="flex space-x-4">
+      {codeParts.map((part, index) => (
+        <Input
+          key={index}
+          id={`code-box-${index}`}
+          type="text"
+          value={part}
+          onChange={(e) => handleCodePartChange(index, e.target.value)}
+          maxLength={1}
+          className="text-center w-12 h-12"
+        />
+      ))}
+    </div>
+    <p className="text-sm text-muted-foreground">
+      We sent a code to {email}.
+    </p>
+    <Button className="w-full" onClick={handleContinue} disabled={combinedCode.length !== 6}>
+      Verify
+    </Button>
+    <div className="mt-4 flex justify-between items-center">
+      <span className="text-sm text-muted-foreground">
+        Resend code in: {countdown}s
+      </span>
+      <span
+        onClick={isResendDisabled ? undefined : handleResendCode}
+        className={`text-sm cursor-pointer ${
+          isResendDisabled ? "text-muted-foreground cursor-not-allowed" : "text-blue-500 hover:underline"
+        }`}
+        aria-disabled={isResendDisabled}
+      >
+        Resend Code
+      </span>
+    </div>
+  </div>
+)}
+
 
           {step === "team" && (
             <div className="space-y-4">

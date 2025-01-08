@@ -1,13 +1,13 @@
 // components/chat/ChannelHeader.tsx
 import { Button } from "@/components/ui/button";
-import { Phone, Video, Users, Search, Info } from "lucide-react";
+import { Phone, Video, Info, Search, MoreVertical } from "lucide-react"; // Import MoreHorizontal
 import { Input } from "@/components/ui/input";
 
 export default function ChannelHeader({
   channelName,
   onVoiceClick,
   onVideoClick,
-  onInfoClick,
+  onInfoClick, // This will now be triggered directly by clicking the MoreVertical icon
 }: {
   channelName: string;
   onVoiceClick: () => void;
@@ -29,9 +29,12 @@ export default function ChannelHeader({
         <Button variant="ghost" size="icon" onClick={onVideoClick}>
           <Video className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" onClick={onInfoClick}>
-          <Info className="h-4 w-4" />
+        
+        {/* MoreVertical icon with onClick */}
+        <Button variant="ghost" size="icon" onClick={onInfoClick}> {/* onInfoClick triggered directly */}
+          <MoreVertical className="h-4 w-4" />
         </Button>
+
         <div className="relative">
           <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
           <Input className="pl-10 w-64" placeholder={`Search #${channelName}`} type="search" />

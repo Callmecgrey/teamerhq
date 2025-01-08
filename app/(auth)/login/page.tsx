@@ -3,16 +3,21 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MessageSquare, Briefcase, Plus } from "lucide-react"; // Import Plus icon
+import { MessageSquare, Briefcase, Plus, X } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function LoginPage() {
-  const [step, setStep] = useState<"email" | "otp" | "org">("email");
+  const [step, setStep] = useState<"email" | "otp" | "org" | "team" | "invite" | "channels">("email");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [teamName, setTeamName] = useState("");
+  const [teamMembers, setTeamMembers] = useState([""]);
+  const [channels, setChannels] = useState([""]);
   const [countdown, setCountdown] = useState(30);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const [headerText, setHeaderText] = useState("Welcome back");
+  const [subText, setSubText] = useState("Sign in to continue to your workspace");
 
   const organizations = [
     { id: 1, name: "Acme Corp", role: "Owner", icon: Briefcase },
@@ -26,7 +31,22 @@ export default function LoginPage() {
       setIsResendDisabled(true);
     } else if (step === "otp") {
       setStep("org");
+      setHeaderText("Welcome Back");
+      setSubText("Choose a workspace or create a new one.");
+    } else if (step === "org") {
+      setStep("team");
+      setHeaderText("Create your workspace");
+      setSubText("Get started with TeamerHQ");
+    } else if (step === "team") {
+      setStep("invite");
+    } else if (step === "invite") {
+      setStep("channels");
     }
+  };
+
+  const handleFinalSubmit = () => {
+    console.log("Workspace Created:", { teamName, teamMembers, channels });
+    // Handle final submission logic here
   };
 
   const handleOtpChange = (index: number, value: string) => {
@@ -38,6 +58,24 @@ export default function LoginPage() {
       const nextInput = document.getElementById(`otp-box-${index + 1}`);
       nextInput?.focus();
     }
+  };
+
+  const handleAddMember = () => setTeamMembers([...teamMembers, ""]);
+  const handleRemoveMember = (index: number) =>
+    setTeamMembers(teamMembers.filter((_, i) => i !== index));
+  const handleMemberChange = (index: number, value: string) => {
+    const updatedMembers = [...teamMembers];
+    updatedMembers[index] = value;
+    setTeamMembers(updatedMembers);
+  };
+
+  const handleAddChannel = () => setChannels([...channels, ""]);
+  const handleRemoveChannel = (index: number) =>
+    setChannels(channels.filter((_, i) => i !== index));
+  const handleChannelChange = (index: number, value: string) => {
+    const updatedChannels = [...channels];
+    updatedChannels[index] = value;
+    setChannels(updatedChannels);
   };
 
   const combinedOtp = otp.join("");
@@ -65,10 +103,8 @@ export default function LoginPage() {
             <MessageSquare className="h-8 w-8 text-primary" />
             <span className="text-2xl font-bold">TeamerHQ</span>
           </Link>
-          <h2 className="mt-6 text-3xl font-bold">Welcome back</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Sign in to continue to your workspace
-          </p>
+          <h2 className="mt-6 text-3xl font-bold">{headerText}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{subText}</p>
         </div>
 
         <div className="bg-card p-8 rounded-lg shadow-lg">
@@ -138,16 +174,14 @@ export default function LoginPage() {
           {step === "org" && (
             <div className="space-y-4">
               <div>
-                <Label>Select workspace</Label>
+                <Label>Select a Workspace</Label>
                 <div className="mt-2 space-y-2">
                   {organizations.map((org) => (
                     <Button
                       key={org.id}
                       variant="outline"
                       className="w-full justify-start h-auto p-4 flex items-center space-x-4"
-                      onClick={() => {
-                        console.log(`Selected organization: ${org.name}`);
-                      }}
+                      onClick={() => console.log(`Selected organization: ${org.name}`)}
                     >
                       <org.icon className="h-8 w-8 text-muted-foreground" />
                       <div>
@@ -168,7 +202,9 @@ export default function LoginPage() {
                   variant="ghost"
                   className="w-full justify-start flex items-center space-x-2"
                   onClick={() => {
-                    console.log("Create new workspace");
+                    setStep("team");
+                    setHeaderText("Create Your Workspace");
+                    setSubText("Get started with TeamerHQ");
                   }}
                 >
                   <Plus className="h-5 w-5 text-muted-foreground" />
@@ -180,16 +216,112 @@ export default function LoginPage() {
               </Button>
             </div>
           )}
-        </div>
 
-        {step !== "org" && (
-          <p className="text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
-            <Link href="/signup" className="font-medium text-primary hover:underline">
-              Sign up
-            </Link>
-          </p>
-        )}
+          {step === "team" && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="teamName">Workspace Name</Label>
+                <Input
+                  id="teamName"
+                  type="text"
+                  placeholder="Acme Corp"
+                  value={teamName}
+                  onChange={(e) => setTeamName(e.target.value)}
+                />
+              </div>
+              <Button className="w-full" onClick={handleContinue} disabled={!teamName}>
+                Create Workspace
+              </Button>
+            </div>
+          )}
+
+          {step === "invite" && (
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold">Invite Team Members</h3>
+              {teamMembers.map((member, index) => (
+                <div className="space-y-2" key={index}>
+                  <Label htmlFor={`teamMember${index}`}>Team Member {index + 1}</Label>
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      id={`teamMember${index}`}
+                      type="email"
+                      placeholder="team.member@company.com"
+                      value={member}
+                      onChange={(e) => handleMemberChange(index, e.target.value)}
+                    />
+                    {teamMembers.length > 1 && (
+                      <button
+                        type="button"
+                        className="p-2 text-red-500"
+                        onClick={() => handleRemoveMember(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+              {teamMembers.length < 4 && (
+                <Button className="w-full" onClick={handleAddMember}>
+                  Add Another Member
+                </Button>
+              )}
+              {teamMembers.length >= 4 && (
+                <p className="text-sm text-muted-foreground">
+                  Don&apos;t worry, you will be able to add more members once you are all set.
+                </p>
+              )}
+              <Button
+                className="w-full mt-4"
+                onClick={handleContinue}
+                disabled={teamMembers.some((member) => !member)}
+              >
+                Continue
+              </Button>
+            </div>
+          )}
+
+          {step === "channels" && (
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold">Create Channels</h3>
+              {channels.map((channel, index) => (
+                <div className="space-y-2" key={index}>
+                  <Label htmlFor={`channel${index}`}>Channel {index + 1}</Label>
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      id={`channel${index}`}
+                      type="text"
+                      placeholder="e.g., General, Marketing"
+                      value={channel}
+                      onChange={(e) => handleChannelChange(index, e.target.value)}
+                    />
+                    {channels.length > 1 && (
+                      <button
+                        type="button"
+                        className="p-2 text-red-500"
+                        onClick={() => handleRemoveChannel(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+              {channels.length < 3 && (
+                <Button className="w-full" onClick={handleAddChannel}>
+                  Add Another Channel
+                </Button>
+              )}
+              <Button
+                className="w-full mt-4"
+                onClick={handleFinalSubmit}
+                disabled={!channels.some((channel) => channel.trim() !== "")}
+              >
+                Yay! Let&apos;s Go
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

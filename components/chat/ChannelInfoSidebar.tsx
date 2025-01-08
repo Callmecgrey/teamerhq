@@ -14,37 +14,40 @@ export default function ChannelInfoSidebar({
   onClose: () => void;
 }) {
   return (
-    <div className="w-[30%] border-l bg-card p-6">
-      <div className="flex justify-between items-start mb-6">
+    <div className="w-[25%] border-l bg-card p-6 flex flex-col h-full">
+      {/* Header Section */}
+      <div className="flex justify-between items-center mb-8">
         <div className="flex items-center space-x-4">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
             <Hash className="h-10 w-10 text-primary" />
           </div>
-          <div>
-            <h2 className="text-xl font-semibold">{channel.name}</h2>
-          </div>
+          <h2 className="text-xl font-semibold">{channel.name}</h2>
         </div>
         <Button variant="ghost" size="icon" onClick={onClose}>
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5" />
         </Button>
       </div>
 
-      <div className="space-y-6">
+      {/* Content Section */}
+      <div className="flex-grow space-y-8 overflow-y-auto">
         {/* Description */}
         <div>
-          <h3 className="text-sm font-medium mb-2">Description</h3>
-          <p className="text-sm">{channel.description}</p>
+          <h3 className="text-sm font-medium text-muted-foreground uppercase">Description</h3>
+          <p className="mt-2 text-sm text-foreground">{channel.description || "No description available."}</p>
         </div>
 
         {/* Team Members */}
         {channel.teamMembers && channel.teamMembers.length > 0 ? (
           <div>
-            <h3 className="text-sm font-medium mb-2">Team Members</h3>
-            <ul className="space-y-2">
+            <h3 className="text-sm font-medium text-muted-foreground uppercase">Team Members</h3>
+            <ul className="mt-4 space-y-3">
               {channel.teamMembers.map((member, index) => (
-                <li key={index} className="flex items-center space-x-2">
-                  <div className="w-8 h-8 rounded-full bg-muted/10 flex items-center justify-center text-sm font-medium">
-                    {member.name.split(" ").map((n) => n[0]).join("")}
+                <li key={index} className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-full bg-muted/10 flex items-center justify-center text-sm font-medium text-primary">
+                    {member.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </div>
                   <div>
                     <p className="text-sm font-medium">{member.name}</p>
@@ -55,8 +58,18 @@ export default function ChannelInfoSidebar({
             </ul>
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">No team members available.</p>
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground uppercase">Team Members</h3>
+            <p className="mt-2 text-sm text-muted-foreground">No team members available.</p>
+          </div>
         )}
+      </div>
+
+      {/* Footer Section */}
+      <div className="mt-6 border-t pt-4">
+        <Button variant="outline" className="w-full">
+          Invite Members
+        </Button>
       </div>
     </div>
   );

@@ -4,10 +4,11 @@ import { X } from "lucide-react";
 
 export default function UserProfileSidebar({ user, onClose }: { user: any; onClose: () => void }) {
   return (
-    <div className="w-[30%] border-l bg-card p-6"> {/* Reduced width */}
-      <div className="flex justify-between items-start mb-6">
+    <div className="w-[25%] border-l bg-card p-6 flex flex-col h-full">
+      <div className="flex justify-between items-center mb-8">
+        {/* User Info Header */}
         <div className="flex items-center space-x-4">
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-2xl">
+          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-semibold">
             {user.name.split(" ").map((n: string) => n[0]).join("")}
           </div>
           <div>
@@ -15,29 +16,44 @@ export default function UserProfileSidebar({ user, onClose }: { user: any; onClo
             <p className="text-sm text-muted-foreground">{user.position}</p>
           </div>
         </div>
+        {/* Close Button */}
         <Button variant="ghost" size="icon" onClick={onClose}>
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5" />
         </Button>
       </div>
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-sm font-medium mb-2">About</h3>
+
+      {/* User Details Section */}
+      <div className="flex-grow space-y-8 overflow-y-auto">
+        <div className="space-y-4">
+          <h3 className="text-sm font-medium text-muted-foreground uppercase">About</h3>
           <div className="space-y-2">
             <p className="text-sm">
-              <span className="text-muted-foreground">Role:</span> {user.role}
+              <span className="font-medium text-muted-foreground">Role:</span> {user.role}
             </p>
             <p className="text-sm">
-              <span className="text-muted-foreground">Position:</span> {user.position}
+              <span className="font-medium text-muted-foreground">Position:</span> {user.position}
             </p>
             <p className="text-sm">
-              <span className="text-muted-foreground">Status:</span> {user.status}
+              <span className="font-medium text-muted-foreground">Status:</span> {user.status}
             </p>
           </div>
         </div>
-        <div className="flex space-x-2">
-          <Button className="flex-1">Direct Message</Button>
-          <Button variant="outline" className="flex-1">Call</Button>
+
+        {/* User Actions Section */}
+        <div>
+          <h3 className="text-sm font-medium text-muted-foreground uppercase">Actions</h3>
+          <div className="flex flex-col gap-2 mt-4">
+            <Button className="w-full">Send Message</Button>
+            <Button variant="outline" className="w-full">Start Call</Button>
+          </div>
         </div>
+      </div>
+
+      {/* Footer Section */}
+      <div className="mt-6 border-t pt-4">
+        <p className="text-xs text-muted-foreground text-center">
+          Last updated: {user.lastUpdated || "N/A"}
+        </p>
       </div>
     </div>
   );

@@ -1,3 +1,5 @@
+// components/chat/MessagesList.tsx
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Heart, Forward } from "lucide-react";

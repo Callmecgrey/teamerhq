@@ -1,3 +1,5 @@
+// components/chat/Sidebar.tsx
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, Hash, MessageSquare, Settings, LogOut, ChevronDown, Award } from "lucide-react"; // Add a logo/icon, I used "Award" here as an example

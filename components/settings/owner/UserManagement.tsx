@@ -24,7 +24,9 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
 const users = [
   { id: 1, name: "John Doe", email: "john@example.com", role: "Owner", status: "Active", dateJoined: "2021-05-01" },
   { id: 2, name: "Jane Smith", email: "jane@example.com", role: "Admin", status: "Invited", dateJoined: "2023-07-10" },
@@ -38,11 +40,14 @@ const UserManagement = () => {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertAction, setAlertAction] = useState<() => void>(() => () => {});
+  const [confirmAction, setConfirmAction] = useState<() => void>(() => () => {});
+  const [inviteSuccess, setInviteSuccess] = useState(false);
 
   const handleInviteUser = () => {
     setAlertMessage(`Inviting user: ${newUserEmail}`);
     setAlertAction(() => () => {
-      alert(`User ${newUserEmail} invited successfully!`);
+      setUserList([...userList, { id: userList.length + 1, name: "New User", email: newUserEmail, role, status: "Invited", dateJoined: new Date().toISOString() }]);
+      setInviteSuccess(true);
       setNewUserEmail("");
     });
     setOpenAlert(true);
@@ -75,14 +80,17 @@ const UserManagement = () => {
   };
 
   const handleChangeRole = (userId: number, newRole: string) => {
-    setUserList(userList.map(user =>
-      user.id === userId ? { ...user, role: newRole } : user
-    ));
+    setConfirmAction(() => () => {
+      setUserList(userList.map(user =>
+        user.id === userId ? { ...user, role: newRole } : user
+      ));
+    });
+    setAlertMessage(`Are you sure you want to change the role of this user to ${newRole}?`);
+    setOpenAlert(true);
   };
 
   return (
     <div className="flex flex-col space-y-6">
-      {/* Tabs Header */}
       <Tabs defaultValue="user-list">
         <TabsList className="space-x-4">
           <TabsTrigger value="user-list">User List</TabsTrigger>
@@ -91,13 +99,9 @@ const UserManagement = () => {
           <TabsTrigger value="guest-accounts">Guest Accounts</TabsTrigger>
         </TabsList>
 
-        {/* Tabs Content */}
         <TabsContent value="user-list">
-          {/* User List Section */}
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold text-gray-800">User List</h2>
-            
-            {/* Table for User List */}
             <Table className="text-sm">
               <TableHeader>
                 <TableRow>
@@ -161,12 +165,10 @@ const UserManagement = () => {
         </TabsContent>
 
         <TabsContent value="invite-users">
-          {/* Invite Users Section */}
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold text-gray-800">Invite Users</h2>
             <div className="flex items-center space-x-4 w-full">
               <div className="flex-1">
-                <Label htmlFor="email" className="text-lg">Invite via Email</Label>
                 <Input
                   id="email"
                   value={newUserEmail}
@@ -191,15 +193,21 @@ const UserManagement = () => {
                 Send Invite
               </Button>
             </div>
+            {inviteSuccess && (
+              <Alert variant="default" className="mt-4">
+                <AlertTitle>Invite Sent!</AlertTitle>
+                <AlertDescription>
+                  The invitation has been successfully sent to {newUserEmail}.
+                </AlertDescription>
+              </Alert>
+            )}
           </div>
         </TabsContent>
 
         <TabsContent value="pending-invites">
-          {/* Pending Invites Section */}
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold text-gray-800">Pending Invites</h2>
             <div className="space-y-2">
-              {/* For simplicity, just a mockup */}
               <div className="flex justify-between items-center p-4 border rounded-md shadow-sm">
                 <div className="flex flex-col">
                   <p className="font-semibold">john@example.com</p>
@@ -207,6 +215,7 @@ const UserManagement = () => {
                 </div>
                 <div className="flex space-x-2">
                   <Button variant="outline" size="sm">Cancel Invite</Button>
+                  <Button variant="default" size="sm">Resend Invite</Button>
                 </div>
               </div>
             </div>
@@ -214,12 +223,10 @@ const UserManagement = () => {
         </TabsContent>
 
         <TabsContent value="guest-accounts">
-          {/* Guest Accounts Section */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-800">Guest Accounts</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">Guest Access Permission</h2>
             <div className="flex items-center space-x-4 w-full">
               <div className="flex-1">
-                <Label htmlFor="guestPermissions" className="text-lg">Assign Permissions to Guest</Label>
                 <Select value="View" onValueChange={() => {}}>
                   <SelectTrigger className="px-4 py-3 border rounded-md shadow-sm">
                     <span>View</span>
@@ -239,7 +246,6 @@ const UserManagement = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Alert Dialog */}
       <AlertDialog open={openAlert} onOpenChange={setOpenAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>

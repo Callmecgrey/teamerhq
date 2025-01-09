@@ -1,8 +1,11 @@
 // components/chat/Sidebar.tsx
 
-import { useState } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // For client-side navigation
 import { Button } from "@/components/ui/button";
-import { Plus, Hash, MessageSquare, Settings, LogOut, ChevronDown, Award } from "lucide-react"; // Add a logo/icon, I used "Award" here as an example
+import { Plus, Hash, MessageSquare, Settings, LogOut, ChevronDown, Award } from "lucide-react"; // Icons
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -18,8 +21,20 @@ export default function Sidebar({
   onUserClick: (user: any) => void;
   onChannelClick: (channel: any) => void;
 }) {
+  const router = useRouter(); // For navigation
   const [channelsOpen, setChannelsOpen] = useState(true);
   const [usersOpen, setUsersOpen] = useState(true);
+  const [userRole, setUserRole] = useState<"owner" | "user" | null>(null); // User role state
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      // Mocked role; replace this with actual API call to fetch the role
+      const role = "user"; // Example role ("user" or "owner")
+      setUserRole(role);
+    };
+
+    fetchUserRole();
+  }, []);
 
   const mockChannels = [
     { name: "general", description: "General discussions for the team." },
@@ -31,14 +46,14 @@ export default function Sidebar({
     { name: "Jane Smith", position: "Product Manager", role: "Product", status: "offline" },
   ];
 
-  const toggleChannels = () => setChannelsOpen(!channelsOpen);
-  const toggleUsers = () => setUsersOpen(!usersOpen);
-
   const workspaces = [
     { name: "Acme Corp", id: "1" },
     { name: "Tech Co", id: "2" },
     { name: "Design Studio", id: "3" },
   ];
+
+  const toggleChannels = () => setChannelsOpen(!channelsOpen);
+  const toggleUsers = () => setUsersOpen(!usersOpen);
 
   const handleWorkspaceChange = (workspace: any) => {
     console.log("Switched to workspace:", workspace.name);
@@ -48,29 +63,33 @@ export default function Sidebar({
     console.log("Add new workspace");
   };
 
+  const handleSettingsClick = () => {
+    if (userRole === "owner") {
+      router.push("/dashboard/settings/owner"); // Navigate to owner settings
+    } else {
+      router.push("/dashboard/settings/user"); // Navigate to user settings
+    }
+  };
+
   return (
     <div className="w-64 bg-card border-r flex flex-col">
       <div className="p-4 border-b">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            {/* Workspace Dropdown with Logo, Name, and Chevron Icon Inside the Box */}
+            {/* Workspace Dropdown with Logo, Name, and Chevron Icon */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center space-x-2">
-                  {/* Container with Border Around the Logo, Workspace Name, and Chevron Icon */}
                   <div className="flex items-center space-x-2 border border-muted-foreground rounded-md p-2">
-                    <Award className="h-5 w-5 text-muted-foreground" /> {/* Placeholder for logo icon */}
+                    <Award className="h-5 w-5 text-muted-foreground" />
                     <span className="font-semibold">Acme Corp</span>
-                    <ChevronDown className="h-4 w-4 text-muted-foreground" /> {/* Chevron icon */}
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
                   </div>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
                 {workspaces.map((workspace, index) => (
-                  <DropdownMenuItem
-                    key={index}
-                    onClick={() => handleWorkspaceChange(workspace)}
-                  >
+                  <DropdownMenuItem key={index} onClick={() => handleWorkspaceChange(workspace)}>
                     {workspace.name}
                   </DropdownMenuItem>
                 ))}
@@ -94,7 +113,6 @@ export default function Sidebar({
               <Plus className="h-3 w-3" />
             </Button>
           </div>
-          {/* Show or hide channels based on channelsOpen state */}
           {channelsOpen && (
             <div className="space-y-1">
               {mockChannels.map((channel, index) => (
@@ -123,7 +141,6 @@ export default function Sidebar({
               <Plus className="h-3 w-3" />
             </Button>
           </div>
-          {/* Show or hide users based on usersOpen state */}
           {usersOpen && (
             <div className="space-y-1">
               {mockUsers.map((user, index) => (
@@ -157,7 +174,12 @@ export default function Sidebar({
 
         {/* Settings */}
         <div className="flex items-center justify-start space-x-2">
-          <Button variant="ghost" size="sm" className="w-full justify-start text-muted-foreground">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-muted-foreground"
+            onClick={handleSettingsClick} // Navigate based on user role
+          >
             <Settings className="h-4 w-4 mr-2" />
             <span className="ml-2">Settings</span>
           </Button>

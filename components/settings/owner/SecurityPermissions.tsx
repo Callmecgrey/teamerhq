@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from "@/components/ui/select";
-import { Toaster } from "@/components/ui/toaster";
-import { toast } from "sonner";
+import { Toaster } from "@/components/ui/toaster"; // Import the custom Toaster
+import { toast } from "sonner"; // Import Sonner toast function
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -20,11 +20,21 @@ const SecurityPermissions = () => {
   const [sessionManagement, setSessionManagement] = useState([{ id: 1, user: "John Doe", ip: "192.168.1.10", activeSince: "2023-01-05" }]);
   const [visibilitySettings, setVisibilitySettings] = useState({ profile: "team-only", workspace: "team-only" });
   const [openAlert, setOpenAlert] = useState(false);
+  const [phoneModalOpen, setPhoneModalOpen] = useState(false);
+  const [otpModalOpen, setOtpModalOpen] = useState(false);
+  const [fingerprintModalOpen, setFingerprintModalOpen] = useState(false);
 
-  const handleForceLogout = (sessionId: number) => {
+  interface Session {
+    id: number;
+    user: string;
+    ip: string;
+    activeSince: string;
+  }
+
+  const handleForceLogout = (sessionId: number): void => {
     setOpenAlert(true);
-    setSessionManagement((prev) =>
-      prev.filter((session) => session.id !== sessionId)
+    setSessionManagement((prev: Session[]) =>
+      prev.filter((session: Session) => session.id !== sessionId)
     );
   };
 
@@ -60,7 +70,7 @@ const SecurityPermissions = () => {
             <div className="flex flex-col space-y-3">
               <div className="flex items-center justify-between">
                 <Label>Set workspace-wide access level</Label>
-                <select className="px-3 py-2 border rounded-md">
+                <select className="px-3 py-2 border rounded-md bg-white text-black dark:bg-gray-800 dark:text-white">
                   <option value="public">Public</option>
                   <option value="invite-only">Invite Only</option>
                   <option value="restricted">Restricted</option>
@@ -132,8 +142,12 @@ const SecurityPermissions = () => {
             </div>
             {twoFactorEnabled && (
               <div className="space-y-3">
-                <Button variant="outline">Add Phone Number</Button>
-                <Button variant="outline">Use Device as Passkey</Button>
+                <Button variant="outline" onClick={() => setPhoneModalOpen(true)}>
+                  Add Phone Number
+                </Button>
+                <Button variant="outline" onClick={() => setFingerprintModalOpen(true)}>
+                  Use Device as Passkey
+                </Button>
               </div>
             )}
             <Button variant="outline" onClick={handleSetRecoveryMethod}>
@@ -190,7 +204,7 @@ const SecurityPermissions = () => {
             <div className="flex items-center justify-between">
               <Label>Profile Visibility</Label>
               <select
-                className="px-3 py-2 border rounded-md"
+                className="px-3 py-2 border rounded-md bg-white text-black dark:bg-gray-800 dark:text-white"
                 value={visibilitySettings.profile}
                 onChange={(e) =>
                   setVisibilitySettings((prev) => ({
@@ -206,7 +220,7 @@ const SecurityPermissions = () => {
             <div className="flex items-center justify-between">
               <Label>Workspace Activity Visibility</Label>
               <select
-                className="px-3 py-2 border rounded-md"
+                className="px-3 py-2 border rounded-md bg-white text-black dark:bg-gray-800 dark:text-white"
                 value={visibilitySettings.workspace}
                 onChange={(e) =>
                   setVisibilitySettings((prev) => ({
@@ -238,6 +252,63 @@ const SecurityPermissions = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Phone Number Modal */}
+      {phoneModalOpen && (
+        <AlertDialog open={phoneModalOpen} onOpenChange={setPhoneModalOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Enter Phone Number</AlertDialogTitle>
+            </AlertDialogHeader>
+            <input type="text" placeholder="Phone Number" className="w-full px-3 py-2 border rounded-md" />
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  setPhoneModalOpen(false);
+                  setOtpModalOpen(true);
+                }}
+              >
+                Submit
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
+
+      {/* OTP Modal */}
+      {otpModalOpen && (
+        <AlertDialog open={otpModalOpen} onOpenChange={setOtpModalOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Enter OTP</AlertDialogTitle>
+            </AlertDialogHeader>
+            <input type="text" placeholder="Enter OTP" className="w-full px-3 py-2 border rounded-md" />
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => setOtpModalOpen(false)}>Verify</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
+
+      {/* Fingerprint Verification Modal */}
+      {fingerprintModalOpen && (
+        <AlertDialog open={fingerprintModalOpen} onOpenChange={setFingerprintModalOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Fingerprint Verification</AlertDialogTitle>
+              <AlertDialogDescription>
+                Please verify your fingerprint to proceed.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => setFingerprintModalOpen(false)}>Verify</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   );
 };

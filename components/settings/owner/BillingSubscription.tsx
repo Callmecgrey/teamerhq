@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/table";
 import { ChartContainer, ChartLegend, ChartTooltip } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from "recharts";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 const BillingPage = () => {
   const [plan, setPlan] = useState("Pro Plan");
@@ -16,17 +17,17 @@ const BillingPage = () => {
   const [paymentMethod, setPaymentMethod] = useState("Visa **** 4242");
   const [billingHistory, setBillingHistory] = useState([
     { date: "2025-01-01", amount: "$99.00", status: "Paid" },
-    { date: "2024-12-01", amount: "$99.00", status: "Paid" },
+    { date: "2024-12-01", amount: "$99.00", status: "Failed" },
   ]);
-
   const [licenses, setLicenses] = useState([
     { name: "John Doe", role: "Admin", status: "Active" },
     { name: "Jane Smith", role: "Member", status: "Active" },
   ]);
-
   const [billingManagers, setBillingManagers] = useState([
     { name: "John Doe", role: "Admin" },
   ]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newCard, setNewCard] = useState("");
 
   const storageBreakdown = [
     { name: "Documents", value: 10 },
@@ -45,13 +46,13 @@ const BillingPage = () => {
   const chartConfig = {
     usersChart: {
       label: "Active Users",
-      color: "#8884d8", // Set a color for the bar chart
+      color: "#8884d8",
     },
     storageChart: {
       label: "Storage Breakdown",
       theme: {
-        light: { backgroundColor: "#ffffff" }, // Light mode config
-        dark: { backgroundColor: "#333333" },  // Dark mode config
+        light: { backgroundColor: "#ffffff" },
+        dark: { backgroundColor: "#333333" },
       },
     },
   };
@@ -72,7 +73,16 @@ const BillingPage = () => {
   };
 
   const handleRemoveBillingManager = (name) => {
-    setBillingManagers(billingManagers.filter(manager => manager.name !== name));
+    setBillingManagers(billingManagers.filter((manager) => manager.name !== name));
+  };
+
+  const handleEditPaymentMethod = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleSaveNewCard = () => {
+    setPaymentMethod(newCard);
+    setIsDialogOpen(false);
   };
 
   return (
@@ -91,13 +101,12 @@ const BillingPage = () => {
             <h2 className="text-xl font-semibold">Plan Management</h2>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-lg">Current Plan: <strong>{plan}</strong></p>
+                <p className="text-lg">
+                  Current Plan: <strong>{plan}</strong>
+                </p>
                 <p className="text-sm text-muted-foreground">Billed monthly. Cancel anytime.</p>
               </div>
-              <Button
-                variant="outline"
-                onClick={() => console.log("Upgrade Plan")}
-              >
+              <Button variant="outline" onClick={() => console.log("Upgrade Plan")}>
                 Upgrade/Downgrade Plan
               </Button>
             </div>
@@ -153,11 +162,12 @@ const BillingPage = () => {
             {/* Payment Method */}
             <div className="flex items-center justify-between">
               <Label>Payment Method</Label>
-              <Input
-                value={paymentMethod}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-                className="w-2/3"
-              />
+              <div className="flex items-center space-x-2">
+                <Input value={paymentMethod} readOnly className="w-2/3" />
+                <Button variant="outline" onClick={handleEditPaymentMethod}>
+                  Edit
+                </Button>
+              </div>
             </div>
 
             {/* Billing History */}
@@ -185,6 +195,14 @@ const BillingPage = () => {
                         >
                           Download Invoice
                         </Button>
+                        {record.status === "Failed" && (
+                          <Button
+                            variant="link"
+                            onClick={() => console.log("Retry Payment")}
+                          >
+                            Retry Payment
+                          </Button>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -243,6 +261,31 @@ const BillingPage = () => {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Dialog for Editing Payment Method */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Payment Method</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Label htmlFor="new-card">Enter New Card Details</Label>
+            <Input
+              id="new-card"
+              className="w-full"
+              placeholder="Card Number"
+              value={newCard}
+              onChange={(e) => setNewCard(e.target.value)}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveNewCard}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

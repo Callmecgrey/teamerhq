@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 const ChannelManagement = () => {
   const [channels, setChannels] = useState([
@@ -23,20 +24,30 @@ const ChannelManagement = () => {
   ]);
 
   const [defaultChannels, setDefaultChannels] = useState<string[]>([]);
-  const [archivedChannels, setArchivedChannels] = useState(["Old Channel"]);
+  const [archivedChannels, setArchivedChannels] = useState<string[]>([]);
   const [permissions, setPermissions] = useState({
-    create: true,
-    delete: false,
-    rename: true,
+    create: { enabled: true, role: "" },
+    delete: { enabled: false, role: "" },
+    rename: { enabled: true, role: "" },
   });
 
+  const [roles, setRoles] = useState(["Admin", "Editor", "Viewer"]); // Sample roles
+
   const togglePermission = (key: keyof typeof permissions) => {
-    setPermissions((prev) => ({ ...prev, [key]: !prev[key] }));
+    setPermissions((prev) => ({
+      ...prev,
+      [key]: { ...prev[key], enabled: !prev[key].enabled },
+    }));
   };
 
   const handleRestoreChannel = (channelName: string) => {
     setArchivedChannels((prev) => prev.filter((name) => name !== channelName));
     console.log("Restored channel:", channelName);
+  };
+
+  const handlePermanentlyDeleteChannel = (channelName: string) => {
+    setArchivedChannels((prev) => prev.filter((name) => name !== channelName));
+    console.log("Permanently deleted channel:", channelName);
   };
 
   const toggleEditChannel = (id: number) => {
@@ -45,6 +56,12 @@ const ChannelManagement = () => {
         channel.id === id ? { ...channel, isEditable: !channel.isEditable } : channel
       )
     );
+  };
+
+  const archiveChannel = (channelName: string) => {
+    setChannels((prev) => prev.filter((channel) => channel.name !== channelName));
+    setArchivedChannels((prev) => [...prev, channelName]);
+    console.log("Archived channel:", channelName);
   };
 
   const handleAddDefaultChannel = (channelName: string) => {
@@ -70,14 +87,14 @@ const ChannelManagement = () => {
         {/* Channel Directory */}
         <TabsContent value="directory">
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-800">Channel Directory</h2>
-            <Table className="text-sm">
+            <h2 className="text-2xl font-semibold text-gray-800 w-full">Channel Directory</h2>
+            <Table className="text-sm w-full">
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Members</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead className="w-1/4">Name</TableHead>
+                  <TableHead className="w-1/4">Type</TableHead>
+                  <TableHead className="w-1/4">Members</TableHead>
+                  <TableHead className="w-1/4">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -121,6 +138,13 @@ const ChannelManagement = () => {
                       <Button
                         variant="outline"
                         size="sm"
+                        onClick={() => archiveChannel(channel.name)}
+                      >
+                        Archive
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => console.log("Delete channel:", channel.name)}
                       >
                         Delete
@@ -153,33 +177,31 @@ const ChannelManagement = () => {
                   ))}
                 </SelectContent>
               </Select>
-              <p className="text-sm text-muted-foreground">
-                These are the channels users will automatically join upon signup.
-              </p>
               <div className="space-y-2">
                 <Label>Selected Default Channels</Label>
-                <div className="space-y-1">
-                  {defaultChannels.map((channel) => (
-                    <div
-                      key={channel}
-                      className="flex items-center justify-between border p-2 rounded"
-                    >
-                      <span>{channel}</span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleRemoveDefaultChannel(channel)}
+                {defaultChannels.length > 0 ? (
+                  <div className="space-y-1">
+                    {defaultChannels.map((channel) => (
+                      <div
+                        key={channel}
+                        className="flex items-center justify-between border p-2 rounded"
                       >
-                        Remove
-                      </Button>
-                    </div>
-                  ))}
-                </div>
+                        <span>{channel}</span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleRemoveDefaultChannel(channel)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">No default channels selected.</p>
+                )}
               </div>
             </div>
-            <Button variant="outline" onClick={() => console.log("Default channels updated:", defaultChannels)}>
-              Save Default Channels
-            </Button>
           </div>
         </TabsContent>
 
@@ -187,30 +209,41 @@ const ChannelManagement = () => {
         <TabsContent value="archived">
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold text-gray-800">Archived Channels</h2>
-            <Table className="text-sm">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {archivedChannels.map((channel, idx) => (
-                  <TableRow key={idx}>
-                    <TableCell>{channel}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleRestoreChannel(channel)}
-                      >
-                        Restore
-                      </Button>
-                    </TableCell>
+            {archivedChannels.length > 0 ? (
+              <Table className="text-sm w-full">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-3/4">Name</TableHead>
+                    <TableHead className="w-1/4 text-right">Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {archivedChannels.map((channel, idx) => (
+                    <TableRow key={idx}>
+                      <TableCell>{channel}</TableCell>
+                      <TableCell className="text-right space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleRestoreChannel(channel)}
+                        >
+                          Restore
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handlePermanentlyDeleteChannel(channel)}
+                        >
+                          Permanently Delete
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <p className="text-sm text-muted-foreground">You don't have an archived channel yet.</p>
+            )}
           </div>
         </TabsContent>
 
@@ -219,27 +252,42 @@ const ChannelManagement = () => {
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold text-gray-800">Channel Permissions</h2>
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label>Allow Channel Creation</Label>
-                <Switch
-                  checked={permissions.create}
-                  onCheckedChange={() => togglePermission("create")}
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <Label>Allow Channel Deletion</Label>
-                <Switch
-                  checked={permissions.delete}
-                  onCheckedChange={() => togglePermission("delete")}
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <Label>Allow Channel Renaming</Label>
-                <Switch
-                  checked={permissions.rename}
-                  onCheckedChange={() => togglePermission("rename")}
-                />
-              </div>
+              {Object.entries(permissions).map(([key, { enabled, role }]) => (
+                <div key={key} className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <Label>Allow {key.charAt(0).toUpperCase() + key.slice(1)} Channels</Label>
+                    <Switch
+                      checked={enabled}
+                      onCheckedChange={() => togglePermission(key as keyof typeof permissions)}
+                    />
+                  </div>
+                  {enabled && (
+                    <div className="flex items-center justify-between">
+                      <Label>Select the required role for {key} action</Label>
+                      <Select
+                        value={role}
+                        onValueChange={(newRole) =>
+                          setPermissions((prev) => ({
+                            ...prev,
+                            [key]: { ...prev[key], role: newRole },
+                          }))
+                        }
+                      >
+                        <SelectTrigger>
+                          <span>{role || "Select Role"}</span>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {roles.map((roleItem) => (
+                            <SelectItem key={roleItem} value={roleItem}>
+                              {roleItem}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </TabsContent>

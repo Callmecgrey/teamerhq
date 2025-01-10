@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/table";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 
 const ChannelManagement = () => {
   const [channels, setChannels] = useState([
@@ -26,12 +25,12 @@ const ChannelManagement = () => {
   const [defaultChannels, setDefaultChannels] = useState<string[]>([]);
   const [archivedChannels, setArchivedChannels] = useState<string[]>([]);
   const [permissions, setPermissions] = useState({
-    create: { enabled: true, role: "" },
+    create: { enabled: false, role: "" },
     delete: { enabled: false, role: "" },
-    rename: { enabled: true, role: "" },
+    rename: { enabled: false, role: "" },
   });
 
-  const [roles, setRoles] = useState(["Admin", "Editor", "Viewer"]); // Sample roles
+  const [roles, setRoles] = useState(["Admin & Team Members", "Owner", "Admin", "Team Members"]);
 
   const togglePermission = (key: keyof typeof permissions) => {
     setPermissions((prev) => ({
@@ -255,15 +254,15 @@ const ChannelManagement = () => {
               {Object.entries(permissions).map(([key, { enabled, role }]) => (
                 <div key={key} className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <Label>Allow {key.charAt(0).toUpperCase() + key.slice(1)} Channels</Label>
+                    <Label className="w-full">Allow {key.charAt(0).toUpperCase() + key.slice(1)} Channels</Label>
                     <Switch
                       checked={enabled}
                       onCheckedChange={() => togglePermission(key as keyof typeof permissions)}
                     />
                   </div>
                   {enabled && (
-                    <div className="flex items-center justify-between">
-                      <Label>Select the required role for {key} action</Label>
+                    <div className="flex items-center justify-between w-full">
+                      <Label className="w-full text-muted-foreground">Select the required role for {key} channels</Label>
                       <Select
                         value={role}
                         onValueChange={(newRole) =>
@@ -273,7 +272,7 @@ const ChannelManagement = () => {
                           }))
                         }
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-1/4">
                           <span>{role || "Select Role"}</span>
                         </SelectTrigger>
                         <SelectContent>

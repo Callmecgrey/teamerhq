@@ -2,20 +2,27 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Table, TableHead, TableBody, TableRow, TableCell } from "@/components/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 
 const ChannelManagement = () => {
   const [channels, setChannels] = useState([
-    { name: "General", type: "Public", members: 50 },
-    { name: "Team Leads", type: "Private", members: 10 },
-    { name: "Marketing", type: "Shared", members: 20 },
+    { id: 1, name: "General", type: "Public", members: 50, isEditable: false },
+    { id: 2, name: "Team Leads", type: "Private", members: 10, isEditable: false },
+    { id: 3, name: "Marketing", type: "Shared", members: 20, isEditable: false },
   ]);
 
-  const [defaultChannels, setDefaultChannels] = useState(["General"]);
+  const [defaultChannels, setDefaultChannels] = useState<string[]>([]);
   const [archivedChannels, setArchivedChannels] = useState(["Old Channel"]);
   const [permissions, setPermissions] = useState({
     create: true,
@@ -25,6 +32,29 @@ const ChannelManagement = () => {
 
   const togglePermission = (key: keyof typeof permissions) => {
     setPermissions((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleRestoreChannel = (channelName: string) => {
+    setArchivedChannels((prev) => prev.filter((name) => name !== channelName));
+    console.log("Restored channel:", channelName);
+  };
+
+  const toggleEditChannel = (id: number) => {
+    setChannels((prev) =>
+      prev.map((channel) =>
+        channel.id === id ? { ...channel, isEditable: !channel.isEditable } : channel
+      )
+    );
+  };
+
+  const handleAddDefaultChannel = (channelName: string) => {
+    if (!defaultChannels.includes(channelName)) {
+      setDefaultChannels((prev) => [...prev, channelName]);
+    }
+  };
+
+  const handleRemoveDefaultChannel = (channelName: string) => {
+    setDefaultChannels((prev) => prev.filter((name) => name !== channelName));
   };
 
   return (
@@ -40,21 +70,62 @@ const ChannelManagement = () => {
         {/* Channel Directory */}
         <TabsContent value="directory">
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Channel Directory</h2>
-            <Table>
-              <TableHead>
+            <h2 className="text-2xl font-semibold text-gray-800">Channel Directory</h2>
+            <Table className="text-sm">
+              <TableHeader>
                 <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Type</TableCell>
-                  <TableCell>Members</TableCell>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Members</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              </TableHead>
+              </TableHeader>
               <TableBody>
-                {channels.map((channel, idx) => (
-                  <TableRow key={idx}>
+                {channels.map((channel) => (
+                  <TableRow key={channel.id}>
                     <TableCell>{channel.name}</TableCell>
-                    <TableCell>{channel.type}</TableCell>
+                    <TableCell>
+                      {channel.isEditable ? (
+                        <Select
+                          value={channel.type}
+                          onValueChange={(newType) =>
+                            setChannels((prev) =>
+                              prev.map((c) =>
+                                c.id === channel.id ? { ...c, type: newType } : c
+                              )
+                            )
+                          }
+                        >
+                          <SelectTrigger>
+                            <span>{channel.type}</span>
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Public">Public</SelectItem>
+                            <SelectItem value="Private">Private</SelectItem>
+                            <SelectItem value="Shared">Shared</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <span>{channel.type}</span>
+                      )}
+                    </TableCell>
                     <TableCell>{channel.members}</TableCell>
+                    <TableCell className="space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => toggleEditChannel(channel.id)}
+                      >
+                        {channel.isEditable ? "Save" : "Edit"}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => console.log("Delete channel:", channel.name)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -65,24 +136,48 @@ const ChannelManagement = () => {
         {/* Default Channels */}
         <TabsContent value="defaults">
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Default Channels</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">Default Channels</h2>
             <div className="space-y-2">
-              <Label>Default Channels</Label>
-              <Input
-                type="text"
-                placeholder="Enter channel names separated by commas"
-                value={defaultChannels.join(", ")}
-                onChange={(e) =>
-                  setDefaultChannels(
-                    e.target.value.split(",").map((channel) => channel.trim())
-                  )
-                }
-              />
+              <Label>Select Default Channels</Label>
+              <Select
+                onValueChange={handleAddDefaultChannel}
+              >
+                <SelectTrigger>
+                  <span>Select Channels</span>
+                </SelectTrigger>
+                <SelectContent>
+                  {channels.map((channel) => (
+                    <SelectItem key={channel.id} value={channel.name}>
+                      {channel.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <p className="text-sm text-muted-foreground">
                 These are the channels users will automatically join upon signup.
               </p>
+              <div className="space-y-2">
+                <Label>Selected Default Channels</Label>
+                <div className="space-y-1">
+                  {defaultChannels.map((channel) => (
+                    <div
+                      key={channel}
+                      className="flex items-center justify-between border p-2 rounded"
+                    >
+                      <span>{channel}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleRemoveDefaultChannel(channel)}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-            <Button variant="outline" onClick={() => console.log("Default channels updated.")}>
+            <Button variant="outline" onClick={() => console.log("Default channels updated:", defaultChannels)}>
               Save Default Channels
             </Button>
           </div>
@@ -91,14 +186,14 @@ const ChannelManagement = () => {
         {/* Archived Channels */}
         <TabsContent value="archived">
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Archived Channels</h2>
-            <Table>
-              <TableHead>
+            <h2 className="text-2xl font-semibold text-gray-800">Archived Channels</h2>
+            <Table className="text-sm">
+              <TableHeader>
                 <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Actions</TableCell>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              </TableHead>
+              </TableHeader>
               <TableBody>
                 {archivedChannels.map((channel, idx) => (
                   <TableRow key={idx}>
@@ -107,7 +202,7 @@ const ChannelManagement = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => console.log("Restore channel:", channel)}
+                        onClick={() => handleRestoreChannel(channel)}
                       >
                         Restore
                       </Button>
@@ -122,7 +217,7 @@ const ChannelManagement = () => {
         {/* Channel Permissions */}
         <TabsContent value="permissions">
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Channel Permissions</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">Channel Permissions</h2>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label>Allow Channel Creation</Label>
@@ -146,9 +241,6 @@ const ChannelManagement = () => {
                 />
               </div>
             </div>
-            <Button variant="outline" onClick={() => console.log("Permissions updated:", permissions)}>
-              Save Permissions
-            </Button>
           </div>
         </TabsContent>
       </Tabs>

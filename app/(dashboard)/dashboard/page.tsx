@@ -30,7 +30,7 @@ export default function DashboardPage() {
     name: string;
     description: string;
     messages?: Message[];
-    teamMembers?: { name: string; role: string }[];
+    teamMembers?: { name: string; position: string }[];
   } | null>(() => {
     const channelName = searchParams.get("channel");
     const channelDescription = searchParams.get("description");
@@ -41,13 +41,13 @@ export default function DashboardPage() {
 
   const [selectedUser, setSelectedUser] = useState<{
     name: string;
-    role?: string;
+    position?: string;
     messages?: Message[];
   } | null>(() => {
     const userName = searchParams.get("user");
-    const userRole = searchParams.get("role");
+    const userDept = searchParams.get("dept");
     return userName
-      ? { name: userName, role: userRole, messages: [] }
+      ? { name: userName, dept: userDept, messages: [] }
       : null;
   });
 
@@ -62,7 +62,7 @@ export default function DashboardPage() {
     if (selectedChannel) query.channel = selectedChannel.name;
     if (selectedUser) {
       query.user = selectedUser.name;
-      if (selectedUser.role) query.role = selectedUser.role;
+      if (selectedUser.position) query.dept = selectedUser.position;
     }
     if (selectedMessage) query.message = String(selectedMessage.id);
     if (activeSidebar) query.sidebar = activeSidebar;
@@ -98,10 +98,10 @@ export default function DashboardPage() {
 
   const closeSidebar = () => setActiveSidebar("files");
 
-  const handleTeamMemberClick = (member: { name: string; role: string }) => {
+  const handleTeamMemberClick = (member: { name: string; position: string }) => {
     setSelectedUser({
       name: member.name,
-      role: member.role,
+      position: member.position,
       messages: [],
     });
     setActiveSidebar("user");

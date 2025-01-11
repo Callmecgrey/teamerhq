@@ -10,28 +10,28 @@ export default function ChannelInfoSidebar({
   channel: {
     name: string;
     description: string;
-    teamMembers?: { name: string; role: string }[];
+    teamMembers?: { name: string; position: string }[];
   };
   onClose: () => void;
-  onTeamMemberClick: (member: { name: string; role: string }) => void;
+  onTeamMemberClick: (member: { name: string; position: string }) => void;
 }) {
   // Define demo team members if none are provided
   const demoTeamMembers = [
-    { name: "Alice Johnson", role: "Team Lead" },
-    { name: "Bob Smith", role: "Developer" },
-    { name: "Charlie Davis", role: "Designer" },
-    { name: "Dana Lee", role: "QA Engineer" },
-    { name: "Evan Wright", role: "Project Manager" },
-    { name: "Fiona Hill", role: "Product Owner" },
-    { name: "George Clark", role: "Business Analyst" },
-    { name: "Hannah Adams", role: "Scrum Master" },
-    { name: "Ian Bell", role: "System Architect" },
-    { name: "Jessica Taylor", role: "UX Researcher" },
-    { name: "Kyle Brown", role: "Frontend Developer" },
-    { name: "Laura Evans", role: "Backend Developer" },
-    { name: "Mike Johnson", role: "DevOps Engineer" },
-    { name: "Nina Carter", role: "Tester" },
-    { name: "Oliver Stone", role: "Support Specialist" },
+    { name: "Alice Johnson", position: "Team Lead" },
+    { name: "Bob Smith", position: "Developer" },
+    { name: "Charlie Davis", position: "Designer" },
+    { name: "Dana Lee", position: "QA Engineer" },
+    { name: "Evan Wright", position: "Project Manager" },
+    { name: "Fiona Hill", position: "Product Owner" },
+    { name: "George Clark", position: "Business Analyst" },
+    { name: "Hannah Adams", position: "Scrum Master" },
+    { name: "Ian Bell", position: "System Architect" },
+    { name: "Jessica Taylor", position: "UX Researcher" },
+    { name: "Kyle Brown", position: "Frontend Developer" },
+    { name: "Laura Evans", position: "Backend Developer" },
+    { name: "Mike Johnson", position: "DevOps Engineer" },
+    { name: "Nina Carter", position: "Tester" },
+    { name: "Oliver Stone", position: "Support Specialist" },
   ];
 
   const teamMembers = channel.teamMembers?.length
@@ -40,7 +40,7 @@ export default function ChannelInfoSidebar({
 
   // Handle onClose, just close the sidebar without navigating
   const handleClose = () => {
-    onClose();  // Simply call the onClose function passed as a prop
+    onClose(); // Simply call the onClose function passed as a prop
   };
 
   return (
@@ -91,7 +91,7 @@ export default function ChannelInfoSidebar({
                   </div>
                   <div>
                     <p className="text-sm font-medium">{member.name}</p>
-                    <p className="text-xs text-muted-foreground">{member.role}</p>
+                    <p className="text-xs text-muted-foreground">{member.position}</p>
                   </div>
                 </li>
               ))}

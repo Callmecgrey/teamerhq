@@ -3,9 +3,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // For client-side navigation
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus, Hash, MessageSquare, Settings, LogOut, ChevronDown, Award } from "lucide-react"; // Icons
+import { Plus, Hash, MessageSquare, Settings, LogOut, ChevronDown, Award } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -24,7 +24,7 @@ export default function Sidebar({
   const router = useRouter(); // For navigation
   const [channelsOpen, setChannelsOpen] = useState(true);
   const [usersOpen, setUsersOpen] = useState(true);
-  const [userRole, setUserRole] = useState<"owner" | "user" | null>(null); // User role state
+  const [userRole, setUserRole] = useState<"owner" | "user" | null>(null);
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -42,8 +42,8 @@ export default function Sidebar({
   ];
 
   const mockUsers = [
-    { name: "John Doe", position: "Senior Developer", role: "Engineering", status: "online" },
-    { name: "Jane Smith", position: "Product Manager", role: "Product", status: "offline" },
+    { name: "John Doe", position: "Senior Developer", dept: "Engineering", status: "online" },
+    { name: "Jane Smith", position: "Product Manager", dept: "Product", status: "offline" },
   ];
 
   const workspaces = [
@@ -65,9 +65,9 @@ export default function Sidebar({
 
   const handleSettingsClick = () => {
     if (userRole === "owner") {
-      router.push("/dashboard/settings/owner"); // Navigate to owner settings
+      router.push("/dashboard/settings/owner");
     } else {
-      router.push("/dashboard/settings/user"); // Navigate to user settings
+      router.push("/dashboard/settings/user");
     }
   };
 

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, Hash, LogOut, Settings, Lock } from "lucide-react";
 import { Sidebar as UISidebar, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
 import { TeamSwitcher } from "@/components/switcher/team-switcher";
+import CreateChannelPopover from "@/components/switcher/CreateChannelPopover"; // Import the popover
 
 // Sample data for teams
 const teamsData = [
@@ -33,23 +34,21 @@ export default function ChatSidebar({
 }: {
   onUserClick: (user: any) => void;
   onChannelClick: (channel: any) => void;
+  onAddChannelClick: () => void; 
 }) {
   const router = useRouter();
   const [channelsOpen, setChannelsOpen] = useState(true);
   const [usersOpen, setUsersOpen] = useState(true);
   const [userRole, setUserRole] = useState<"owner" | "user" | null>(null);
   const [userLogo, setUserLogo] = useState<React.ElementType>(Plus);
-
-  // Unread message count for user and channel
   const [unreadMessages, setUnreadMessages] = useState<number>(3);
   const [unreadChannel, setUnreadChannel] = useState<number>(205);
-
-  // Drafting status for "Me"
   const [drafting, setDrafting] = useState(true);
+  const [isCreateChannelPopoverOpen, setIsCreateChannelPopoverOpen] = useState(false); // New state for the popover
 
   useEffect(() => {
     const fetchUserRole = async () => {
-      const role = "user";
+      const role = "user"; // Example role, you can replace with actual logic
       setUserRole(role);
     };
     fetchUserRole();
@@ -98,7 +97,7 @@ export default function ChatSidebar({
               <span className="text-sm font-medium cursor-pointer" onClick={toggleChannels}>
                 Channels
               </span>
-              <Button variant="ghost" size="icon" className="h-4 w-4">
+              <Button variant="ghost" size="icon" className="h-4 w-4" onClick={() => setIsCreateChannelPopoverOpen(true)}>
                 <Plus className="h-3 w-3" />
               </Button>
             </div>
@@ -154,7 +153,7 @@ export default function ChatSidebar({
                     />
                     {user.name}
                     {user.name !== "Me" && unreadMessages > 0 && (
-                      <span className="ml-2 text-red-500 text-xs font-bold">• {unreadMessages}</span> // Unread message notification for other users
+                      <span className="ml-2 text-red-500 text-xs font-bold">• {unreadMessages}</span>
                     )}
                     {user.name === "Me" && drafting && (
                       <span className="ml-2 text-orange-500 text-xs font-bold">Drafting...</span>
@@ -183,6 +182,11 @@ export default function ChatSidebar({
           </Button>
         </div>
       </UISidebar>
+
+      {/* Create Channel Popover */}
+      {isCreateChannelPopoverOpen && (
+        <CreateChannelPopover onClose={() => setIsCreateChannelPopoverOpen(false)} />
+      )}
     </SidebarProvider>
   );
 }

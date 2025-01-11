@@ -12,6 +12,7 @@ import MessageThreadSidebar from "@/components/chat/MessageThreadSidebar";
 import ChannelInfoSidebar from "@/components/chat/ChannelInfoSidebar";
 import UserChatHeader from "@/components/chat/UserChatHeader";
 import FilesSidebar from "@/components/chat/FilesSidebar";
+import CreateChannelPopover from "@/components/switcher/CreateChannelPopover"; // Import the popover
 
 type Message = {
   id: number;
@@ -55,6 +56,8 @@ export default function DashboardPage() {
   const [activeSidebar, setActiveSidebar] = useState<"user" | "channel" | "message" | "files">(
     "files"
   );
+
+  const [isCreateChannelPopoverOpen, setIsCreateChannelPopoverOpen] = useState(false); // New state for the popover
 
   // Update URL query parameters when states change
   useEffect(() => {
@@ -110,7 +113,11 @@ export default function DashboardPage() {
   return (
     <div className="h-screen flex">
       {/* Sidebar */}
-      <Sidebar onChannelClick={handleChannelSelect} onUserClick={handleUserSelect} />
+      <Sidebar
+        onChannelClick={handleChannelSelect}
+        onUserClick={handleUserSelect}
+        onAddChannelClick={() => setIsCreateChannelPopoverOpen(true)} // Open popover when + is clicked
+      />
 
       {/* Main Content */}
       <div className={`flex-1 flex flex-col ${activeSidebar !== "files" ? "max-w-[75%]" : ""}`}>
@@ -199,6 +206,11 @@ export default function DashboardPage() {
       )}
       {activeSidebar === "files" && (
         <FilesSidebar onClose={() => {}} />
+      )}
+
+      {/* Create Channel Popover */}
+      {isCreateChannelPopoverOpen && (
+        <CreateChannelPopover onClose={() => setIsCreateChannelPopoverOpen(false)} />
       )}
     </div>
   );

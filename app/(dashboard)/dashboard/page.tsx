@@ -11,6 +11,7 @@ import UserProfileSidebar from "@/components/chat/UserProfileSidebar";
 import MessageThreadSidebar from "@/components/chat/MessageThreadSidebar";
 import ChannelInfoSidebar from "@/components/chat/ChannelInfoSidebar";
 import UserChatHeader from "@/components/chat/UserChatHeader";
+import FilesSidebar from "@/components/chat/FilesSidebar";
 
 type Message = {
   id: number;
@@ -51,8 +52,8 @@ export default function DashboardPage() {
   });
 
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
-  const [activeSidebar, setActiveSidebar] = useState<"user" | "channel" | "message" | null>(
-    searchParams.get("sidebar") as "user" | "channel" | "message" | null
+  const [activeSidebar, setActiveSidebar] = useState<"user" | "channel" | "message" | "files">(
+    "files"
   );
 
   // Update URL query parameters when states change
@@ -72,17 +73,19 @@ export default function DashboardPage() {
 
   // Handlers
   const handleChannelSelect = (channel: any) => {
+    const wasInMessageSidebar = activeSidebar === "message";
     setSelectedChannel(channel);
     setSelectedUser(null);
     setSelectedMessage(null);
-    setActiveSidebar(null);
+    setActiveSidebar(wasInMessageSidebar ? "files" : "files");
   };
 
   const handleUserSelect = (user: any) => {
+    const wasInMessageSidebar = activeSidebar === "message";
     setSelectedUser(user);
     setSelectedChannel(null);
     setSelectedMessage(null);
-    setActiveSidebar(null);
+    setActiveSidebar(wasInMessageSidebar ? "files" : "files");
   };
 
   const toggleMessageThreadSidebar = (message: Message) => {
@@ -92,7 +95,8 @@ export default function DashboardPage() {
 
   const openUserProfileSidebar = () => setActiveSidebar("user");
   const openChannelInfoSidebar = () => setActiveSidebar("channel");
-  const closeSidebar = () => setActiveSidebar(null);
+
+  const closeSidebar = () => setActiveSidebar("files");
 
   const handleTeamMemberClick = (member: { name: string; role: string }) => {
     setSelectedUser({
@@ -109,7 +113,7 @@ export default function DashboardPage() {
       <Sidebar onChannelClick={handleChannelSelect} onUserClick={handleUserSelect} />
 
       {/* Main Content */}
-      <div className={`flex-1 flex flex-col ${activeSidebar ? "max-w-[75%]" : ""}`}>
+      <div className={`flex-1 flex flex-col ${activeSidebar !== "files" ? "max-w-[75%]" : ""}`}>
         {selectedChannel ? (
           <>
             <ChannelHeader
@@ -192,6 +196,9 @@ export default function DashboardPage() {
       )}
       {activeSidebar === "user" && selectedUser && (
         <UserProfileSidebar user={selectedUser} onClose={closeSidebar} />
+      )}
+      {activeSidebar === "files" && (
+        <FilesSidebar onClose={() => {}} />
       )}
     </div>
   );

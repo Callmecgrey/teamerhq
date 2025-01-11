@@ -29,7 +29,7 @@ const plans = [
   },
   {
     name: "Startup",
-    price: "$19/month",
+    price: "$25.99/month",
     description: "Ideal for small teams and startups.",
     features: [
       "5 Workspaces", 
@@ -51,7 +51,7 @@ const plans = [
   },
   {
     name: "Plus",
-    price: "$49/month",
+    price: "$99.99/month",
     description: "Perfect for growing teams.",
     features: [
       "Unlimited Workspaces", 
@@ -218,14 +218,14 @@ export default function PricingPage() {
                     <td key={index} className="border-b px-6 py-3">
                       {feature === "Screen Sharing" && (plan.features.includes("Screen Sharing") ? "✔️" : "❌")}
                       {feature === "2FA Authentication" && (plan.name === "Free" ? "❌" : "✔️")}
-                      {feature === "Custom URL" && (plan.name === "Free" ? "❌" : "✔️")}
-                      {feature === "Message Retention" && (plan.name === "Free" ? "❌" : "✔️")}
-                      {feature === "File Upload" && (plan.name === "Free" ? "❌" : "✔️")}
+                      {feature === "Custom URL" && (plan.name === "Free" ? "❌" : plan.name === "Startup" ? "❌" : "✔️")}
+                      {feature === "Message Retention" && (plan.name === "Free" ? "3 Months" : "Unlimited")}
+                      {feature === "File Upload" && (plan.name === "Free" ? "5GB" : plan.name === "Startup" ? "50GB" : plan.name === "Plus" ? "100GB" : "Unlimited")}
                       {feature === "3rd Party Integration & API" && (plan.name === "Free" ? "❌" : "✔️")}
                       {feature === "Audit Log" && (plan.name === "Free" ? "❌" : plan.name === "Startup" ? "❌" : "✔️")}
                       {feature === "Instant Messaging" && "✔️"}
-                      {feature === "HD Video Calls" && "✔️"}
-                      {feature === "Team Channels" && "✔️"}
+                      {feature === "HD Video Calls" && (plan.name === "Free" ? "2 Members" : plan.name === "Startup" ? "20 Members" : plan.name === "Plus" ? "50 Members" : "Unlimited")}
+                      {feature === "Team Channels" && (plan.name === "Free" ? "5 Channels" : plan.name === "Startup" ? "15 Channels" : plan.name === "Plus" ? "50 Channels" : "Unlimited")}
                     </td>
                   ))}
                 </tr>

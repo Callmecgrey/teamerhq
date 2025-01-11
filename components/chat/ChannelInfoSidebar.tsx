@@ -13,6 +13,18 @@ export default function ChannelInfoSidebar({
   };
   onClose: () => void;
 }) {
+  // Define demo team members if none are provided
+  const demoTeamMembers = [
+    { name: "Alice Johnson", role: "Team Lead" },
+    { name: "Bob Smith", role: "Developer" },
+    { name: "Charlie Davis", role: "Designer" },
+    { name: "Dana Lee", role: "QA Engineer" },
+  ];
+
+  const teamMembers = channel.teamMembers?.length
+    ? channel.teamMembers
+    : demoTeamMembers;
+
   return (
     <div className="w-[25%] border-l bg-card p-6 flex flex-col h-full">
       {/* Header Section */}
@@ -33,15 +45,19 @@ export default function ChannelInfoSidebar({
         {/* Description */}
         <div>
           <h3 className="text-sm font-medium text-muted-foreground uppercase">Description</h3>
-          <p className="mt-2 text-sm text-foreground">{channel.description || "No description available."}</p>
+          <p className="mt-2 text-sm text-foreground">
+            {channel.description || "No description available."}
+          </p>
         </div>
 
         {/* Team Members */}
-        {channel.teamMembers && channel.teamMembers.length > 0 ? (
+        {teamMembers && teamMembers.length > 0 ? (
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground uppercase">Team Members</h3>
+            <h3 className="text-sm font-medium text-muted-foreground uppercase">
+              Team Members
+            </h3>
             <ul className="mt-4 space-y-3">
-              {channel.teamMembers.map((member, index) => (
+              {teamMembers.map((member, index) => (
                 <li key={index} className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-full bg-muted/10 flex items-center justify-center text-sm font-medium text-primary">
                     {member.name
@@ -59,8 +75,12 @@ export default function ChannelInfoSidebar({
           </div>
         ) : (
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground uppercase">Team Members</h3>
-            <p className="mt-2 text-sm text-muted-foreground">No team members available.</p>
+            <h3 className="text-sm font-medium text-muted-foreground uppercase">
+              Team Members
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No team members available.
+            </p>
           </div>
         )}
       </div>

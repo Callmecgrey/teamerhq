@@ -3,15 +3,36 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Smile, Paperclip, Send, Mic, X } from "lucide-react";
 
+type Reply = {
+  user: string;
+  time: string;
+  content: string;
+};
+
+type Message = {
+  user: string;
+  time: string;
+  content: string;
+  replies?: Reply[];
+};
+
 export default function MessageThreadSidebar({
   message,
   onClose,
   onVoiceRecord,
 }: {
-  message: any;
+  message: Message; // Updated type here
   onClose: () => void;
   onVoiceRecord: () => void;
 }) {
+  const getUserInitials = (name: string) => {
+    if (!name) return "?";
+    return name
+      .split(" ")
+      .map((n: string) => n[0])
+      .join("");
+  };
+
   return (
     <div className="w-[25%] border-l bg-card p-6 flex flex-col h-full">
       {/* Header */}
@@ -25,37 +46,31 @@ export default function MessageThreadSidebar({
       {/* Original Message */}
       <div className="flex items-start space-x-4 bg-muted/20 p-4 rounded-lg shadow-sm mb-4">
         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-medium text-primary">
-            {message.user
-            .split(" ")
-            .map((n: string) => n[0])
-            .join("")}
+          {getUserInitials(message?.user || "Unknown")}
         </div>
         <div>
           <div className="flex items-center space-x-2">
-            <span className="font-medium">{message.user}</span>
-            <span className="text-xs text-muted-foreground">{message.time}</span>
+            <span className="font-medium">{message?.user || "Unknown"}</span>
+            <span className="text-xs text-muted-foreground">{message?.time || "N/A"}</span>
           </div>
-          <p className="text-sm mt-1">{message.content}</p>
+          <p className="text-sm mt-1">{message?.content || "No content available."}</p>
         </div>
       </div>
 
       {/* Replies Section */}
       <div className="flex-grow space-y-4 overflow-y-auto">
-        {message.replies && message.replies.length > 0 ? (
-          message.replies.map((reply, index) => (
+        {message?.replies && message.replies.length > 0 ? (
+          message.replies.map((reply: Reply, index: number) => (
             <div key={index} className="flex items-start space-x-3 p-3 bg-muted/10 rounded-lg">
               <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-medium text-primary">
-                {reply.user
-                  .split(" ")
-                  .map((n: string) => n[0])
-                  .join("")}
+                {getUserInitials(reply?.user || "Unknown")}
               </div>
               <div>
                 <div className="flex items-center space-x-2">
-                  <span className="font-medium">{reply.user}</span>
-                  <span className="text-xs text-muted-foreground">{reply.time}</span>
+                  <span className="font-medium">{reply?.user || "Unknown"}</span>
+                  <span className="text-xs text-muted-foreground">{reply?.time || "N/A"}</span>
                 </div>
-                <p className="text-sm mt-1">{reply.content}</p>
+                <p className="text-sm mt-1">{reply?.content || "No content available."}</p>
               </div>
             </div>
           ))
@@ -90,7 +105,7 @@ export default function MessageThreadSidebar({
               </Button>
             </div>
           </div>
-          <Button size="icon" variant="primary" aria-label="Send Message">
+          <Button size="icon" variant="default" aria-label="Send Message">
             <Send className="h-5 w-5" />
           </Button>
         </div>

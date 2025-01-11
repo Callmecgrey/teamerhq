@@ -12,25 +12,44 @@ import MessageThreadSidebar from "@/components/chat/MessageThreadSidebar";
 import ChannelInfoSidebar from "@/components/chat/ChannelInfoSidebar";
 import UserChatHeader from "@/components/chat/UserChatHeader";
 
+type Message = {
+  id: number;
+  user: string;
+  time: string;
+  content: string;
+};
+
 export default function DashboardPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Initialize states from query parameters
+  // State initialization
   const [message, setMessage] = useState("");
-  const [selectedChannel, setSelectedChannel] = useState(() => {
+  const [selectedChannel, setSelectedChannel] = useState<{
+    name: string;
+    description: string;
+    messages?: Message[];
+  } | null>(() => {
     const channelName = searchParams.get("channel");
-    return channelName ? { name: channelName } : null;
+    const channelDescription = searchParams.get("description");
+    return channelName && channelDescription
+      ? { name: channelName, description: channelDescription, messages: [] }
+      : null;
   });
-  const [selectedUser, setSelectedUser] = useState(() => {
+
+  const [selectedUser, setSelectedUser] = useState<{
+    name: string;
+    role?: string;
+    messages?: Message[];
+  } | null>(() => {
     const userName = searchParams.get("user");
     const userRole = searchParams.get("role");
-    return userName ? { name: userName, role: userRole } : null;
+    return userName
+      ? { name: userName, role: userRole, messages: [] }
+      : null;
   });
-  const [selectedMessage, setSelectedMessage] = useState(() => {
-    const messageId = searchParams.get("message");
-    return messageId ? { id: messageId } : null;
-  });
+
+  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [activeSidebar, setActiveSidebar] = useState<"user" | "channel" | "message" | null>(
     searchParams.get("sidebar") as "user" | "channel" | "message" | null
   );
@@ -43,13 +62,14 @@ export default function DashboardPage() {
       query.user = selectedUser.name;
       if (selectedUser.role) query.role = selectedUser.role;
     }
-    if (selectedMessage) query.message = selectedMessage.id;
+    if (selectedMessage) query.message = String(selectedMessage.id);
     if (activeSidebar) query.sidebar = activeSidebar;
 
     const search = new URLSearchParams(query).toString();
     router.replace(`?${search}`);
   }, [selectedChannel, selectedUser, selectedMessage, activeSidebar]);
 
+  // Handlers
   const handleChannelSelect = (channel: any) => {
     setSelectedChannel(channel);
     setSelectedUser(null);
@@ -64,7 +84,7 @@ export default function DashboardPage() {
     setActiveSidebar(null);
   };
 
-  const toggleMessageThreadSidebar = (message: any) => {
+  const toggleMessageThreadSidebar = (message: Message) => {
     setSelectedMessage(message);
     setActiveSidebar("message");
   };
@@ -84,8 +104,6 @@ export default function DashboardPage() {
           <>
             <ChannelHeader
               channelName={selectedChannel.name}
-              onVoiceClick={() => console.log("Voice clicked")}
-              onVideoClick={() => console.log("Video clicked")}
               onInfoClick={openChannelInfoSidebar}
             />
             <MessagesList
@@ -96,26 +114,48 @@ export default function DashboardPage() {
               message={message}
               placeholder={`Message #${selectedChannel.name}`}
               onChange={(e) => setMessage(e.target.value)}
-              onSend={() => console.log("Message sent:", message)}
+              onSend={() => {
+                if (selectedChannel.messages) {
+                  setSelectedChannel({
+                    ...selectedChannel,
+                    messages: [
+                      ...selectedChannel.messages,
+                      { id: Date.now(), user: "You", time: new Date().toLocaleTimeString(), content: message },
+                    ],
+                  });
+                }
+                setMessage("");
+              }}
+              onVoiceRecord={() => console.log("Voice recording started")}
             />
           </>
         ) : selectedUser ? (
           <>
             <UserChatHeader
               user={selectedUser}
-              onProfileClick={openUserProfileSidebar} // Trigger the sidebar when info button is clicked
+              onProfileClick={openUserProfileSidebar}
             />
             <MessagesList
-              messages={[
-                { user: selectedUser.name, time: "12:30 PM", content: "Hi there!" },
-                { user: "You", time: "12:32 PM", content: "Hello!" },
-              ]}
+              messages={selectedUser.messages || []}
+              onMessageClick={toggleMessageThreadSidebar}
             />
             <MessageInput
               message={message}
               placeholder={`Message ${selectedUser.name}`}
               onChange={(e) => setMessage(e.target.value)}
-              onSend={() => console.log("Message sent:", message)}
+              onSend={() => {
+                if (selectedUser.messages) {
+                  setSelectedUser({
+                    ...selectedUser,
+                    messages: [
+                      ...selectedUser.messages,
+                      { id: Date.now(), user: "You", time: new Date().toLocaleTimeString(), content: message },
+                    ],
+                  });
+                }
+                setMessage("");
+              }}
+              onVoiceRecord={() => console.log("Voice recording started")}
             />
           </>
         ) : (
@@ -127,7 +167,11 @@ export default function DashboardPage() {
 
       {/* Sidebars */}
       {activeSidebar === "message" && selectedMessage && (
-        <MessageThreadSidebar message={selectedMessage} onClose={closeSidebar} />
+        <MessageThreadSidebar
+          message={selectedMessage}
+          onClose={closeSidebar}
+          onVoiceRecord={() => console.log("Voice recording started")}
+        />
       )}
       {activeSidebar === "channel" && selectedChannel && (
         <ChannelInfoSidebar channel={selectedChannel} onClose={closeSidebar} />
@@ -138,4 +182,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

@@ -5,11 +5,13 @@ import { Smile, Paperclip, Send, Mic } from "lucide-react";
 
 export default function MessageInput({
   message,
+  placeholder,
   onChange,
   onSend,
   onVoiceRecord,
 }: {
   message: string;
+  placeholder?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSend: () => void;
   onVoiceRecord: () => void;
@@ -17,7 +19,6 @@ export default function MessageInput({
   return (
     <div className="p-4 border-t bg-card">
       <div className="flex items-center space-x-3">
-        {/* Voice Recording Icon */}
         <Button
           variant="ghost"
           size="icon"
@@ -28,10 +29,9 @@ export default function MessageInput({
           <Mic className="h-5 w-5" />
         </Button>
 
-        {/* Input Field */}
         <div className="flex-1 relative">
           <Input
-            placeholder="Type your message..."
+            placeholder={placeholder || "Type your message..."}
             value={message}
             onChange={onChange}
             className="pr-24 text-sm focus:ring-2 focus:ring-primary focus:outline-none"
@@ -56,10 +56,9 @@ export default function MessageInput({
           </div>
         </div>
 
-        {/* Send Button */}
         <Button
           size="icon"
-          variant="primary"
+          variant="default"
           onClick={onSend}
           disabled={!message.trim()}
           aria-label="Send Message"

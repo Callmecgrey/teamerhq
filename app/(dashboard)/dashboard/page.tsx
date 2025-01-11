@@ -29,11 +29,12 @@ export default function DashboardPage() {
     name: string;
     description: string;
     messages?: Message[];
+    teamMembers?: { name: string; role: string }[];
   } | null>(() => {
     const channelName = searchParams.get("channel");
     const channelDescription = searchParams.get("description");
     return channelName && channelDescription
-      ? { name: channelName, description: channelDescription, messages: [] }
+      ? { name: channelName, description: channelDescription, messages: [], teamMembers: [] }
       : null;
   });
 
@@ -92,6 +93,15 @@ export default function DashboardPage() {
   const openUserProfileSidebar = () => setActiveSidebar("user");
   const openChannelInfoSidebar = () => setActiveSidebar("channel");
   const closeSidebar = () => setActiveSidebar(null);
+
+  const handleTeamMemberClick = (member: { name: string; role: string }) => {
+    setSelectedUser({
+      name: member.name,
+      role: member.role,
+      messages: [],
+    });
+    setActiveSidebar("user");
+  };
 
   return (
     <div className="h-screen flex">
@@ -174,7 +184,11 @@ export default function DashboardPage() {
         />
       )}
       {activeSidebar === "channel" && selectedChannel && (
-        <ChannelInfoSidebar channel={selectedChannel} onClose={closeSidebar} />
+        <ChannelInfoSidebar
+          channel={selectedChannel}
+          onClose={closeSidebar}
+          onTeamMemberClick={handleTeamMemberClick}
+        />
       )}
       {activeSidebar === "user" && selectedUser && (
         <UserProfileSidebar user={selectedUser} onClose={closeSidebar} />

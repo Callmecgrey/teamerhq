@@ -1,10 +1,12 @@
 // components/chat/ChannelInfoSidebar.tsx
+// components/chat/ChannelInfoSidebar.tsx
 import { Button } from "@/components/ui/button";
 import { X, Hash } from "lucide-react";
 
 export default function ChannelInfoSidebar({
   channel,
   onClose,
+  onTeamMemberClick,
 }: {
   channel: {
     name: string;
@@ -12,6 +14,7 @@ export default function ChannelInfoSidebar({
     teamMembers?: { name: string; role: string }[];
   };
   onClose: () => void;
+  onTeamMemberClick: (member: { name: string; role: string }) => void;
 }) {
   // Define demo team members if none are provided
   const demoTeamMembers = [
@@ -19,6 +22,17 @@ export default function ChannelInfoSidebar({
     { name: "Bob Smith", role: "Developer" },
     { name: "Charlie Davis", role: "Designer" },
     { name: "Dana Lee", role: "QA Engineer" },
+    { name: "Evan Wright", role: "Project Manager" },
+    { name: "Fiona Hill", role: "Product Owner" },
+    { name: "George Clark", role: "Business Analyst" },
+    { name: "Hannah Adams", role: "Scrum Master" },
+    { name: "Ian Bell", role: "System Architect" },
+    { name: "Jessica Taylor", role: "UX Researcher" },
+    { name: "Kyle Brown", role: "Frontend Developer" },
+    { name: "Laura Evans", role: "Backend Developer" },
+    { name: "Mike Johnson", role: "DevOps Engineer" },
+    { name: "Nina Carter", role: "Tester" },
+    { name: "Oliver Stone", role: "Support Specialist" },
   ];
 
   const teamMembers = channel.teamMembers?.length
@@ -58,7 +72,11 @@ export default function ChannelInfoSidebar({
             </h3>
             <ul className="mt-4 space-y-3">
               {teamMembers.map((member, index) => (
-                <li key={index} className="flex items-center space-x-3">
+                <li
+                  key={index}
+                  className="flex items-center space-x-3 cursor-pointer"
+                  onClick={() => onTeamMemberClick(member)}
+                >
                   <div className="w-10 h-10 rounded-full bg-muted/10 flex items-center justify-center text-sm font-medium text-primary">
                     {member.name
                       .split(" ")
@@ -94,3 +112,4 @@ export default function ChannelInfoSidebar({
     </div>
   );
 }
+

@@ -38,7 +38,7 @@ const Sidebar = ({ selectedTab, onSelectTab }: SidebarProps) => {
   return (
     <div className="w-64 bg-card border-r flex flex-col p-4 h-full overflow-y-auto">
       <h2 className="text-lg font-semibold mb-4">Owner Settings</h2>
-      
+
       {/* Main Sidebar Tabs */}
       {tabs.map((tab) => (
         <Button
@@ -59,7 +59,7 @@ const Sidebar = ({ selectedTab, onSelectTab }: SidebarProps) => {
           variant="outline"
           size="sm"
           className="w-full justify-start"
-          onClick={() => window.location.href = "/dashboard"} // Update with your actual dashboard route
+          onClick={() => (window.location.href = "/dashboard")}
         >
           <Grid className="h-4 w-4 mr-2" />
           Go to Workspace

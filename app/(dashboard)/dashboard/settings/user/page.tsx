@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import Sidebar from "@/components/settings/user/sidebar";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import Sidebar from "@/components/settings/user/Sidebar";
 import ProfileSettings from "@/components/settings/user/ProfileSettings";
 import SecurityPrivacy from "@/components/settings/user/SecurityPrivacy";
 import NotificationSettings from "@/components/settings/user/NotificationSettings";
@@ -13,8 +14,23 @@ import ActivityData from "@/components/settings/user/ActivityData";
 import SupportFeedback from "@/components/settings/user/SupportFeedback";
 
 export default function UserSettingsPage() {
-  const [selectedTab, setSelectedTab] = useState("profileSettings");
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
+  // Get the "tab" query parameter or default to "profileSettings"
+  const [selectedTab, setSelectedTab] = useState<string>(
+    searchParams.get("tab") || "profileSettings"
+  );
+
+  // Update the URL query parameter when the selected tab changes
+  useEffect(() => {
+    const currentTab = searchParams.get("tab");
+    if (currentTab !== selectedTab) {
+      router.replace(`?tab=${selectedTab}`);
+    }
+  }, [selectedTab]);
+
+  // Render the appropriate content based on the selected tab
   const renderContent = () => {
     switch (selectedTab) {
       case "profileSettings":

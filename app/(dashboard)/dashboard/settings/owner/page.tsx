@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Sidebar from "@/components/settings/owner/Sidebar";
 import WorkspaceInformation from "@/components/settings/owner/WorkspaceInformation";
 import UserManagement from "@/components/settings/owner/UserManagement";
@@ -15,8 +16,23 @@ import NotificationsAlerts from "@/components/settings/owner/NotificationsAlerts
 import SupportFeedback from "@/components/settings/owner/SupportFeedback";
 
 export default function OwnerSettingsPage() {
-  const [selectedTab, setSelectedTab] = useState("workspaceInformation");
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
+  // Get the "tab" query parameter or default to "workspaceInformation"
+  const [selectedTab, setSelectedTab] = useState<string>(
+    searchParams.get("tab") || "workspaceInformation"
+  );
+
+  // Update the URL query parameter when the selected tab changes
+  useEffect(() => {
+    const currentTab = searchParams.get("tab");
+    if (currentTab !== selectedTab) {
+      router.replace(`?tab=${selectedTab}`);
+    }
+  }, [selectedTab]);
+
+  // Render the appropriate content based on the selected tab
   const renderContent = () => {
     switch (selectedTab) {
       case "workspaceInformation":

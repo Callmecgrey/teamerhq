@@ -19,7 +19,8 @@ const plans = [
       "Small File Uploads", 
       "Instant Messaging", 
       "HD Video Calls", 
-      "Team Channels"
+      "Team Channels", 
+      "Screen Sharing"
     ],
     button: { text: "Get Started", link: "/signup" },
     popular: false,
@@ -40,7 +41,8 @@ const plans = [
       "File Uploads", 
       "Instant Messaging", 
       "HD Video Calls", 
-      "Team Channels"
+      "Team Channels", 
+      "Screen Sharing"
     ],
     button: { text: "Start Trial", link: "/signup" },
     popular: true,
@@ -62,7 +64,8 @@ const plans = [
       "3rd Party Integration & API", 
       "Instant Messaging", 
       "HD Video Calls", 
-      "Team Channels"
+      "Team Channels", 
+      "Screen Sharing"
     ],
     button: { text: "Start Trial", link: "/signup" },
     popular: false,
@@ -85,7 +88,8 @@ const plans = [
       "Audit Log", 
       "Instant Messaging", 
       "HD Video Calls", 
-      "Team Channels"
+      "Team Channels", 
+      "Screen Sharing"
     ],
     button: { text: "Contact Sales", link: "/contact-sales" },
     popular: false,
@@ -103,7 +107,29 @@ const featuresList = [
   "Message Retention", 
   "File Upload", 
   "3rd Party Integration & API", 
-  "Audit Log"
+  "Audit Log", 
+  "Screen Sharing"
+];
+
+const testimonials = [
+  {
+    name: "John Doe",
+    role: "Founder at TechStartup",
+    message: "TeamerHQ has helped us streamline communication and increase team productivity. The Startup plan was perfect for our growing team!",
+    rating: 5,
+  },
+  {
+    name: "Jane Smith",
+    role: "Product Manager at InnovateInc",
+    message: "The Plus plan with advanced analytics allowed us to better track our team's performance and make smarter decisions.",
+    rating: 5,
+  },
+  {
+    name: "Samuel Green",
+    role: "Lead Developer at WebSolutions",
+    message: "The Free plan was exactly what I needed to test the platform. Now we're upgrading to the Startup plan as our team grows.",
+    rating: 4,
+  },
 ];
 
 export default function PricingPage() {
@@ -190,15 +216,16 @@ export default function PricingPage() {
                   <td className="border-b px-6 py-3">{feature}</td>
                   {plans.map((plan, index) => (
                     <td key={index} className="border-b px-6 py-3">
+                      {feature === "Screen Sharing" && (plan.features.includes("Screen Sharing") ? "✔️" : "❌")}
                       {feature === "2FA Authentication" && (plan.name === "Free" ? "❌" : "✔️")}
                       {feature === "Custom URL" && (plan.name === "Free" ? "❌" : "✔️")}
                       {feature === "Message Retention" && (plan.name === "Free" ? "❌" : "✔️")}
                       {feature === "File Upload" && (plan.name === "Free" ? "❌" : "✔️")}
                       {feature === "3rd Party Integration & API" && (plan.name === "Free" ? "❌" : "✔️")}
                       {feature === "Audit Log" && (plan.name === "Free" ? "❌" : plan.name === "Startup" ? "❌" : "✔️")}
-                      {feature === "Instant Messaging" && (plan.name === "Free" ? "✔️" : "✔️")}
-                      {feature === "HD Video Calls" && (plan.name === "Free" ? "✔️" : "✔️")}
-                      {feature === "Team Channels" && (plan.name === "Free" ? "✔️" : "✔️")}
+                      {feature === "Instant Messaging" && "✔️"}
+                      {feature === "HD Video Calls" && "✔️"}
+                      {feature === "Team Channels" && "✔️"}
                     </td>
                   ))}
                 </tr>
@@ -208,11 +235,37 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Customer Testimonials */}
+      {/* Updated Customer Testimonials */}
       <section className="container mx-auto px-6 py-20">
-        <h2 className="text-3xl font-semibold mb-6 text-center">What Our Customers Are Saying</h2>
+        <h2 className="text-3xl font-semibold mb-6 text-center">
+          What Our Customers Are Saying
+        </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Testimonials would be displayed here */}
+          {testimonials.map((testimonial, index) => (
+            <div key={index} className="p-6 bg-white dark:bg-card rounded-lg shadow-lg">
+              <div className="mb-4">
+                {[...Array(5)].map((_, starIndex) => (
+                  <span
+                    key={starIndex}
+                    className={`inline-block text-xl ${
+                      starIndex < testimonial.rating
+                        ? "text-yellow-500"
+                        : "text-gray-300 dark:text-gray-500"
+                    }`}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+              <p className="text-gray-700 dark:text-gray-300 mb-4">
+                "{testimonial.message}"
+              </p>
+              <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
+                {testimonial.name}
+              </h3>
+              <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+            </div>
+          ))}
         </div>
       </section>
 

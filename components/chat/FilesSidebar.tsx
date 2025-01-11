@@ -1,4 +1,4 @@
-import { FileText, Download, Image, Lock, Unlock, Upload, Share2, Folder } from "lucide-react";
+import { FileText, Download, Image, Lock, Unlock, Upload, Folder } from "lucide-react";
 import { useState } from "react";
 
 export default function FilesSidebar({ onClose }: { onClose: () => void }) {
@@ -24,7 +24,6 @@ export default function FilesSidebar({ onClose }: { onClose: () => void }) {
     ],
   });
   const [totalSize, setTotalSize] = useState(36.5); // Assuming size is in MB
-  const [hoveredFile, setHoveredFile] = useState<string | null>(null); // Track the hovered file for preview
 
   // Handle file upload
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,46 +85,6 @@ export default function FilesSidebar({ onClose }: { onClose: () => void }) {
     }
   };
 
-  // Handle file preview on hover
-  const handleMouseEnter = (fileName: string) => {
-    setHoveredFile(fileName);
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredFile(null);
-  };
-
-  // Render file preview
-  const renderFilePreview = (file: { name: string; type: string; url: string }) => {
-    if (file.type === "image") {
-      return <img src={file.url} alt={file.name} className="w-24 h-24 object-cover" />;
-    } else if (file.type === "video") {
-      return (
-        <video className="w-24 h-24 object-cover" controls>
-          <source src={file.url} type="video/mp4" />
-        </video>
-      );
-    } else if (file.type === "pdf" || file.type === "docx") {
-      return (
-        <div className="text-sm text-muted-foreground">
-          <p>Preview not available for this type</p>
-        </div>
-      );
-    }
-    return null;
-  };
-
-  // Render Share Button
-  const renderShareButton = (fileUrl: string) => (
-    <button
-      className="text-muted-foreground hover:text-foreground"
-      onClick={() => navigator.clipboard.writeText(fileUrl)}
-    >
-      <Share2 className="w-5 h-5" />
-      <span className="sr-only">Share</span>
-    </button>
-  );
-
   return (
     <div className="w-[25%] border-l bg-card p-6 flex flex-col h-full">
       {/* Header Section */}
@@ -156,158 +115,46 @@ export default function FilesSidebar({ onClose }: { onClose: () => void }) {
 
       {/* File Grouping */}
       <div className="space-y-4 overflow-y-auto flex-grow">
-        {/* Images Group */}
-        <div>
-          <div
-            className="flex justify-between items-center cursor-pointer"
-            onClick={() => toggleFolder("images")}
-          >
-            <div className="flex items-center space-x-3">
-              <Folder className="w-6 h-6 text-muted-foreground" />
-              <span className="font-medium">Images</span>
+        {["images", "docs", "videos"].map((folderType) => (
+          <div key={folderType}>
+            <div
+              className="flex justify-between items-center cursor-pointer"
+              onClick={() => toggleFolder(folderType)}
+            >
+              <div className="flex items-center space-x-3">
+                <Folder className="w-6 h-6 text-muted-foreground" />
+                <span className="font-medium">{folderType.charAt(0).toUpperCase() + folderType.slice(1)}</span>
+              </div>
+              <span className="text-muted-foreground">
+                {openFolders[folderType] ? "-" : "+"}
+              </span>
             </div>
-            <span className="text-muted-foreground">
-              {openFolders.images ? "-" : "+"}
-            </span>
-          </div>
-          {openFolders.images && (
-            <div className="ml-6 mt-2 space-y-2">
-              {files.images.map((file, index) => (
-                <div
-                  key={index}
-                  className="p-4 bg-muted/10 rounded-lg flex justify-between items-center hover:bg-muted/20 transition-all"
-                  onMouseEnter={() => handleMouseEnter(file.name)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="flex items-center space-x-3">
-                    {getFileIcon(file.type)}
-                    <div>
-                      <p className="font-medium">{file.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {file.size} • {file.uploadedAt}
-                      </p>
+            {openFolders[folderType] && (
+              <div className="ml-6 mt-2 space-y-2">
+                {files[folderType as keyof typeof files].map((file, index) => (
+                  <div
+                    key={index}
+                    className="p-4 bg-muted/10 rounded-lg flex justify-between items-center hover:bg-muted/20 transition-all"
+                  >
+                    <div className="flex items-center space-x-3">
+                      {getFileIcon(file.type)}
+                      <div>
+                        <p className="font-medium">{file.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {file.size} • {file.uploadedAt}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-4">
                     <button className="text-muted-foreground hover:text-foreground transition-colors">
                       <Download className="w-5 h-5" />
                       <span className="sr-only">Download</span>
                     </button>
                   </div>
-                  {/* Show Preview and Share Button on Hover */}
-                  {hoveredFile === file.name && (
-                    <div className="absolute top-0 right-0 p-4 bg-gray-900 rounded-lg text-white">
-                      {renderFilePreview(file)}
-                      {renderShareButton(file.url)}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Docs Group */}
-        <div>
-          <div
-            className="flex justify-between items-center cursor-pointer"
-            onClick={() => toggleFolder("docs")}
-          >
-            <div className="flex items-center space-x-3">
-              <Folder className="w-6 h-6 text-muted-foreground" />
-              <span className="font-medium">Documents</span>
-            </div>
-            <span className="text-muted-foreground">
-              {openFolders.docs ? "-" : "+"}
-            </span>
+                ))}
+              </div>
+            )}
           </div>
-          {openFolders.docs && (
-            <div className="ml-6 mt-2 space-y-2">
-              {files.docs.map((file, index) => (
-                <div
-                  key={index}
-                  className="p-4 bg-muted/10 rounded-lg flex justify-between items-center hover:bg-muted/20 transition-all"
-                  onMouseEnter={() => handleMouseEnter(file.name)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="flex items-center space-x-3">
-                    {getFileIcon(file.type)}
-                    <div>
-                      <p className="font-medium">{file.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {file.size} • {file.uploadedAt}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <button className="text-muted-foreground hover:text-foreground transition-colors">
-                      <Download className="w-5 h-5" />
-                      <span className="sr-only">Download</span>
-                    </button>
-                  </div>
-                  {/* Show Preview and Share Button on Hover */}
-                  {hoveredFile === file.name && (
-                    <div className="absolute top-0 right-0 p-4 bg-gray-900 rounded-lg text-white">
-                      {renderFilePreview(file)}
-                      {renderShareButton(file.url)}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Videos Group */}
-        <div>
-          <div
-            className="flex justify-between items-center cursor-pointer"
-            onClick={() => toggleFolder("videos")}
-          >
-            <div className="flex items-center space-x-3">
-              <Folder className="w-6 h-6 text-muted-foreground" />
-              <span className="font-medium">Videos</span>
-            </div>
-            <span className="text-muted-foreground">
-              {openFolders.videos ? "-" : "+"}
-            </span>
-          </div>
-          {openFolders.videos && (
-            <div className="ml-6 mt-2 space-y-2">
-              {files.videos.map((file, index) => (
-                <div
-                  key={index}
-                  className="p-4 bg-muted/10 rounded-lg flex justify-between items-center hover:bg-muted/20 transition-all"
-                  onMouseEnter={() => handleMouseEnter(file.name)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="flex items-center space-x-3">
-                    {getFileIcon(file.type)}
-                    <div>
-                      <p className="font-medium">{file.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {file.size} • {file.uploadedAt}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <button className="text-muted-foreground hover:text-foreground transition-colors">
-                      <Download className="w-5 h-5" />
-                      <span className="sr-only">Download</span>
-                    </button>
-                  </div>
-                  {/* Show Preview and Share Button on Hover */}
-                  {hoveredFile === file.name && (
-                    <div className="absolute top-0 right-0 p-4 bg-gray-900 rounded-lg text-white">
-                      {renderFilePreview(file)}
-                      {renderShareButton(file.url)}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        ))}
       </div>
 
       {/* Footer Section */}

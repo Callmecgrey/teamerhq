@@ -21,8 +21,10 @@ export default function CreateChannelPopover({ onClose }: { onClose: () => void 
 
   return (
     <Dialog open={true} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogOverlay />
-      <DialogContent>
+      {/* Make the overlay background transparent */}
+      <DialogOverlay className="bg-black bg-opacity-50" /> 
+      
+      <DialogContent className="bg-transparent p-6 rounded-lg shadow-lg">
         <div className="space-y-4">
           <DialogTitle>Create a New Channel</DialogTitle>
           <DialogDescription>

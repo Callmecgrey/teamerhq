@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, Hash, LogOut, Settings, Lock } from "lucide-react";
 import { Sidebar as UISidebar, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
 import { TeamSwitcher } from "@/components/switcher/team-switcher";
-import CreateChannelPopover from "@/components/switcher/CreateChannelPopover"; // Import the popover
+import CreateChannelPopover from "@/components/switcher/CreateChannelPopover";
 
 // Sample data for teams
 const teamsData = [
@@ -31,10 +31,12 @@ const teamsData = [
 export default function ChatSidebar({
   onUserClick,
   onChannelClick,
+  onMeClick, // New prop for handling "Me" clicks
 }: {
   onUserClick: (user: any) => void;
   onChannelClick: (channel: any) => void;
-  onAddChannelClick: () => void; 
+  onAddChannelClick: () => void;
+  onMeClick: () => void; // Handler for "Me" clicks
 }) {
   const router = useRouter();
   const [channelsOpen, setChannelsOpen] = useState(true);
@@ -44,7 +46,7 @@ export default function ChatSidebar({
   const [unreadMessages, setUnreadMessages] = useState<number>(3);
   const [unreadChannel, setUnreadChannel] = useState<number>(205);
   const [drafting, setDrafting] = useState(true);
-  const [isCreateChannelPopoverOpen, setIsCreateChannelPopoverOpen] = useState(false); // New state for the popover
+  const [isCreateChannelPopoverOpen, setIsCreateChannelPopoverOpen] = useState(false);
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -144,7 +146,7 @@ export default function ChatSidebar({
                     variant="ghost"
                     className="w-full justify-start"
                     size="sm"
-                    onClick={() => onUserClick(user)}
+                    onClick={() => (user.name === "Me" ? onMeClick() : onUserClick(user))} // Handle "Me" click
                   >
                     <div
                       className={`w-2 h-2 ${

@@ -12,7 +12,9 @@ import MessageThreadSidebar from "@/components/chat/MessageThreadSidebar";
 import ChannelInfoSidebar from "@/components/chat/ChannelInfoSidebar";
 import UserChatHeader from "@/components/chat/UserChatHeader";
 import FilesSidebar from "@/components/chat/FilesSidebar";
-import CreateChannelPopover from "@/components/switcher/CreateChannelPopover"; // Import the popover
+import CreateChannelPopover from "@/components/switcher/CreateChannelPopover";
+import UserPersonalHeader from "@/components/chat/UserPersonalHeader"; // Import new header
+import UserMessageList from "@/components/chat/UserMessageList"; // Import new message list
 
 type Message = {
   id: number;
@@ -25,7 +27,6 @@ export default function DashboardPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // State initialization
   const [message, setMessage] = useState("");
   const [selectedChannel, setSelectedChannel] = useState<{
     name: string;
@@ -52,14 +53,14 @@ export default function DashboardPage() {
       : null;
   });
 
+  const [isViewingMe, setIsViewingMe] = useState(false); // State for "Me"
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [activeSidebar, setActiveSidebar] = useState<"user" | "channel" | "message" | "files">(
     "files"
   );
 
-  const [isCreateChannelPopoverOpen, setIsCreateChannelPopoverOpen] = useState(false); // New state for the popover
+  const [isCreateChannelPopoverOpen, setIsCreateChannelPopoverOpen] = useState(false);
 
-  // Update URL query parameters when states change
   useEffect(() => {
     const query: Record<string, string> = {};
     if (selectedChannel) query.channel = selectedChannel.name;
@@ -74,12 +75,12 @@ export default function DashboardPage() {
     router.replace(`?${search}`);
   }, [selectedChannel, selectedUser, selectedMessage, activeSidebar]);
 
-  // Handlers
   const handleChannelSelect = (channel: any) => {
     const wasInMessageSidebar = activeSidebar === "message";
     setSelectedChannel(channel);
     setSelectedUser(null);
     setSelectedMessage(null);
+    setIsViewingMe(false); // Exit "Me" view when switching channels
     setActiveSidebar(wasInMessageSidebar ? "files" : "files");
   };
 
@@ -88,7 +89,16 @@ export default function DashboardPage() {
     setSelectedUser(user);
     setSelectedChannel(null);
     setSelectedMessage(null);
+    setIsViewingMe(false); // Exit "Me" view when selecting a user
     setActiveSidebar(wasInMessageSidebar ? "files" : "files");
+  };
+
+  const handleMeSelect = () => {
+    setIsViewingMe(true);
+    setSelectedChannel(null);
+    setSelectedUser(null);
+    setSelectedMessage(null);
+    setActiveSidebar("files");
   };
 
   const toggleMessageThreadSidebar = (message: Message) => {
@@ -116,12 +126,31 @@ export default function DashboardPage() {
       <Sidebar
         onChannelClick={handleChannelSelect}
         onUserClick={handleUserSelect}
-        onAddChannelClick={() => setIsCreateChannelPopoverOpen(true)} // Open popover when + is clicked
+        onAddChannelClick={() => setIsCreateChannelPopoverOpen(true)}
+        onMeClick={handleMeSelect} // Handle "Me" clicks
       />
 
       {/* Main Content */}
       <div className={`flex-1 flex flex-col ${activeSidebar !== "files" ? "max-w-[75%]" : ""}`}>
-        {selectedChannel ? (
+        {isViewingMe ? (
+          <>
+            <UserPersonalHeader
+              user={{ name: "John Doe", position: "Software Engineer" }} // Example user details
+              onProfileClick={() => console.log("Profile clicked!")}
+            />
+            <UserMessageList />
+            <MessageInput
+              message={message}
+              placeholder={`Message yourself`}
+              onChange={(e) => setMessage(e.target.value)}
+              onSend={() => {
+                console.log("Message to self:", message);
+                setMessage(""); // Clear the input field after sending the message
+              }}
+              onVoiceRecord={() => console.log("Voice recording started")}
+            />
+          </>
+        ) : selectedChannel ? (
           <>
             <ChannelHeader
               channelName={selectedChannel.name}
@@ -141,7 +170,12 @@ export default function DashboardPage() {
                     ...selectedChannel,
                     messages: [
                       ...selectedChannel.messages,
-                      { id: Date.now(), user: "You", time: new Date().toLocaleTimeString(), content: message },
+                      {
+                        id: Date.now(),
+                        user: "You",
+                        time: new Date().toLocaleTimeString(),
+                        content: message,
+                      },
                     ],
                   });
                 }
@@ -170,7 +204,12 @@ export default function DashboardPage() {
                     ...selectedUser,
                     messages: [
                       ...selectedUser.messages,
-                      { id: Date.now(), user: "You", time: new Date().toLocaleTimeString(), content: message },
+                      {
+                        id: Date.now(),
+                        user: "You",
+                        time: new Date().toLocaleTimeString(),
+                        content: message,
+                      },
                     ],
                   });
                 }
@@ -181,7 +220,7 @@ export default function DashboardPage() {
           </>
         ) : (
           <div className="flex items-center justify-center flex-1">
-            <p>Select a channel or user to start chatting.</p>
+            <p>Select a channel, user, or "Me" to start chatting.</p>
           </div>
         )}
       </div>
@@ -204,9 +243,7 @@ export default function DashboardPage() {
       {activeSidebar === "user" && selectedUser && (
         <UserProfileSidebar user={selectedUser} onClose={closeSidebar} />
       )}
-      {activeSidebar === "files" && (
-        <FilesSidebar onClose={() => {}} />
-      )}
+      {activeSidebar === "files" && <FilesSidebar onClose={() => {}} />}
 
       {/* Create Channel Popover */}
       {isCreateChannelPopoverOpen && (

@@ -13,8 +13,8 @@ import ChannelInfoSidebar from "@/components/chat/ChannelInfoSidebar";
 import UserChatHeader from "@/components/chat/UserChatHeader";
 import FilesSidebar from "@/components/chat/FilesSidebar";
 import CreateChannelPopover from "@/components/switcher/CreateChannelPopover";
-import UserPersonalHeader from "@/components/chat/UserPersonalHeader"; // Import new header
-import UserMessageList from "@/components/chat/UserMessageList"; // Import new message list
+import UserPersonalHeader from "@/components/chat/UserPersonalHeader";
+import UserMessageList from "@/components/chat/UserMessageList";
 
 type Message = {
   id: number;
@@ -53,7 +53,7 @@ export default function DashboardPage() {
       : null;
   });
 
-  const [isViewingMe, setIsViewingMe] = useState(false); // State for "Me"
+  const [isViewingMe, setIsViewingMe] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [activeSidebar, setActiveSidebar] = useState<"user" | "channel" | "message" | "files">(
     "files"
@@ -80,7 +80,7 @@ export default function DashboardPage() {
     setSelectedChannel(channel);
     setSelectedUser(null);
     setSelectedMessage(null);
-    setIsViewingMe(false); // Exit "Me" view when switching channels
+    setIsViewingMe(false);
     setActiveSidebar(wasInMessageSidebar ? "files" : "files");
   };
 
@@ -89,7 +89,7 @@ export default function DashboardPage() {
     setSelectedUser(user);
     setSelectedChannel(null);
     setSelectedMessage(null);
-    setIsViewingMe(false); // Exit "Me" view when selecting a user
+    setIsViewingMe(false);
     setActiveSidebar(wasInMessageSidebar ? "files" : "files");
   };
 
@@ -135,7 +135,7 @@ export default function DashboardPage() {
         {isViewingMe ? (
           <>
             <UserPersonalHeader
-              user={{ name: "John Doe", position: "Software Engineer" }} // Example user details
+              user={{ name: "John Doe", position: "Software Engineer" }} // Example user details to replaced with api
               onProfileClick={() => console.log("Profile clicked!")}
             />
             <UserMessageList />
@@ -145,7 +145,7 @@ export default function DashboardPage() {
               onChange={(e) => setMessage(e.target.value)}
               onSend={() => {
                 console.log("Message to self:", message);
-                setMessage(""); // Clear the input field after sending the message
+                setMessage("");
               }}
               onVoiceRecord={() => console.log("Voice recording started")}
             />

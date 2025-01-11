@@ -80,8 +80,8 @@ const WorkspaceInformation = () => {
           {/* Time Zone */}
           <div className="space-y-2 mt-4">
             <Label htmlFor="timeZone" className="text-lg">Time Zone</Label>
-            <Select value={timeZone} onValueChange={setTimeZone} className="w-full">
-              <SelectTrigger className="px-4 py-3 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500">
+            <Select value={timeZone} onValueChange={setTimeZone}>
+              <SelectTrigger className="w-full px-4 py-3 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500">
                 <span>{timeZone}</span>
               </SelectTrigger>
               <SelectContent>

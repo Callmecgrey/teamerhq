@@ -6,8 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/table";
-import { ChartContainer, ChartLegend, ChartTooltip } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from "recharts";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 const BillingPage = () => {
@@ -41,39 +39,34 @@ const BillingPage = () => {
     { name: "Mar", users: 15 },
   ];
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  interface BillingHistory {
+    date: string;
+    amount: string;
+    status: string;
+  }
 
-  const chartConfig = {
-    usersChart: {
-      label: "Active Users",
-      color: "#8884d8",
-    },
-    storageChart: {
-      label: "Storage Breakdown",
-      theme: {
-        light: { backgroundColor: "#ffffff" },
-        dark: { backgroundColor: "#333333" },
-      },
-    },
-  };
+  interface License {
+    name: string;
+    role: string;
+    status: string;
+  }
 
-  const teamMembers = [
-    { name: "John Doe", role: "Admin" },
-    { name: "Jane Smith", role: "Member" },
-    { name: "Michael Jordan", role: "Member" },
-    { name: "Kobe Bryant", role: "Member" },
-  ];
+  interface BillingManager {
+    name: string;
+    role: string;
+  }
 
-  const handleAssignBillingManager = (selectedMember) => {
-    if (billingManagers.length < 2) {
+  const handleAssignBillingManager = (name: string) => {
+    const selectedMember = licenses.find((member: License) => member.name === name);
+    if (selectedMember && billingManagers.length < 2) {
       setBillingManagers([...billingManagers, selectedMember]);
     } else {
       alert("You can only have 2 billing managers.");
     }
   };
 
-  const handleRemoveBillingManager = (name) => {
-    setBillingManagers(billingManagers.filter((manager) => manager.name !== name));
+  const handleRemoveBillingManager = (name: string) => {
+    setBillingManagers(billingManagers.filter((manager: BillingManager) => manager.name !== name));
   };
 
   const handleEditPaymentMethod = () => {
@@ -106,9 +99,7 @@ const BillingPage = () => {
                 </p>
                 <p className="text-sm text-muted-foreground">Billed monthly. Cancel anytime.</p>
               </div>
-              <Button variant="outline" onClick={() => console.log("Upgrade Plan")}>
-                Upgrade/Downgrade Plan
-              </Button>
+              <Button variant="outline" onClick={() => console.log("Upgrade Plan")}>Upgrade/Downgrade Plan</Button>
             </div>
           </div>
         </TabsContent>
@@ -117,39 +108,21 @@ const BillingPage = () => {
         <TabsContent value="analytics">
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Usage Analytics</h2>
-            <div className="flex space-x-6">
-              <div className="w-1/2">
-                <ChartContainer config={chartConfig.storageChart}>
-                  <PieChart>
-                    <Pie
-                      data={storageBreakdown}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                      fill="#8884d8"
-                    >
-                      {storageBreakdown.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <ChartTooltip />
-                    <ChartLegend />
-                  </PieChart>
-                </ChartContainer>
-              </div>
-              <div className="w-1/2">
-                <ChartContainer config={chartConfig.usersChart}>
-                  <BarChart data={activeUserData}>
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="users" fill="#8884d8" />
-                  </BarChart>
-                </ChartContainer>
-              </div>
+            <div>
+              <h3 className="text-lg font-semibold">Storage Breakdown</h3>
+              <ul className="list-disc list-inside">
+                {storageBreakdown.map((item, idx) => (
+                  <li key={idx}>{item.name}: {item.value} GB</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold">Active Users by Month</h3>
+              <ul className="list-disc list-inside">
+                {activeUserData.map((item, idx) => (
+                  <li key={idx}>{item.name}: {item.users} users</li>
+                ))}
+              </ul>
             </div>
           </div>
         </TabsContent>
@@ -164,9 +137,7 @@ const BillingPage = () => {
               <Label>Payment Method</Label>
               <div className="flex items-center space-x-2">
                 <Input value={paymentMethod} readOnly className="w-2/3" />
-                <Button variant="outline" onClick={handleEditPaymentMethod}>
-                  Edit
-                </Button>
+                <Button variant="outline" onClick={handleEditPaymentMethod}>Edit</Button>
               </div>
             </div>
 
@@ -189,19 +160,9 @@ const BillingPage = () => {
                       <TableCell>{record.amount}</TableCell>
                       <TableCell>{record.status}</TableCell>
                       <TableCell>
-                        <Button
-                          variant="link"
-                          onClick={() => console.log("Download Invoice")}
-                        >
-                          Download Invoice
-                        </Button>
+                        <Button variant="link" onClick={() => console.log("Download Invoice")}>Download Invoice</Button>
                         {record.status === "Failed" && (
-                          <Button
-                            variant="link"
-                            onClick={() => console.log("Retry Payment")}
-                          >
-                            Retry Payment
-                          </Button>
+                          <Button variant="link" onClick={() => console.log("Retry Payment")}>Retry Payment</Button>
                         )}
                       </TableCell>
                     </TableRow>
@@ -223,8 +184,8 @@ const BillingPage = () => {
               <Input
                 id="billing-manager"
                 className="w-full"
-                placeholder="Search for team member"
-                onChange={(e) => handleAssignBillingManager(e.target.value)}
+                placeholder="Enter team member name"
+                onBlur={(e) => handleAssignBillingManager(e.target.value)}
               />
             </div>
 
@@ -245,13 +206,7 @@ const BillingPage = () => {
                       <TableCell>{manager.name}</TableCell>
                       <TableCell>{manager.role}</TableCell>
                       <TableCell>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleRemoveBillingManager(manager.name)}
-                        >
-                          Remove
-                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => handleRemoveBillingManager(manager.name)}>Remove</Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -279,9 +234,7 @@ const BillingPage = () => {
             />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-              Cancel
-            </Button>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleSaveNewCard}>Save</Button>
           </DialogFooter>
         </DialogContent>

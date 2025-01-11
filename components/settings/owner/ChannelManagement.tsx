@@ -268,7 +268,7 @@ const ChannelManagement = () => {
                         onValueChange={(newRole) =>
                           setPermissions((prev) => ({
                             ...prev,
-                            [key]: { ...prev[key], role: newRole },
+                            [key as keyof typeof permissions]: { ...prev[key as keyof typeof permissions], role: newRole },
                           }))
                         }
                       >

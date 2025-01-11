@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus, Hash, LogOut, Settings } from "lucide-react";
+import { Plus, Hash, LogOut, Settings, Lock } from "lucide-react";
 import { Sidebar as UISidebar, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
 import { TeamSwitcher } from "@/components/switcher/team-switcher";
 
@@ -38,23 +38,33 @@ export default function ChatSidebar({
   const [channelsOpen, setChannelsOpen] = useState(true);
   const [usersOpen, setUsersOpen] = useState(true);
   const [userRole, setUserRole] = useState<"owner" | "user" | null>(null);
+  const [userLogo, setUserLogo] = useState<React.ElementType>(Plus);
+
+  // Unread message count for user and channel
+  const [unreadMessages, setUnreadMessages] = useState<number>(3);
+  const [unreadChannel, setUnreadChannel] = useState<number>(205);
+
+  // Drafting status for "Me"
+  const [drafting, setDrafting] = useState(true);
 
   useEffect(() => {
     const fetchUserRole = async () => {
-      const role = "user"; // Mocked role; replace with API call if needed
+      const role = "user";
       setUserRole(role);
     };
     fetchUserRole();
   }, []);
 
   const mockChannels = [
-    { name: "general", description: "General discussions for the team." },
-    { name: "announcements", description: "Important updates and announcements." },
+    { name: "general", description: "General discussions for the team.", channelType: "Public" },
+    { name: "announcements", description: "Important updates and announcements.", channelType: "Public" },
+    { name: "team-planning", description: "Private team planning channel.", channelType: "Private" },
   ];
 
   const mockUsers = [
     { name: "John Doe", position: "Senior Developer", dept: "Engineering", status: "online" },
     { name: "Jane Smith", position: "Product Manager", dept: "Product", status: "offline" },
+    { name: "Me", position: "Software Engineer", dept: "Engineering", status: "online" },
   ];
 
   const toggleChannels = () => setChannelsOpen(!channelsOpen);
@@ -66,6 +76,10 @@ export default function ChatSidebar({
     } else {
       router.push("/dashboard/settings/user");
     }
+  };
+
+  const handleLogout = () => {
+    router.push("/login");
   };
 
   return (
@@ -98,8 +112,15 @@ export default function ChatSidebar({
                     size="sm"
                     onClick={() => onChannelClick(channel)}
                   >
-                    <Hash className="h-4 w-4 mr-2" />
+                    {channel.channelType === "Private" ? (
+                      <Lock className="h-4 w-4 mr-2" />
+                    ) : (
+                      <Hash className="h-4 w-4 mr-2" />
+                    )}
                     {channel.name}
+                    {unreadChannel && (
+                      <span className="ml-2 text-red-500 text-xs font-bold">• {unreadChannel}</span>
+                    )}
                   </Button>
                 ))}
               </div>
@@ -132,6 +153,12 @@ export default function ChatSidebar({
                       } rounded-full mr-2`}
                     />
                     {user.name}
+                    {user.name !== "Me" && unreadMessages > 0 && (
+                      <span className="ml-2 text-red-500 text-xs font-bold">• {unreadMessages}</span> // Unread message notification for other users
+                    )}
+                    {user.name === "Me" && drafting && (
+                      <span className="ml-2 text-orange-500 text-xs font-bold">Drafting...</span>
+                    )}
                   </Button>
                 ))}
               </div>
@@ -141,7 +168,7 @@ export default function ChatSidebar({
 
         {/* Sidebar Footer with Settings and Logout */}
         <div className="p-4 border-t space-y-2">
-          <Button variant="ghost" size="sm" className="w-full justify-start text-muted-foreground">
+          <Button variant="ghost" size="sm" className="w-full justify-start text-muted-foreground" onClick={handleLogout}>
             <LogOut className="h-4 w-4 mr-2" />
             Logout
           </Button>

@@ -12,6 +12,7 @@ export default function UserChatHeader({ user, onProfileClick }: { user: any; on
 
   return (
     <div className="h-16 border-b flex items-center justify-between px-4">
+      {/* User Info */}
       <div
         className="flex items-center space-x-2 cursor-pointer"
         onClick={onProfileClick}
@@ -27,20 +28,27 @@ export default function UserChatHeader({ user, onProfileClick }: { user: any; on
           <p className="text-sm text-muted-foreground">{user.position}</p>
         </div>
       </div>
+
+      {/* Right Section */}
       <div className="flex items-center space-x-2">
+        {/* Search Bar */}
+        <div className="relative">
+          <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+          <Input className="pl-10 w-64" placeholder={`Search ${user.name}`} type="search" />
+        </div>
+
+        {/* Call Icons */}
         <Button variant="ghost" size="icon" onClick={handleVoiceClick}>
           <Phone className="h-4 w-4" />
         </Button>
         <Button variant="ghost" size="icon" onClick={handleVideoClick}>
           <Video className="h-4 w-4" />
         </Button>
+
+        {/* More Options */}
         <Button variant="ghost" size="icon" onClick={onProfileClick}>
           <MoreVertical className="h-4 w-4" />
         </Button>
-        <div className="relative">
-          <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-          <Input className="pl-10 w-64" placeholder={`Search ${user.name}`} type="search" />
-        </div>
       </div>
     </div>
   );

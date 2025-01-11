@@ -1,6 +1,14 @@
 // components/chat/ChannelInfoSidebar.tsx
 import { Button } from "@/components/ui/button";
 import { X, Hash } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export default function ChannelInfoSidebar({
   channel,
@@ -15,7 +23,6 @@ export default function ChannelInfoSidebar({
   onClose: () => void;
   onTeamMemberClick: (member: { name: string; position: string }) => void;
 }) {
-  // Define demo team members if none are provided
   const demoTeamMembers = [
     { name: "Alice Johnson", position: "Team Lead" },
     { name: "Bob Smith", position: "Developer" },
@@ -38,9 +45,8 @@ export default function ChannelInfoSidebar({
     ? channel.teamMembers
     : demoTeamMembers;
 
-  // Handle onClose, just close the sidebar without navigating
   const handleClose = () => {
-    onClose(); // Simply call the onClose function passed as a prop
+    onClose();
   };
 
   return (
@@ -104,9 +110,62 @@ export default function ChannelInfoSidebar({
 
       {/* Footer Section */}
       <div className="mt-6 border-t pt-4">
-        <Button variant="outline" className="w-full">
-          Invite Members
-        </Button>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" className="w-full">
+              Manage Members
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Manage Team Member</SheetTitle>
+              <SheetDescription>
+                Add new members or remove existing members
+              </SheetDescription>
+            </SheetHeader>
+
+            {/* Scrollable Member List */}
+            <div className="space-y-4 mt-4 overflow-y-auto max-h-[70vh]">
+              {demoTeamMembers.map((member, index) => {
+                const isMemberInChannel = teamMembers.some(
+                  (teamMember) => teamMember.name === member.name
+                );
+
+                return (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
+                    <div>
+                      <p className="font-medium">{member.name}</p>
+                      <p className="text-sm text-muted-foreground">{member.position}</p>
+                    </div>
+                    {isMemberInChannel ? (
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => console.log(`Removed ${member.name}`)}
+                      >
+                        Remove
+                      </Button>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => console.log(`Added ${member.name}`)}
+                      >
+                        Add
+                      </Button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <Button variant="secondary" className="mt-6 w-full">
+              Add New Member
+            </Button>
+          </SheetContent>
+        </Sheet>
       </div>
     </div>
   );

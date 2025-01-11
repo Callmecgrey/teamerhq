@@ -1,5 +1,4 @@
 // components/chat/ChannelInfoSidebar.tsx
-// components/chat/ChannelInfoSidebar.tsx
 import { Button } from "@/components/ui/button";
 import { X, Hash } from "lucide-react";
 
@@ -39,6 +38,11 @@ export default function ChannelInfoSidebar({
     ? channel.teamMembers
     : demoTeamMembers;
 
+  // Handle onClose, just close the sidebar without navigating
+  const handleClose = () => {
+    onClose();  // Simply call the onClose function passed as a prop
+  };
+
   return (
     <div className="w-[25%] border-l bg-card p-6 flex flex-col h-full">
       {/* Header Section */}
@@ -49,7 +53,7 @@ export default function ChannelInfoSidebar({
           </div>
           <h2 className="text-xl font-semibold">{channel.name}</h2>
         </div>
-        <Button variant="ghost" size="icon" onClick={onClose}>
+        <Button variant="ghost" size="icon" onClick={handleClose}>
           <X className="h-5 w-5" />
         </Button>
       </div>
@@ -64,13 +68,15 @@ export default function ChannelInfoSidebar({
           </p>
         </div>
 
-        {/* Team Members */}
-        {teamMembers && teamMembers.length > 0 ? (
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground uppercase">
-              Team Members
-            </h3>
-            <ul className="mt-4 space-y-3">
+        {/* Team Members Section */}
+        <div className="sticky top-0 bg-card z-10">
+          <h3 className="text-sm font-medium text-muted-foreground uppercase border-b pb-2">
+            Team Members
+          </h3>
+        </div>
+        <div className="overflow-y-auto max-h-[calc(100vh-280px)]">
+          {teamMembers && teamMembers.length > 0 ? (
+            <ul className="space-y-3">
               {teamMembers.map((member, index) => (
                 <li
                   key={index}
@@ -90,17 +96,10 @@ export default function ChannelInfoSidebar({
                 </li>
               ))}
             </ul>
-          </div>
-        ) : (
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground uppercase">
-              Team Members
-            </h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              No team members available.
-            </p>
-          </div>
-        )}
+          ) : (
+            <p className="mt-2 text-sm text-muted-foreground">No team members available.</p>
+          )}
+        </div>
       </div>
 
       {/* Footer Section */}
@@ -112,4 +111,3 @@ export default function ChannelInfoSidebar({
     </div>
   );
 }
-

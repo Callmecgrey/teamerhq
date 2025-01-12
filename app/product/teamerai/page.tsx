@@ -216,25 +216,16 @@ export default function TeamerAIPage() {
                 Experience the Power of AI-Enhanced Collaboration
               </h2>
               <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
-                Join thousands of teams already using TeamerAI to transform their workflow
+                Have a one on one real time experience of how TeamerAI can help your team collaborate better and be more productive.
               </p>
               <div className="flex flex-col gap-4 sm:flex-row justify-center">
-                <Link href="/signup">
+                <Link href="/schedule-demo">
                   <Button
                     size="lg"
                     className="bg-white text-purple-600 hover:bg-purple-50"
                   >
-                    Get Started Free
+                    Schedule a Demo
                     <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-                <Link href="/demo">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="border-2 border-white text-white hover:bg-white/10"
-                  >
-                    Schedule Demo
                   </Button>
                 </Link>
               </div>

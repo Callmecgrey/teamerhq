@@ -23,7 +23,7 @@ const features = [
   {
     icon: Zap,
     title: "Rapid Integration",
-    description: "Custom API access and seamless deployment"
+    description: "Custom API for team success"
   }
 ];
 

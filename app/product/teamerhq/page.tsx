@@ -185,7 +185,7 @@ export default function Features() {
                 </div>
                 <div className="ml-3 inline-flex">
                   <a
-                    href="/contact"
+                    href="/help/contact"
                     className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-800 hover:bg-blue-700"
                   >
                     Contact sales

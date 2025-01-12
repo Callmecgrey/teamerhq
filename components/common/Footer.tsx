@@ -12,7 +12,7 @@ const footerLinks = {
   ],
   Product: [
     { name: "Features", href: "/product/teamerhq" },
-    { name: "Security", href: "/product/teamerhq" },
+    { name: "Security", href: "/security" },
     { name: "Enterprise", href: "/enterprise" },
     { name: "Customer Stories", href: "/customers" },
   ],

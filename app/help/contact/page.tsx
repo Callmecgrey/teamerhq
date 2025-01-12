@@ -243,7 +243,7 @@ export default function ContactSupport() {
       {/* Additional Help Section */}
       <div className="mt-12 text-center bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-8">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Need Immediate Help?
+          Looking for APIs Docs?
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
           Check our documentation for quick solutions to common problems.

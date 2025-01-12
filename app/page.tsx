@@ -289,7 +289,9 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-gray-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-black">
-      <Header />
+      <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow">
+        <Header />
+      </div>
       
       {/* Hero Section */}
       <motion.section
@@ -323,17 +325,16 @@ export default function LandingPage() {
               className="flex flex-col gap-4 mt-10 sm:flex-row sm:justify-center"
             >
               <div className="flex gap-4">
-              <a
-                href="/signup"
-                className="inline-flex items-center justify-center bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white py-2 px-4 text-lg font-medium rounded-lg"
+                <a
+                  href="/signup"
+                  className="inline-flex items-center justify-center bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white py-2 px-4 text-lg font-medium rounded-lg"
                 >
-                Start Free Trial
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </a>
-            </div>
-
+                  Start Free Trial
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </a>
+              </div>
             </motion.div>
-            
+
             {/* Social Proof */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -435,8 +436,8 @@ export default function LandingPage() {
               <a
                 href="/schedule-demo"
                 className="inline-flex items-center justify-center border-2 border-gray-300 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 py-2 px-4 text-lg font-medium rounded-lg"
-                >
-                 Schedule Demo
+              >
+                Schedule Demo
               </a>
             </div>
           </motion.div>

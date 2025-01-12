@@ -1,94 +1,94 @@
 "use client";
 
 import {
-  Hash,
-  Users,
-  Lock,
-  Settings,
-  Bell,
-  Archive,
-  MessageSquare,
+  FileUp,
+  FolderTree,
+  Share2,
   Search,
+  Lock,
+  Download,
+  History,
+  Tag,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
 const steps = [
   {
-    title: "Create a Channel",
-    description: "Set up a new channel for your team's discussions.",
-    icon: Hash,
+    title: "Upload Files",
+    description: "Share files and documents with your team.",
+    icon: FileUp,
     tips: [
-      "Choose a clear, descriptive name",
-      "Set a channel topic and description",
-      "Decide between public or private visibility",
+      "Drag and drop multiple files",
+      "Supported formats: docs, images, PDFs",
+      "Maximum file size: 100MB per file",
     ],
   },
   {
-    title: "Manage Members",
-    description: "Add team members and set appropriate permissions.",
-    icon: Users,
+    title: "Organize Content",
+    description: "Keep your files structured and easy to find.",
+    icon: FolderTree,
     tips: [
-      "Invite members individually or in bulk",
-      "Assign channel roles and permissions",
-      "Remove inactive members when needed",
+      "Create folders for different projects",
+      "Use consistent naming conventions",
+      "Add descriptive file descriptions",
     ],
   },
   {
-    title: "Configure Privacy",
-    description: "Set up privacy settings and access controls.",
-    icon: Lock,
+    title: "Share and Collaborate",
+    description: "Control access and collaborate on files.",
+    icon: Share2,
     tips: [
-      "Choose between public and private channels",
-      "Set up invite-only restrictions",
-      "Configure external sharing settings",
+      "Set view or edit permissions",
+      "Share via links or direct mentions",
+      "Collaborate in real-time on documents",
     ],
   },
   {
-    title: "Customize Settings",
-    description: "Fine-tune your channel for optimal team collaboration.",
-    icon: Settings,
+    title: "Find and Manage",
+    description: "Locate and organize your shared files.",
+    icon: Search,
     tips: [
-      "Set up posting permissions",
-      "Configure thread preferences",
-      "Enable or disable features",
+      "Use advanced search filters",
+      "Sort by date, type, or size",
+      "Track file version history",
     ],
   },
 ];
 
 const quickTips = [
   {
-    title: "Notifications",
-    description: "Set custom notification preferences for each channel.",
-    icon: Bell,
+    title: "Security",
+    description: "Set permissions and protect sensitive files.",
+    icon: Lock,
   },
   {
-    title: "Channel Search",
-    description: "Find messages and files within specific channels.",
-    icon: Search,
+    title: "Downloads",
+    description: "Download files for offline access.",
+    icon: Download,
   },
   {
-    title: "Archiving",
-    description: "Archive inactive channels to reduce clutter.",
-    icon: Archive,
+    title: "Versioning",
+    description: "Track changes and restore previous versions.",
+    icon: History,
   },
   {
-    title: "Threads",
-    description: "Use threads to organize conversations.",
-    icon: MessageSquare,
+    title: "Tags",
+    description: "Organize files with custom tags.",
+    icon: Tag,
   },
 ];
 
-export default function ChannelsGuide() {
+export default function FilesGuide() {
   return (
     <div className="max-w-3xl mx-auto">
       {/* Hero Section */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
-          Channel Management Guide
+          File Management Guide
         </h1>
         <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-          Learn how to create, manage, and optimize channels for effective team communication.
+          Learn how to efficiently manage, share, and organize files in TeamerHQ.
         </p>
       </div>
 
@@ -146,7 +146,7 @@ export default function ChannelsGuide() {
       {/* Quick Tips Section */}
       <div className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-8 mb-12">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
-          Quick Channel Tips
+          Quick File Tips
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {quickTips.map((tip, index) => {
@@ -182,10 +182,10 @@ export default function ChannelsGuide() {
       {/* Next Steps */}
       <div className="text-center bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-8">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Need more help with channels?
+          Need help with file management?
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Check out our detailed guides or contact our support team.
+          Explore our detailed guides or reach out to our support team.
         </p>
         <div className="flex justify-center gap-4">
           <Link
@@ -195,7 +195,7 @@ export default function ChannelsGuide() {
             Contact Support
           </Link>
           <Link
-            href="/help/channels/advanced"
+            href="/help/files/advanced"
             className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
           >
             Advanced Guide

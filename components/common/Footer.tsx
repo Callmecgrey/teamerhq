@@ -7,19 +7,16 @@ const footerLinks = {
   Company: [
     { name: "About", href: "/about" },
     { name: "Blog", href: "/blog" },
-    { name: "Careers", href: "/careers" },
     { name: "Contact", href: "/help/contact" },
   ],
   Product: [
-    { name: "Features", href: "/product/teamerhq" },
     { name: "Security", href: "/security" },
     { name: "Enterprise", href: "/enterprise" },
     { name: "Customer Stories", href: "/customers" },
   ],
   Resources: [
-    { name: "API Reference", href: "/api" },
-    { name: "Documentation", href: "/docs" },
-    { name: "Guides", href: "/guides" },
+    { name: "API Documentation", href: "/documentation" },
+    { name: "Changelog", href: "/changelog" },
     { name: "Help Center", href: "/help" },
   ],
   Legal: [
@@ -43,28 +40,9 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground max-w-xs">
-               Built by{" "}
-              <Link
-                href="https://www.linconwavesinnovation.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 dark:text-blue-400 underline hover:no-underline"
-              >
-                Linconwaves
-              </Link>
-              .
+            The all-in-one collaboration platform that bring your team together.
             </p>
-            <div className="mt-6">
-              <h3 className="font-semibold text-sm">Subscribe to our newsletter</h3>
-              <div className="mt-2 flex gap-2">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="max-w-xs"
-                />
-                <Button>Subscribe</Button>
-              </div>
-            </div>
+            
           </div>
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4 xl:col-span-4">
             {Object.entries(footerLinks).map(([category, links]) => (

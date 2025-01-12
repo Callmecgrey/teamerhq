@@ -11,7 +11,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 
 // Dynamically import VideoPlayer to avoid SSR issues
-const VideoPlayer = dynamic(() => import("@/components/VideoPlayer"), {
+const VideoPlayer = dynamic(() => import("@/components/video/VideoPlayer"), {
   ssr: false,
 });
 

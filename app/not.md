@@ -1,7 +1,9 @@
+have modified the landing page like this 
+
 "use client";
 
 import { 
-  ArrowRight, MessageSquare, Video, ScreenShare, Users2, Shield, Bot,
+  ArrowRight, MessageSquare, Video, Share2, Users2, Shield, Bot,
   Slack, Github, Trello, FileText, Figma, LayoutGrid, GitPullRequest,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,97 +18,37 @@ const features = [
     icon: MessageSquare,
     title: "Real-time Messaging",
     description: "Instant messaging with threaded conversations, reactions, and file sharing.",
-    color: "from-blue-500 to-cyan-500",
-    subFeatures: [
-      {
-        title: "Thread Discussions",
-        description: "Keep conversations organized with threaded replies"
-      },
-      {
-        title: "Smart Notifications",
-        description: "Get notified only about what matters to you"
-      }
-    ]
+    color: "from-blue-500 to-cyan-500"
   },
   {
     icon: Video,
     title: "HD Video Calls",
     description: "Crystal clear video meetings with screen sharing and recording capabilities.",
-    color: "from-purple-500 to-pink-500",
-    subFeatures: [
-      {
-        title: "4K Quality",
-        description: "Ultra-high definition video for crystal clear calls"
-      },
-      {
-        title: "Cloud Recording",
-        description: "Record and store meetings securely in the cloud"
-      }
-    ]
+    color: "from-purple-500 to-pink-500"
   },
   {
-    icon: ScreenShare,
+    icon: Share2,
     title: "Screen Sharing",
     description: "Share your screen with one click for seamless collaboration.",
-    color: "from-orange-500 to-red-500",
-    subFeatures: [
-      {
-        title: "Multi-Monitor",
-        description: "Share any screen or specific application window"
-      },
-      {
-        title: "Remote Control",
-        description: "Allow teammates to control your screen when needed"
-      }
-    ]
+    color: "from-orange-500 to-red-500"
   },
   {
     icon: Users2,
     title: "Team Channels",
     description: "Organize conversations by teams, projects, or topics.",
-    color: "from-green-500 to-emerald-500",
-    subFeatures: [
-      {
-        title: "Custom Groups",
-        description: "Create channels for teams, projects, or topics"
-      },
-      {
-        title: "Access Control",
-        description: "Manage permissions and roles for each channel"
-      }
-    ]
+    color: "from-green-500 to-emerald-500"
   },
   {
     icon: Shield,
     title: "Enterprise Security",
     description: "Bank-level security with end-to-end encryption and 2FA.",
-    color: "from-indigo-500 to-violet-500",
-    subFeatures: [
-      {
-        title: "End-to-End Encryption",
-        description: "Military-grade encryption for all communications"
-      },
-      {
-        title: "Advanced 2FA",
-        description: "Multi-factor authentication with biometric support"
-      }
-    ]
+    color: "from-indigo-500 to-violet-500"
   },
   {
     icon: Bot,
     title: "TeamerAI",
     description: "AI-powered assistant to boost your team's productivity.",
-    color: "from-yellow-500 to-amber-500",
-    subFeatures: [
-      {
-        title: "Smart Automation",
-        description: "Automate routine tasks with AI assistance"
-      },
-      {
-        title: "Insights & Analytics",
-        description: "Get AI-powered insights about team performance"
-      }
-    ]
+    color: "from-yellow-500 to-amber-500"
   }
 ];
 
@@ -142,105 +84,50 @@ const testimonials = [
   }
 ];
 
-type SubFeature = {
-  title: string;
-  description: string;
-};
-
 type Feature = {
   icon: React.ElementType;
   title: string;
   description: string;
   color: string;
-  subFeatures: SubFeature[];
 };
 
 function FeatureSection({ feature, index }: { feature: Feature; index: number }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { margin: "-40% 0px -40% 0px" });
-
+  
   return (
     <motion.div
       ref={ref}
-      className="relative h-screen flex items-center"
+      className="h-screen flex items-center justify-center sticky top-0"
       initial={{ opacity: 0 }}
-      animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+      animate={isInView ? { opacity: 1 } : { opacity: 0.3 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-7xl mx-auto px-4 w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        {/* Left side - Feature Title */}
+      <div className="max-w-4xl mx-auto px-4 text-center">
         <motion.div
-          initial={{ x: -100, opacity: 0 }}
-          animate={isInView ? { x: 0, opacity: 1 } : { x: -100, opacity: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-left"
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0.5, opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className={`inline-flex p-6 rounded-3xl bg-gradient-to-r ${feature.color} mb-8`}
         >
-          <h3 className="text-6xl font-bold text-gray-900 dark:text-white">
-            {feature.title}
-          </h3>
+          <feature.icon className="w-12 h-12 text-white" />
         </motion.div>
-
-        {/* Right side - Icon and Description */}
-        <motion.div
-          initial={{ x: 100, opacity: 0 }}
-          animate={isInView ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="relative"
+        <motion.h3
+          initial={{ y: 20, opacity: 0 }}
+          animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6"
         >
-          <div className="relative z-10">
-            {/* Feature Icon */}
-            <motion.div
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0.5, opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className={`inline-flex p-8 rounded-3xl bg-gradient-to-r ${feature.color} mb-8 relative z-10`}
-            >
-              <feature.icon className="w-16 h-16 text-white" />
-            </motion.div>
-
-            {/* Decorative background blur */}
-            <div
-              className={`absolute inset-0 bg-gradient-to-r ${feature.color} opacity-10 blur-3xl -z-10 rounded-full transform -translate-y-1/2`}
-            />
-
-            {/* Feature Description */}
-            <motion.p
-              initial={{ y: 20, opacity: 0 }}
-              animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="text-xl text-gray-600 dark:text-gray-400 mt-6 max-w-lg"
-            >
-              {feature.description}
-            </motion.p>
-
-            {/* Sub-features */}
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="mt-8 grid grid-cols-2 gap-4"
-            >
-              {feature.subFeatures.map((subFeature, idx) => (
-                <div
-                  key={idx}
-                  className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
-                >
-                  <div
-                    className={`w-8 h-8 rounded-full bg-gradient-to-r ${feature.color} flex items-center justify-center mb-3`}
-                  >
-                    <feature.icon className="w-4 h-4 text-white" />
-                  </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-                    {subFeature.title}
-                  </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {subFeature.description}
-                  </p>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-        </motion.div>
+          {feature.title}
+        </motion.h3>
+        <motion.p
+          initial={{ y: 20, opacity: 0 }}
+          animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="text-xl md:text-2xl text-gray-600 dark:text-gray-400"
+        >
+          {feature.description}
+        </motion.p>
       </div>
     </motion.div>
   );
@@ -327,16 +214,20 @@ export default function LandingPage() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-col gap-4 mt-10 sm:flex-row sm:justify-center"
             >
-              <div className="flex gap-4">
-              <a
-                href="/signup"
-                className="inline-flex items-center justify-center bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white py-2 px-4 text-lg font-medium rounded-lg"
-                >
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
+              >
                 Start Free Trial
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </a>
-            </div>
-
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-2"
+              >
+                Schedule Demo
+              </Button>
             </motion.div>
             
             {/* Social Proof */}
@@ -364,11 +255,11 @@ export default function LandingPage() {
       {/* Features Showcase */}
       <section className="relative bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950">
         <div className="text-center py-20">
-          <h2 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">
+          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">
             Powerful Features for Modern Teams
           </h2>
         </div>
-        <div className="min-h-screen" style={{ height: `${features.length * 100}vh` }}>
+        <div className="h-[100vh] sticky top-0" style={{ height: `${features.length * 100}vh` }}>
           {features.map((feature, index) => (
             <FeatureSection key={index} feature={feature} index={index} />
           ))}
@@ -376,10 +267,10 @@ export default function LandingPage() {
       </section>
 
       {/* Integration Section */}
-      <section className="h-[600px] py-20 bg-gradient-to-b from-transparent to-blue-50/50 dark:to-blue-950/30 overflow-hidden">
+      <section className="py-20 bg-gradient-to-b from-transparent to-blue-50/50 dark:to-blue-950/30 overflow-hidden">
         <div className="container px-4 mx-auto max-w-7xl">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">
+            <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">
               Connects With Your Favorite Tools
             </h2>
             <p className="mt-4 text-gray-600 dark:text-gray-400">
@@ -389,7 +280,7 @@ export default function LandingPage() {
         </div>
         <Marquee
           gradient={false}
-          speed={30}
+          speed={50}
           className="py-8"
         >
           {tools.map((tool) => (
@@ -437,12 +328,20 @@ export default function LandingPage() {
               Join thousands of teams already using our platform
             </p>
             <div className="flex flex-col gap-4 mt-8 sm:flex-row sm:justify-center">
-              <a
-                href="/schedule-demo"
-                className="inline-flex items-center justify-center border-2 border-gray-300 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 py-2 px-4 text-lg font-medium rounded-lg"
-                >
-                 Schedule Demo
-              </a>
+              <Button
+                size="lg"
+                className="bg-white text-blue-600 hover:bg-blue-50"
+              >
+                Start Free Trial
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-2 border-white text-white hover:bg-white/10"
+              >
+                View Pricing
+              </Button>
             </div>
           </motion.div>
         </div>
@@ -452,3 +351,8 @@ export default function LandingPage() {
     </div>
   );
 }
+
+now let's further enhance the {Powerful Features for Modern Teams}
+1. feature title by the left, and image and description by the right 
+2. as i scroll using framer motion, let each title that be comes active show the icon and description by the right until all features are exhaused.
+3. ensure each image and description disappears once i scroll pass the title 

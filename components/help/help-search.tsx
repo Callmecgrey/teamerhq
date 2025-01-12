@@ -8,31 +8,89 @@ import { Command, Command as CommandPrimitive } from "cmdk";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
-// This would come from your documentation data
-const searchableItems = [
+// Dynamically build the searchable items based on sidebar items
+const generateSearchableItems = (sidebarItems: any[]) => {
+  interface SidebarItem {
+    title: string;
+    href: string;
+  }
+
+  interface SidebarSection {
+    title: string;
+    items: SidebarItem[];
+  }
+
+  interface SearchableItem {
+    title: string;
+    href: string;
+    category: string;
+    keywords: string;
+  }
+
+  const items: SearchableItem[] = [];
+  
+  sidebarItems.forEach((section) => {
+    section.items.forEach((item: SidebarItem) => {
+      items.push({
+      title: item.title,
+      href: item.href,
+      category: section.title,
+      keywords: item.title.toLowerCase(), // Add more keywords as necessary
+      });
+    });
+  });
+
+  return items;
+};
+
+// Sidebar items (from your layout)
+const sidebarItems = [
   {
-    title: "Introduction to TeamerHQ",
-    href: "/help",
-    category: "Getting Started",
-    keywords: "introduction, overview, basics, start",
+    title: "Getting Started",
+    items: [
+      { title: "Introduction to TeamerHQ", href: "/help" },
+      { title: "Quick Start Guide", href: "/help/quick-start" },
+      { title: "Setting up your Workspace", href: "/help/workspace" },
+    ],
   },
   {
-    title: "Quick Start Guide",
-    href: "/help/quick-start",
-    category: "Getting Started",
-    keywords: "setup, begin, tutorial, guide",
+    title: "Using TeamerHQ",
+    items: [
+      { title: "Messaging", href: "/help/messaging" },
+      { title: "Channels", href: "/help/channels" },
+      { title: "Direct Messages", href: "/help/direct-messages" },
+      { title: "Managing Files", href: "/help/files" },
+      { title: "Shortcut & Commands", href: "/help/shortcuts" },
+    ],
   },
   {
-    title: "Setting up your Workspace",
-    href: "/help/workspace",
-    category: "Getting Started",
-    keywords: "workspace, setup, configure, organization",
+    title: "User Account",
+    items: [
+      { title: "Profile Settings", href: "/help/user/profile" },
+      { title: "Notifications", href: "/help/user/notifications" },
+      { title: "Privacy & Security", href: "/help/user/privacy" },
+    ],
   },
   {
-    title: "Messaging",
-    href: "/help/messaging",
-    category: "Using TeamerHQ",
-    keywords: "messages, chat, communication, send",
+    title: "Workspace Settings",
+    items: [
+      { title: "Workspace Customization", href: "/help/owner/profile" },
+      { title: "User Management", href: "/help/owner/notifications" },
+      { title: "Integration & APIs", href: "/help/owner/integrations" },
+      { title: "Billing & Subscription", href: "/help/owner/billing" },
+    ],
+  },
+  {
+    title: "Utilities",
+    items: [
+      { title: "Common Issues", href: "/help/utilities/common-issues" },
+    ],
+  },
+  {
+    title: "Contact Support",
+    items: [
+      { title: "Support", href: "/help/contact" },
+    ],
   },
 ];
 
@@ -56,6 +114,9 @@ export function HelpSearch({ ...props }: DialogProps) {
     setOpen(false);
     command();
   }, []);
+
+  // Generate searchable items based on the sidebarItems
+  const searchableItems = generateSearchableItems(sidebarItems);
 
   // Filter items based on the search query
   const filteredItems = searchableItems.filter((item) => {

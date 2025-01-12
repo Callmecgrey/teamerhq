@@ -1,146 +1,137 @@
 "use client";
 
 import {
+  Building2,
+  Palette,
+  Settings,
+  Users,
+  Shield,
+  Workflow,
+  Globe,
   MessageSquare,
-  AtSign,
-  Hash,
-  Smile,
-  FileText,
-  Reply,
-  Forward,
-  Star,
-  Search,
-  BookMarked,
-  Edit3,
-  AlertCircle
+  FileCheck,
+  Zap
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-const messagingFeatures = [
+const setupSteps = [
   {
-    title: "Message Composition",
-    description: "Create clear and effective messages for your team.",
+    title: "Basic Configuration",
+    description: "Set up the fundamental aspects of your workspace.",
+    icon: Building2,
+    tasks: [
+      {
+        title: "Workspace Name & URL",
+        description: "Choose a unique name and URL for your workspace",
+        steps: [
+          "Select a clear, recognizable workspace name",
+          "Customize your workspace URL (e.g., company-name.teamerhq.com)",
+          "Add a brief workspace description"
+        ]
+      },
+      {
+        title: "Branding",
+        description: "Add your company's visual identity",
+        steps: [
+          "Upload your company logo (recommended size: 256x256px)",
+          "Set a workspace avatar for notifications",
+          "Choose brand colors for your workspace theme"
+        ]
+      }
+    ]
+  },
+  {
+    title: "Team Structure",
+    description: "Organize your team and set up departments.",
+    icon: Users,
+    tasks: [
+      {
+        title: "Department Setup",
+        description: "Create and organize departments",
+        steps: [
+          "Define main departments (e.g., Engineering, Marketing)",
+          "Set department leads and managers",
+          "Create sub-teams within departments"
+        ]
+      },
+      {
+        title: "Role Configuration",
+        description: "Define roles and permissions",
+        steps: [
+          "Set up role hierarchies",
+          "Configure role-based permissions",
+          "Create custom roles for specific needs"
+        ]
+      }
+    ]
+  },
+  {
+    title: "Security & Compliance",
+    description: "Configure security settings and compliance rules.",
+    icon: Shield,
+    tasks: [
+      {
+        title: "Security Settings",
+        description: "Set up security measures",
+        steps: [
+          "Configure 2FA requirements",
+          "Set password policies",
+          "Define session timeout rules"
+        ]
+      },
+      {
+        title: "Compliance Rules",
+        description: "Establish compliance guidelines",
+        steps: [
+          "Set up data retention policies",
+          "Configure audit logging",
+          "Define content moderation rules"
+        ]
+      }
+    ]
+  }
+];
+
+const quickSetup = [
+  {
+    title: "Global Settings",
+    description: "Configure workspace-wide preferences",
+    icon: Globe,
+  },
+  {
+    title: "Communication Rules",
+    description: "Set messaging and channel guidelines",
     icon: MessageSquare,
-    tasks: [
-      {
-        title: "Text Formatting",
-        description: "Style your messages for better readability",
-        steps: [
-          "Use **bold** for emphasis",
-          "Create _italic_ text for subtle emphasis",
-          "Add `code blocks` for technical content",
-          "Create bulleted and numbered lists"
-        ]
-      },
-      {
-        title: "Rich Content",
-        description: "Enhance your messages with media",
-        steps: [
-          "Drag and drop files directly into messages",
-          "Paste images from clipboard",
-          "Add emojis using the picker or :shortcodes:",
-          "Include links with preview cards"
-        ]
-      }
-    ]
   },
   {
-    title: "Message Organization",
-    description: "Keep conversations structured and easy to follow.",
-    icon: Hash,
-    tasks: [
-      {
-        title: "Threading",
-        description: "Organize related messages",
-        steps: [
-          "Start a thread from any message",
-          "Follow specific conversation threads",
-          "Mention people within threads",
-          "Set thread notifications"
-        ]
-      },
-      {
-        title: "Bookmarks & Pins",
-        description: "Save important messages",
-        steps: [
-          "Pin critical announcements to channels",
-          "Bookmark messages for quick access",
-          "Create message reminders",
-          "Share bookmarks with team members"
-        ]
-      }
-    ]
+    title: "File Management",
+    description: "Configure file sharing and storage",
+    icon: FileCheck,
   },
   {
-    title: "Collaboration Features",
-    description: "Work together effectively through messages.",
-    icon: AtSign,
-    tasks: [
-      {
-        title: "Mentions & Notifications",
-        description: "Get attention when needed",
-        steps: [
-          "Use @username to notify specific people",
-          "@channel for team-wide announcements",
-          "Set up custom notification keywords",
-          "Configure notification preferences"
-        ]
-      },
-      {
-        title: "Reactions & Responses",
-        description: "Engage with messages efficiently",
-        steps: [
-          "React with emojis for quick responses",
-          "Use message shortcuts",
-          "Create custom reaction sets",
-          "View reaction summaries"
-        ]
-      }
-    ]
+    title: "Automation",
+    description: "Set up workflow automations",
+    icon: Workflow,
   }
 ];
 
-const quickTips = [
-  {
-    title: "Message Search",
-    description: "Find any message using powerful search filters",
-    icon: Search,
-  },
-  {
-    title: "Saved Items",
-    description: "Access bookmarked messages and files quickly",
-    icon: BookMarked,
-  },
-  {
-    title: "Message Editing",
-    description: "Edit and manage your sent messages",
-    icon: Edit3,
-  },
-  {
-    title: "Important Messages",
-    description: "Never miss critical communications",
-    icon: AlertCircle,
-  }
-];
-
-export default function MessagingGuide() {
+export default function WorkspaceSetup() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Hero Section */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
-          Mastering TeamerHQ Messaging
+          Setting Up Your Workspace
         </h1>
         <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-          Learn how to communicate effectively with your team using TeamerHQ's powerful messaging features.
-          From basic formatting to advanced collaboration tools, this guide covers everything you need to know.
+          Configure your TeamerHQ workspace to match your organization's needs. Follow this guide to set up everything from basic branding to advanced security settings.
         </p>
       </div>
 
-      {/* Main Features */}
+      {/* Setup Steps */}
       <div className="space-y-16 mb-16">
-        {messagingFeatures.map((section, index) => {
+        {setupSteps.map((section, index) => {
           const Icon = section.icon;
           return (
             <motion.div
@@ -199,17 +190,17 @@ export default function MessagingGuide() {
         })}
       </div>
 
-      {/* Quick Tips */}
+      {/* Quick Setup Tips */}
       <div className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-8 mb-12">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
-          Pro Messaging Tips
+          Additional Configuration Options
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {quickTips.map((tip, index) => {
-            const Icon = tip.icon;
+          {quickSetup.map((item, index) => {
+            const Icon = item.icon;
             return (
               <motion.div
-                key={tip.title}
+                key={item.title}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -222,10 +213,10 @@ export default function MessagingGuide() {
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-900 dark:text-gray-100">
-                      {tip.title}
+                      {item.title}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {tip.description}
+                      {item.description}
                     </p>
                   </div>
                 </div>
@@ -238,23 +229,23 @@ export default function MessagingGuide() {
       {/* Next Steps */}
       <div className="text-center bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-8">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Ready to level up your communication?
+          Ready to customize further?
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Explore our advanced guides for more messaging tips and best practices.
+          Explore advanced settings and integrations to enhance your workspace.
         </p>
         <div className="flex justify-center gap-4">
           <Link
-            href="/help/channels"
+            href="/help/owner/integrations"
             className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
           >
-            Channel Guide
+            Integration Guide
           </Link>
           <Link
-            href="/help/direct-messages"
+            href="/help/owner/customization"
             className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
           >
-            Direct Messages
+            Advanced Settings
           </Link>
         </div>
       </div>

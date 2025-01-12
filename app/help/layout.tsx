@@ -1,6 +1,5 @@
 "use client";
 
-import { Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -22,15 +21,24 @@ const sidebarItems = [
       { title: "Messaging", href: "/help/messaging" },
       { title: "Channels", href: "/help/channels" },
       { title: "Direct Messages", href: "/help/direct-messages" },
-      { title: "File Sharing", href: "/help/file-sharing" },
+      { title: "Files", href: "/help/files" },
     ],
   },
   {
-    title: "Account & Settings",
+    title: "User Account",
     items: [
-      { title: "Profile Settings", href: "/help/profile" },
-      { title: "Notifications", href: "/help/notifications" },
-      { title: "Privacy & Security", href: "/help/privacy" },
+      { title: "Profile Settings", href: "/help/user/profile" },
+      { title: "Notifications", href: "/help/user/notifications" },
+      { title: "Privacy & Security", href: "/help/user/privacy" },
+    ],
+  },
+  {
+    title: "Workspace Settings",
+    items: [
+      { title: "Workspace Customization", href: "/help/owner/profile" },
+      { title: "User Management", href: "/help/owner/notifications" },
+      { title: "Integration & APIs", href: "/help/owner/integrations" },
+      { title: "Billing & Subscription", href: "/help/owner/billing" },
     ],
   },
 ];

@@ -3,16 +3,12 @@
 import {
   AlertCircle,
   Wifi,
-  MessageSquareWarning,
   FileWarning,
   Bell,
-  Upload,
   RefreshCw,
-  Settings,
   Lock,
   Zap,
   Database,
-  Users,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -112,7 +108,7 @@ const quickTroubleshooting = [
     title: "Check Status Page",
     icon: Database,
     description: "View real-time system status and any ongoing incidents",
-    link: "/status",
+    link: "status.teamerhq.com",
   },
   {
     title: "Reset App Settings",
@@ -153,7 +149,7 @@ export default function CommonIssues() {
           <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
           <p className="text-sm text-yellow-800 dark:text-yellow-200">
             Having an urgent issue? Check our{" "}
-            <a href="/status" className="underline font-medium">
+            <a href="status.teamerhq.com" className="underline font-medium">
               Status Page
             </a>{" "}
             or contact{" "}
@@ -253,30 +249,6 @@ export default function CommonIssues() {
               </motion.a>
             );
           })}
-        </div>
-      </div>
-
-      {/* Contact Support Section */}
-      <div className="mt-12 text-center bg-red-50 dark:bg-red-900/20 rounded-2xl p-8">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Still Having Issues?
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Our support team is here to help you resolve any problems you encounter.
-        </p>
-        <div className="flex justify-center gap-4">
-          <a
-            href="/help/contact"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700"
-          >
-            Contact Support
-          </a>
-          <a
-            href="/help/faq"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-600 bg-white hover:bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
-          >
-            View FAQ
-          </a>
         </div>
       </div>
     </div>

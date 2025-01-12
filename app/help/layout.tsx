@@ -38,7 +38,7 @@ const sidebarItems = [
     title: "Workspace Settings",
     items: [
       { title: "Workspace Customization", href: "/help/owner/profile" },
-      { title: "User Management", href: "/help/owner/notifications" },
+      { title: "User Management", href: "/help/owner/user-management" },
       { title: "Integration & APIs", href: "/help/owner/integrations" },
       { title: "Billing & Subscription", href: "/help/owner/billing" },
     ],

@@ -66,12 +66,12 @@ export default function HelpCenter() {
         <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Quick Links</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
-            "Getting Started Guide",
-            "Account Settings",
-            "Workspace Administration",
-            "Security & Privacy",
-            "Integrations",
-            "Billing & Plans",
+            "Quick Start",
+            "User/Profile",
+            "Owner/Profile",
+            "User/Privacy",
+            "Owner/integrations",
+            "Owner/billing",
           ].map((link, i) => (
             <Link
               key={i}
@@ -90,17 +90,17 @@ export default function HelpCenter() {
       {/* Contact support */}
       <div className="mt-12 bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6 text-center">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-          Still need help?
+          Jump In
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-4">
-          Our support team is available 24/7 to assist you with any questions.
+          Quick Start Guide
         </p>
         <Link
-          href="/help/contact"
-          className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-900"
-        >
-          Contact Support
-        </Link>
+            href="/help/quick-start"
+            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
+          >
+            Next
+          </Link>
       </div>
     </div>
   );

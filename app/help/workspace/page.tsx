@@ -2,25 +2,15 @@
 
 import {
   Building2,
-  Palette,
-  Settings,
   Users,
   Shield,
   Workflow,
   Globe,
   MessageSquare,
   FileCheck,
-  Zap,
-  Boxes,
-  Bell,
   Bot,
-  Calendar,
-  Clock,
-  Cloud,
   Code,
   Database,
-  Key,
-  LayoutGrid
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -51,16 +41,6 @@ const setupSteps = [
           "Customize loading screens and system messages"
         ]
       },
-      {
-        title: "Default Preferences",
-        description: "Set workspace-wide defaults",
-        steps: [
-          "Configure default notification settings",
-          "Set up default channel categories",
-          "Define workspace-wide message retention rules",
-          "Configure default file sharing permissions"
-        ]
-      }
     ]
   },
   {
@@ -68,16 +48,6 @@ const setupSteps = [
     description: "Organize your team and set up departments.",
     icon: Users,
     tasks: [
-      {
-        title: "Department Setup",
-        description: "Create and organize departments",
-        steps: [
-          "Define main departments (e.g., Engineering, Marketing)",
-          "Set department leads and managers",
-          "Create sub-teams within departments",
-          "Configure department-specific channels"
-        ]
-      },
       {
         title: "Role Configuration",
         description: "Define roles and permissions",
@@ -110,7 +80,6 @@ const setupSteps = [
         description: "Set up security measures",
         steps: [
           "Configure 2FA requirements",
-          "Set password policies",
           "Define session timeout rules",
           "Set up IP allowlisting"
         ]
@@ -119,22 +88,11 @@ const setupSteps = [
         title: "Compliance Rules",
         description: "Establish compliance guidelines",
         steps: [
-          "Set up data retention policies",
           "Configure audit logging",
           "Define content moderation rules",
           "Set up compliance reporting"
         ]
       },
-      {
-        title: "Data Protection",
-        description: "Configure data security measures",
-        steps: [
-          "Set up data backup schedules",
-          "Configure encryption settings",
-          "Define data access policies",
-          "Set up data export controls"
-        ]
-      }
     ]
   },
   {
@@ -146,8 +104,6 @@ const setupSteps = [
         title: "Tool Integration",
         description: "Connect essential tools",
         steps: [
-          "Set up SSO integration",
-          "Connect project management tools",
           "Configure calendar integration",
           "Set up file storage services"
         ]
@@ -162,57 +118,35 @@ const setupSteps = [
           "Set up scheduled tasks"
         ]
       },
-      {
-        title: "Analytics Setup",
-        description: "Configure tracking and reporting",
-        steps: [
-          "Set up usage analytics",
-          "Configure custom reports",
-          "Set up automated reporting",
-          "Define KPI tracking"
-        ]
-      }
     ]
   }
 ];
 
 const quickSetup = [
   {
-    title: "Global Settings",
+    title: "More Integrations",
     description: "Configure workspace-wide preferences",
     icon: Globe,
-    link: "/settings/global"
+    link: "/owner/integrations"
   },
   {
-    title: "Communication Rules",
+    title: "Rules Set",
     description: "Set messaging and channel guidelines",
     icon: MessageSquare,
-    link: "/settings/communication"
+    link: "/owner/profile"
   },
   {
     title: "File Management",
     description: "Configure file sharing and storage",
     icon: FileCheck,
-    link: "/settings/files"
+    link: "/files"
   },
   {
     title: "Automation",
     description: "Set up workflow automations",
     icon: Bot,
-    link: "/settings/automation"
+    link: "/bot"
   },
-  {
-    title: "API Access",
-    description: "Manage API keys and webhooks",
-    icon: Code,
-    link: "/settings/api"
-  },
-  {
-    title: "Backup & Recovery",
-    description: "Configure data backup settings",
-    icon: Database,
-    link: "/settings/backup"
-  }
 ];
 
 const setupProgress = [
@@ -370,23 +304,23 @@ export default function WorkspaceSetup() {
       {/* Next Steps */}
       <div className="text-center bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-8">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Ready to customize further?
+          Up Next
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Explore advanced settings and integrations to enhance your workspace.
+          Messaging
         </p>
         <div className="flex justify-center gap-4">
           <Link
-            href="/help/owner/integrations"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
-          >
-            Integration Guide
-          </Link>
-          <Link
-            href="/help/owner/customization"
+            href="/help/quick-start"
             className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
           >
-            Advanced Settings
+            Back
+          </Link>
+          <Link
+            href="/help/messaging"
+            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
+          >
+            Next
           </Link>
         </div>
       </div>

@@ -16,12 +16,11 @@ import Link from "next/link";
 const steps = [
   {
     title: "API Configuration",
-    description: "Set up and manage your API access.",
+    description: "From admin settings page navigate to Integrations tab to generate and manage APIs",
     icon: Code,
     tips: [
       "Generate API keys",
-      "Set up authentication tokens",
-      "Configure rate limits",
+      "Configure access levels",
     ],
   },
   {
@@ -30,8 +29,7 @@ const steps = [
     icon: Puzzle,
     tips: [
       "Browse available integrations",
-      "Configure OAuth connections",
-      "Test integration endpoints",
+      "Test  3rd Party integration",
     ],
   },
   {
@@ -178,23 +176,23 @@ export default function IntegrationsGuide() {
 
       <div className="text-center bg-cyan-50 dark:bg-cyan-900/20 rounded-2xl p-8">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Need help with integrations?
+          Up Next
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Explore our detailed guides or reach out to our support team.
+          Billing & Subscription
         </p>
         <div className="flex justify-center gap-4">
           <Link
-            href="/help/contact"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 dark:bg-cyan-600 dark:hover:bg-cyan-700"
-          >
-            Contact Support
-          </Link>
-          <Link
-            href="/help/owner/integrations/advanced"
+            href="/help/owner/user-management"
             className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-cyan-600 bg-white hover:bg-cyan-50 dark:bg-gray-800 dark:text-cyan-400 dark:hover:bg-gray-700"
           >
-            Advanced Guide
+            Next
+          </Link>
+          <Link
+            href="/help/owner/billing"
+            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-cyan-600 bg-white hover:bg-cyan-50 dark:bg-gray-800 dark:text-cyan-400 dark:hover:bg-gray-700"
+          >
+            Next
           </Link>
         </div>
       </div>

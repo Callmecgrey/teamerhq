@@ -178,23 +178,23 @@ export default function UserManagementGuide() {
 
       <div className="text-center bg-rose-50 dark:bg-rose-900/20 rounded-2xl p-8">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Need help with user management?
+          Up Next
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Explore our detailed guides or reach out to our support team.
+          Integrations & APIs
         </p>
         <div className="flex justify-center gap-4">
           <Link
-            href="/help/contact"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-rose-600 hover:bg-rose-700 dark:bg-rose-600 dark:hover:bg-rose-700"
-          >
-            Contact Support
-          </Link>
-          <Link
-            href="/help/owner/notifications/advanced"
+            href="/help/owner/profile"
             className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-rose-600 bg-white hover:bg-rose-50 dark:bg-gray-800 dark:text-rose-400 dark:hover:bg-gray-700"
           >
-            Advanced Guide
+            Back
+          </Link>
+          <Link
+            href="/help/owner/integrations"
+            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-rose-600 bg-white hover:bg-rose-50 dark:bg-gray-800 dark:text-rose-400 dark:hover:bg-gray-700"
+          >
+            Next
           </Link>
         </div>
       </div>

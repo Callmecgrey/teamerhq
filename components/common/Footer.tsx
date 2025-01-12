@@ -8,12 +8,12 @@ const footerLinks = {
     { name: "About", href: "/about" },
     { name: "Blog", href: "/blog" },
     { name: "Careers", href: "/careers" },
-    { name: "Contact", href: "/contact" },
+    { name: "Contact", href: "/help/contact" },
   ],
   Product: [
     { name: "Features", href: "/product/teamerhq" },
     { name: "Security", href: "/product/teamerhq" },
-    { name: "Enterprise", href: "/product/teamerhq" },
+    { name: "Enterprise", href: "/enterprise" },
     { name: "Customer Stories", href: "/customers" },
   ],
   Resources: [

@@ -49,6 +49,12 @@ const sidebarItems = [
       { title: "Common Issues", href: "/help/utilities/common-issues" },
     ],
   },
+  {
+    title: "Contact Support",
+    items: [
+      { title: "Support", href: "/help/contact" },
+    ],
+  },
 ];
 
 export default function HelpLayout({

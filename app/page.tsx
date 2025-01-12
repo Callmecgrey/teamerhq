@@ -161,25 +161,23 @@ function FeatureSection({ feature, index }: { feature: Feature; index: number })
   return (
     <motion.div
       ref={ref}
-      className="relative h-screen flex items-center"
+      className="relative h-screen flex items-center overflow-hidden"
       initial={{ opacity: 0 }}
       animate={isInView ? { opacity: 1 } : { opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-7xl mx-auto px-4 w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        {/* Left side - Feature Title */}
+      <div className="max-w-7xl mx-auto px-4 w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <motion.div
           initial={{ x: -100, opacity: 0 }}
           animate={isInView ? { x: 0, opacity: 1 } : { x: -100, opacity: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-left"
         >
-          <h3 className="text-6xl font-bold text-gray-900 dark:text-white">
+          <h3 className="text-4xl sm:text-6xl font-bold text-gray-900 dark:text-white">
             {feature.title}
           </h3>
         </motion.div>
 
-        {/* Right side - Icon and Description */}
         <motion.div
           initial={{ x: 100, opacity: 0 }}
           animate={isInView ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
@@ -187,37 +185,33 @@ function FeatureSection({ feature, index }: { feature: Feature; index: number })
           className="relative"
         >
           <div className="relative z-10">
-            {/* Feature Icon */}
             <motion.div
               initial={{ scale: 0.5, opacity: 0 }}
               animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0.5, opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className={`inline-flex p-8 rounded-3xl bg-gradient-to-r ${feature.color} mb-8 relative z-10`}
+              className={`inline-flex p-6 sm:p-8 rounded-3xl bg-gradient-to-r ${feature.color} mb-6 relative z-10`}
             >
-              <feature.icon className="w-16 h-16 text-white" />
+              <feature.icon className="w-12 h-12 sm:w-16 sm:h-16 text-white" />
             </motion.div>
 
-            {/* Decorative background blur */}
             <div
               className={`absolute inset-0 bg-gradient-to-r ${feature.color} opacity-10 blur-3xl -z-10 rounded-full transform -translate-y-1/2`}
             />
 
-            {/* Feature Description */}
             <motion.p
               initial={{ y: 20, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
-              className="text-xl text-gray-600 dark:text-gray-400 mt-6 max-w-lg"
+              className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mt-4 sm:mt-6 max-w-lg"
             >
               {feature.description}
             </motion.p>
 
-            {/* Sub-features */}
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
               transition={{ duration: 0.5, delay: 0.8 }}
-              className="mt-8 grid grid-cols-2 gap-4"
+              className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4"
             >
               {feature.subFeatures.map((subFeature, idx) => (
                 <div
@@ -225,14 +219,14 @@ function FeatureSection({ feature, index }: { feature: Feature; index: number })
                   className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
                 >
                   <div
-                    className={`w-8 h-8 rounded-full bg-gradient-to-r ${feature.color} flex items-center justify-center mb-3`}
+                    className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r ${feature.color} flex items-center justify-center mb-2 sm:mb-3`}
                   >
-                    <feature.icon className="w-4 h-4 text-white" />
+                    <feature.icon className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                   </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-1 sm:mb-2">
                     {subFeature.title}
                   </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                     {subFeature.description}
                   </p>
                 </div>
@@ -262,21 +256,23 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
       initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.5, delay: index * 0.2 }}
-      className="relative p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl"
+      className="relative p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl"
     >
-      <div className="flex items-center gap-4 mb-6">
+      <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
         <img
           src={testimonial.image}
           alt={testimonial.author}
-          className="w-16 h-16 rounded-full object-cover"
+          className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover"
         />
         <div>
           <h4 className="font-semibold text-gray-900 dark:text-white">{testimonial.author}</h4>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{testimonial.role}</p>
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{testimonial.role}</p>
         </div>
       </div>
-      <p className="text-gray-600 dark:text-gray-300 italic">&ldquo;{testimonial.quote}&rdquo;</p>
-      <div className="absolute -bottom-2 left-8 w-4 h-4 bg-white dark:bg-gray-800 rotate-45 transform origin-center"></div>
+      <p className="text-gray-600 dark:text-gray-300 italic text-sm sm:text-base">
+        &ldquo;{testimonial.quote}&rdquo;
+      </p>
+      <div className="absolute -bottom-2 left-6 w-3 h-3 sm:w-4 sm:h-4 bg-white dark:bg-gray-800 rotate-45 transform origin-center"></div>
     </motion.div>
   );
 }
@@ -285,14 +281,14 @@ export default function LandingPage() {
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end start"],
   });
 
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-gray-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-black">
+    <div className="min-h-screen overflow-x-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-gray-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-black">
       <Header />
       
       {/* Hero Section */}

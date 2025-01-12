@@ -65,7 +65,7 @@ export function HelpSearch({ ...props }: DialogProps) {
         className="flex items-center w-full gap-2 px-3 py-2 text-sm text-gray-500 transition-colors duration-200 border rounded-lg dark:text-gray-400 border-gray-200/70 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800"
       >
         <Search className="w-4 h-4" />
-        <span className="flex-1 text-left">Search documentation...</span>
+        <span className="flex-1 text-left">Search docs</span>
         <kbd className="hidden px-2 py-1 text-xs font-mono text-gray-500 bg-gray-100 rounded dark:bg-gray-800 dark:text-gray-400 sm:inline-block">
           ⌘K
         </kbd>

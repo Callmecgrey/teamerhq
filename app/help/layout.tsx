@@ -45,17 +45,20 @@ export default function HelpLayout({
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Sidebar */}
-      <div className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 px-4 py-6 overflow-y-auto">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex-1">
-            <HelpSearch />
-          </div>
-          <div className="ml-2">
-            <ThemeToggle />
-          </div>
+      <div className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col h-screen sticky top-0">
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-4 border-b border-gray-200 dark:border-gray-700">
+          <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Help Center</h1>
+          <ThemeToggle />
         </div>
-        
-        <nav>
+
+        {/* Search */}
+        <div className="px-4 py-4 border-b border-gray-200 dark:border-gray-700">
+          <HelpSearch />
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto px-4 py-6">
           {sidebarItems.map((section, i) => (
             <div key={i} className="mb-6">
               <h5 className="mb-2 px-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
@@ -83,11 +86,9 @@ export default function HelpLayout({
         </nav>
       </div>
 
-      {/* Main content */}
-      <div className="flex-1 px-8 py-6 overflow-y-auto">
-        <div className="max-w-3xl mx-auto">
-          {children}
-        </div>
+      {/* Main Content */}
+      <div className="flex-1 py-6 overflow-y-auto">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">{children}</div>
       </div>
     </div>
   );

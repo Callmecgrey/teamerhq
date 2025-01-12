@@ -215,15 +215,7 @@ export default function SecurityPage() {
                       Contact Security Team
                     </Button>
                   </Link>
-                  <Link href="/security/whitepaper">
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="border-2 border-white text-white hover:bg-white/10"
-                    >
-                      Download Security Whitepaper
-                    </Button>
-                  </Link>
+                  
                 </div>
               </div>
             </motion.div>

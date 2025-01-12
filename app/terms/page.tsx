@@ -85,7 +85,7 @@ export default function TermsPage() {
           {/* Content */}
           <div className="prose prose-lg dark:prose-invert max-w-none">
             <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-200 dark:border-gray-700">
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">Last updated: January 1, 1970</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">Last updated: January 13, 2025</p>
 
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">1. Acceptance of Terms</h2>
               <div className="bg-gradient-to-r from-violet-500/10 to-purple-500/10 p-6 rounded-lg mb-8">

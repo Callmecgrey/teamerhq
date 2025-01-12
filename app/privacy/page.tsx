@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shield, Lock, Eye, FileText, CheckCircle2 } from "lucide-react";
+import { Shield, Lock, Eye, CheckCircle2 } from "lucide-react";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 
@@ -82,7 +82,7 @@ export default function PrivacyPage() {
           {/* Content */}
           <div className="prose prose-lg dark:prose-invert max-w-none">
             <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-200 dark:border-gray-700">
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">Last updated: January 1, 1970</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">Last updated: January 13, 2025</p>
 
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">1. Information We Collect</h2>
               <p className="text-gray-600 dark:text-gray-400">We collect information that you provide directly to us, including:</p>

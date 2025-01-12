@@ -19,7 +19,7 @@ export default function HelpCenter() {
       icon: <Zap className="w-5 h-5" />,
       title: "Shortcuts",
       description: "Boost your productivity with keyboard shortcuts and commands",
-      href: "/help/quick-actions",
+      href: "/help/shortcuts",
     },
   ];
 

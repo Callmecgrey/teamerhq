@@ -13,7 +13,7 @@ const sidebarItems = [
     items: [
       { title: "Introduction to TeamerHQ", href: "/help" },
       { title: "Quick Start Guide", href: "/help/quick-start" },
-      { title: "Setting up your Workspace", href: "/help/workspace-setup" },
+      { title: "Setting up your Workspace", href: "/help/workspace" },
     ],
   },
   {

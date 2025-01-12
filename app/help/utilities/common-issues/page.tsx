@@ -108,25 +108,15 @@ const quickTroubleshooting = [
     title: "Check Status Page",
     icon: Database,
     description: "View real-time system status and any ongoing incidents",
-    link: "status.teamerhq.com",
-  },
-  {
-    title: "Reset App Settings",
-    icon: RefreshCw,
-    description: "Restore default settings without losing messages",
-    link: "/settings/reset",
-  },
-  {
-    title: "Permission Issues",
-    icon: Lock,
-    description: "Review and update your workspace permissions",
-    link: "/settings/permissions",
+    link: "https://status.teamerhq.com",
+    target: "_blank",
   },
   {
     title: "Network Test",
     icon: Wifi,
     description: "Run a connection test to identify issues",
-    link: "/utilities/network-test",
+    link: "https://network.teamerhq.com",
+    target: "_blank",
   },
 ];
 
@@ -149,7 +139,7 @@ export default function CommonIssues() {
           <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
           <p className="text-sm text-yellow-800 dark:text-yellow-200">
             Having an urgent issue? Check our{" "}
-            <a href="status.teamerhq.com" className="underline font-medium">
+            <a href="https://status.teamerhq.com" target="_blank" className="underline font-medium">
               Status Page
             </a>{" "}
             or contact{" "}
@@ -226,6 +216,7 @@ export default function CommonIssues() {
             return (
               <motion.a
                 href={tool.link}
+                target={tool.target}
                 key={tool.title}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}

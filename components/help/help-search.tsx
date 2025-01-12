@@ -24,7 +24,7 @@ const searchableItems = [
   },
   {
     title: "Setting up your Workspace",
-    href: "/help/workspace-setup",
+    href: "/help/workspace",
     category: "Getting Started",
     keywords: "workspace, setup, configure, organization",
   },
@@ -34,7 +34,6 @@ const searchableItems = [
     category: "Using TeamerHQ",
     keywords: "messages, chat, communication, send",
   },
-  // Add more items based on your documentation
 ];
 
 export function HelpSearch({ ...props }: DialogProps) {
@@ -58,6 +57,15 @@ export function HelpSearch({ ...props }: DialogProps) {
     command();
   }, []);
 
+  // Filter items based on the search query
+  const filteredItems = searchableItems.filter((item) => {
+    const lowerCaseQuery = value.toLowerCase();
+    return (
+      item.title.toLowerCase().includes(lowerCaseQuery) ||
+      item.keywords.toLowerCase().includes(lowerCaseQuery)
+    );
+  });
+
   return (
     <>
       <button
@@ -78,25 +86,35 @@ export function HelpSearch({ ...props }: DialogProps) {
               <CommandPrimitive.Input
                 value={value}
                 onValueChange={setValue}
-                className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder="Type to search..."
               />
             </div>
             <CommandPrimitive.List className="max-h-[500px] overflow-y-auto overflow-x-hidden">
-              <CommandPrimitive.Empty className="py-6 text-center text-sm">
+              <CommandPrimitive.Empty className="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
                 No results found.
               </CommandPrimitive.Empty>
-              {searchableItems.map((group) => (
+              {filteredItems.map((group) => (
                 <CommandPrimitive.Group key={group.category} heading={group.category}>
                   <CommandPrimitive.Item
                     value={group.title}
                     onSelect={() => {
                       runCommand(() => router.push(group.href));
                     }}
-                    className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-gray-100 dark:aria-selected:bg-gray-800 aria-selected:text-gray-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                    className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 aria-selected:bg-gray-100 dark:aria-selected:bg-gray-800 aria-selected:text-gray-900 dark:aria-selected:text-gray-100"
                   >
                     <div className="flex flex-col">
-                      <span>{group.title}</span>
+                      <span>
+                        {group.title.split(new RegExp(`(${value})`, "gi")).map((part, index) => {
+                          return part.toLowerCase() === value.toLowerCase() ? (
+                            <span key={index} className="font-semibold text-blue-500 dark:text-blue-400">
+                              {part}
+                            </span>
+                          ) : (
+                            part
+                          );
+                        })}
+                      </span>
                       <span className="text-xs text-gray-500 dark:text-gray-400">
                         {group.category}
                       </span>

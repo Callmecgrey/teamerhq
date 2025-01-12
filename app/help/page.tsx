@@ -5,19 +5,19 @@ export default function HelpCenter() {
   const popularTopics = [
     {
       icon: <MessageSquare className="w-5 h-5" />,
-      title: "Messaging Basics",
+      title: "Messaging",
       description: "Learn how to send messages, use threads, and format your text",
       href: "/help/messaging",
     },
     {
       icon: <Users className="w-5 h-5" />,
-      title: "Channel Management",
+      title: "Channels",
       description: "Create and organize channels for your team communication",
       href: "/help/channels",
     },
     {
       icon: <Zap className="w-5 h-5" />,
-      title: "Quick Actions",
+      title: "Shortcuts",
       description: "Boost your productivity with keyboard shortcuts and commands",
       href: "/help/quick-actions",
     },

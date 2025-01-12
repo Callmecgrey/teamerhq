@@ -4,7 +4,6 @@ import {
   ArrowRight, MessageSquare, Video, ScreenShare, Users2, Shield, Bot,
   Slack, Github, Trello, FileText, Figma, LayoutGrid, GitPullRequest,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";

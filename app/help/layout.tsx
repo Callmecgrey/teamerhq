@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { HelpSearch } from "@/components/help/help-search";
+import { useState } from "react";
 
 const sidebarItems = [
   {
@@ -21,7 +22,8 @@ const sidebarItems = [
       { title: "Messaging", href: "/help/messaging" },
       { title: "Channels", href: "/help/channels" },
       { title: "Direct Messages", href: "/help/direct-messages" },
-      { title: "Files", href: "/help/files" },
+      { title: "Managing Files", href: "/help/files" },
+      { title: "Shortcut & Commands", href: "/help/shortcuts" },
     ],
   },
   {
@@ -41,6 +43,12 @@ const sidebarItems = [
       { title: "Billing & Subscription", href: "/help/owner/billing" },
     ],
   },
+  {
+    title: "Utilities",
+    items: [
+      { title: "Common Issues", href: "/help/utilities/common-issues" },
+    ],
+  },
 ];
 
 export default function HelpLayout({
@@ -49,6 +57,11 @@ export default function HelpLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const [openSection, setOpenSection] = useState(0);
+
+  const toggleSection = (index: number) => {
+    setOpenSection((prev) => (prev === index ? -1 : index));
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -56,7 +69,9 @@ export default function HelpLayout({
       <div className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col h-screen sticky top-0">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-4">
-          <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Help Center</h1>
+          <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            Help Center
+          </h1>
           <ThemeToggle />
         </div>
 
@@ -69,29 +84,47 @@ export default function HelpLayout({
         <nav className="flex-1 overflow-y-auto px-4 py-6">
           {sidebarItems.map((section, i) => (
             <div key={i} className="mb-6">
-              <h5 className="mb-2 px-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
+              <button
+                onClick={() => toggleSection(i)}
+                className="w-full text-left px-2 py-2 text-sm font-semibold text-gray-900 dark:text-gray-100 flex justify-between items-center"
+              >
                 {section.title}
-              </h5>
-              <ul className="space-y-1">
-                {section.items.map((item, j) => (
-                  <li key={j}>
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        "block px-2 py-1.5 text-sm rounded-md",
-                        pathname === item.href
-                          ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 font-medium"
-                          : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
-                      )}
-                    >
-                      {item.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+                <span className="text-gray-500 dark:text-gray-400">
+                  {openSection === i ? "-" : "+"}
+                </span>
+              </button>
+              {openSection === i && (
+                <ul className="space-y-1 mt-2">
+                  {section.items.map((item, j) => (
+                    <li key={j}>
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "block px-2 py-1.5 text-sm rounded-md",
+                          pathname === item.href
+                            ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 font-medium"
+                            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
+                        )}
+                      >
+                        {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </nav>
+
+        {/* Footer */}
+        <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700">
+          <Link
+            href="/"
+            className="block text-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+          >
+            Back to Home
+          </Link>
+        </div>
       </div>
 
       {/* Main Content */}

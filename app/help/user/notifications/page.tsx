@@ -1,94 +1,93 @@
 "use client";
 
 import {
-  User,
-  Image as ImageIcon,
+  Bell,
   Mail,
-  Phone,
-  Globe,
-  Languages,
-  Building,
+  MessageSquare,
+  Calendar,
+  Smartphone,
   Clock,
-  Edit3,
+  Filter,
+  Settings,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
 const steps = [
   {
-    title: "Basic Information",
-    description: "Manage your personal information and contact details.",
-    icon: User,
+    title: "Notification Preferences",
+    description: "Customize how and when you receive notifications.",
+    icon: Bell,
     tips: [
-      "Keep your full name and title up to date",
-      "Add a professional profile picture",
-      "Update your contact information regularly",
+      "Choose notification channels (email, mobile, desktop)",
+      "Set quiet hours for notifications",
+      "Customize notification sounds",
     ],
   },
   {
-    title: "Profile Picture",
-    description: "Upload and manage your profile photo.",
-    icon: ImageIcon,
-    tips: [
-      "Use a clear, professional headshot",
-      "Image should be at least 400x400 pixels",
-      "Supported formats: JPG, PNG, GIF",
-    ],
-  },
-  {
-    title: "Contact Information",
-    description: "Update your contact details and preferences.",
+    title: "Email Notifications",
+    description: "Manage your email notification settings.",
     icon: Mail,
     tips: [
-      "Add both work and personal email",
-      "Include your phone number for urgent communications",
-      "Set preferred contact method",
+      "Select which updates to receive via email",
+      "Set email digest frequency",
+      "Customize email format preferences",
     ],
   },
   {
-    title: "Professional Details",
-    description: "Showcase your professional background.",
-    icon: Building,
+    title: "Mobile Notifications",
+    description: "Configure push notifications for your mobile device.",
+    icon: Smartphone,
     tips: [
-      "Add your current role and department",
-      "List relevant skills and expertise",
-      "Include professional certifications",
+      "Enable/disable push notifications",
+      "Set notification priority levels",
+      "Configure notification grouping",
+    ],
+  },
+  {
+    title: "Calendar Reminders",
+    description: "Set up reminders for important events and deadlines.",
+    icon: Calendar,
+    tips: [
+      "Choose reminder timing preferences",
+      "Set up recurring reminders",
+      "Customize calendar notification format",
     ],
   },
 ];
 
 const quickTips = [
   {
-    title: "Time Zone",
-    description: "Set your working hours and time zone.",
+    title: "Quiet Hours",
+    description: "Set do-not-disturb periods.",
     icon: Clock,
   },
   {
-    title: "Language",
-    description: "Choose your preferred language.",
-    icon: Languages,
+    title: "Filters",
+    description: "Create custom notification filters.",
+    icon: Filter,
   },
   {
-    title: "Website",
-    description: "Add your portfolio or website.",
-    icon: Globe,
+    title: "Chat Settings",
+    description: "Manage chat notification preferences.",
+    icon: MessageSquare,
   },
   {
-    title: "Custom Fields",
-    description: "Add additional profile information.",
-    icon: Edit3,
+    title: "Advanced",
+    description: "Configure advanced notification settings.",
+    icon: Settings,
   },
 ];
 
-export default function ProfileGuide() {
+export default function NotificationsGuide() {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
-          Profile Settings Guide
+          Notifications Guide
         </h1>
         <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-          Learn how to customize your profile and manage your personal information in TeamerHQ.
+          Learn how to manage your notification preferences and stay updated in TeamerHQ.
         </p>
       </div>
 
@@ -107,8 +106,8 @@ export default function ProfileGuide() {
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
-                    <div className="p-3 bg-purple-50 dark:bg-purple-900/30 rounded-lg">
-                      <Icon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    <div className="p-3 bg-orange-50 dark:bg-orange-900/30 rounded-lg">
+                      <Icon className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                     </div>
                   </div>
                   <div className="flex-1">
@@ -144,7 +143,7 @@ export default function ProfileGuide() {
 
       <div className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-8 mb-12">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
-          Quick Profile Tips
+          Quick Notification Tips
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {quickTips.map((tip, index) => {
@@ -159,8 +158,8 @@ export default function ProfileGuide() {
                 className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700"
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-50 dark:bg-purple-900/30 rounded-md">
-                    <Icon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                  <div className="p-2 bg-orange-50 dark:bg-orange-900/30 rounded-md">
+                    <Icon className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-900 dark:text-gray-100">
@@ -177,9 +176,9 @@ export default function ProfileGuide() {
         </div>
       </div>
 
-      <div className="text-center bg-purple-50 dark:bg-purple-900/20 rounded-2xl p-8">
+      <div className="text-center bg-orange-50 dark:bg-orange-900/20 rounded-2xl p-8">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Need help with your profile?
+          Need help with notifications?
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
           Explore our detailed guides or reach out to our support team.
@@ -187,13 +186,13 @@ export default function ProfileGuide() {
         <div className="flex justify-center gap-4">
           <Link
             href="/help/contact"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-700"
+            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700"
           >
             Contact Support
           </Link>
           <Link
-            href="/help/user/profile/advanced"
-            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-purple-600 bg-white hover:bg-purple-50 dark:bg-gray-800 dark:text-purple-400 dark:hover:bg-gray-700"
+            href="/help/user/notifications/advanced"
+            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-orange-600 bg-white hover:bg-orange-50 dark:bg-gray-800 dark:text-orange-400 dark:hover:bg-gray-700"
           >
             Advanced Guide
           </Link>

@@ -10,7 +10,17 @@ import {
   Globe,
   MessageSquare,
   FileCheck,
-  Zap
+  Zap,
+  Boxes,
+  Bell,
+  Bot,
+  Calendar,
+  Clock,
+  Cloud,
+  Code,
+  Database,
+  Key,
+  LayoutGrid
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -27,7 +37,8 @@ const setupSteps = [
         steps: [
           "Select a clear, recognizable workspace name",
           "Customize your workspace URL (e.g., company-name.teamerhq.com)",
-          "Add a brief workspace description"
+          "Add a brief workspace description",
+          "Set workspace timezone and language preferences"
         ]
       },
       {
@@ -36,7 +47,18 @@ const setupSteps = [
         steps: [
           "Upload your company logo (recommended size: 256x256px)",
           "Set a workspace avatar for notifications",
-          "Choose brand colors for your workspace theme"
+          "Choose brand colors for your workspace theme",
+          "Customize loading screens and system messages"
+        ]
+      },
+      {
+        title: "Default Preferences",
+        description: "Set workspace-wide defaults",
+        steps: [
+          "Configure default notification settings",
+          "Set up default channel categories",
+          "Define workspace-wide message retention rules",
+          "Configure default file sharing permissions"
         ]
       }
     ]
@@ -52,7 +74,8 @@ const setupSteps = [
         steps: [
           "Define main departments (e.g., Engineering, Marketing)",
           "Set department leads and managers",
-          "Create sub-teams within departments"
+          "Create sub-teams within departments",
+          "Configure department-specific channels"
         ]
       },
       {
@@ -61,7 +84,18 @@ const setupSteps = [
         steps: [
           "Set up role hierarchies",
           "Configure role-based permissions",
-          "Create custom roles for specific needs"
+          "Create custom roles for specific needs",
+          "Set up approval workflows"
+        ]
+      },
+      {
+        title: "User Management",
+        description: "Configure user-related settings",
+        steps: [
+          "Set up user onboarding workflows",
+          "Define user profile requirements",
+          "Configure user groups and access levels",
+          "Set up user activity monitoring"
         ]
       }
     ]
@@ -77,7 +111,8 @@ const setupSteps = [
         steps: [
           "Configure 2FA requirements",
           "Set password policies",
-          "Define session timeout rules"
+          "Define session timeout rules",
+          "Set up IP allowlisting"
         ]
       },
       {
@@ -86,7 +121,55 @@ const setupSteps = [
         steps: [
           "Set up data retention policies",
           "Configure audit logging",
-          "Define content moderation rules"
+          "Define content moderation rules",
+          "Set up compliance reporting"
+        ]
+      },
+      {
+        title: "Data Protection",
+        description: "Configure data security measures",
+        steps: [
+          "Set up data backup schedules",
+          "Configure encryption settings",
+          "Define data access policies",
+          "Set up data export controls"
+        ]
+      }
+    ]
+  },
+  {
+    title: "Integrations & Automation",
+    description: "Set up tools and automated workflows.",
+    icon: Workflow,
+    tasks: [
+      {
+        title: "Tool Integration",
+        description: "Connect essential tools",
+        steps: [
+          "Set up SSO integration",
+          "Connect project management tools",
+          "Configure calendar integration",
+          "Set up file storage services"
+        ]
+      },
+      {
+        title: "Workflow Automation",
+        description: "Create automated processes",
+        steps: [
+          "Set up automated welcome messages",
+          "Configure notification workflows",
+          "Create custom bot commands",
+          "Set up scheduled tasks"
+        ]
+      },
+      {
+        title: "Analytics Setup",
+        description: "Configure tracking and reporting",
+        steps: [
+          "Set up usage analytics",
+          "Configure custom reports",
+          "Set up automated reporting",
+          "Define KPI tracking"
         ]
       }
     ]
@@ -98,27 +181,51 @@ const quickSetup = [
     title: "Global Settings",
     description: "Configure workspace-wide preferences",
     icon: Globe,
+    link: "/settings/global"
   },
   {
     title: "Communication Rules",
     description: "Set messaging and channel guidelines",
     icon: MessageSquare,
+    link: "/settings/communication"
   },
   {
     title: "File Management",
     description: "Configure file sharing and storage",
     icon: FileCheck,
+    link: "/settings/files"
   },
   {
     title: "Automation",
     description: "Set up workflow automations",
-    icon: Workflow,
+    icon: Bot,
+    link: "/settings/automation"
+  },
+  {
+    title: "API Access",
+    description: "Manage API keys and webhooks",
+    icon: Code,
+    link: "/settings/api"
+  },
+  {
+    title: "Backup & Recovery",
+    description: "Configure data backup settings",
+    icon: Database,
+    link: "/settings/backup"
   }
+];
+
+const setupProgress = [
+  { step: "Basic Setup", status: "required" },
+  { step: "Team Structure", status: "required" },
+  { step: "Security", status: "required" },
+  { step: "Integrations", status: "optional" },
+  { step: "Customization", status: "optional" }
 ];
 
 export default function WorkspaceSetup() {
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Hero Section */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
@@ -127,6 +234,32 @@ export default function WorkspaceSetup() {
         <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
           Configure your TeamerHQ workspace to match your organization's needs. Follow this guide to set up everything from basic branding to advanced security settings.
         </p>
+      </div>
+
+      {/* Setup Progress */}
+      <div className="mb-12 bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Setup Progress</h2>
+        <div className="space-y-3">
+          {setupProgress.map((item, index) => (
+            <div key={index} className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                  item.status === 'required' ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-gray-100 dark:bg-gray-700'
+                }`}>
+                  <span className="text-sm font-medium">{index + 1}</span>
+                </div>
+                <span className="text-gray-700 dark:text-gray-300">{item.step}</span>
+              </div>
+              <span className={`text-sm ${
+                item.status === 'required' 
+                  ? 'text-blue-600 dark:text-blue-400' 
+                  : 'text-gray-500 dark:text-gray-400'
+              }`}>
+                {item.status === 'required' ? 'Required' : 'Optional'}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Setup Steps */}
@@ -150,9 +283,16 @@ export default function WorkspaceSetup() {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                      {index + 1}. {section.title}
-                    </h2>
+                    <div className="flex items-center gap-3 mb-4">
+                      <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                        {index + 1}. {section.title}
+                      </h2>
+                      {index < 3 && (
+                        <span className="px-2 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full">
+                          Required
+                        </span>
+                      )}
+                    </div>
                     <p className="text-gray-600 dark:text-gray-400 mb-6">
                       {section.description}
                     </p>
@@ -195,17 +335,18 @@ export default function WorkspaceSetup() {
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
           Additional Configuration Options
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {quickSetup.map((item, index) => {
             const Icon = item.icon;
             return (
-              <motion.div
+              <motion.a
+                href={item.link}
                 key={item.title}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700"
+                className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-800 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-md">
@@ -220,7 +361,7 @@ export default function WorkspaceSetup() {
                     </p>
                   </div>
                 </div>
-              </motion.div>
+              </motion.a>
             );
           })}
         </div>

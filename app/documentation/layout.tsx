@@ -41,7 +41,12 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
             <div className="flex items-center space-x-2 mb-8">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
                 </svg>
               </div>
               <h2 className="text-xl font-bold">Documentation</h2>
@@ -62,23 +67,29 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
                     {section.title}
                   </h3>
                   <div className="space-y-1">
-                    {section.items.map((item, itemIndex) => (
-                      <Button
-                        key={itemIndex}
-                        variant="ghost"
-                        asChild
-                        className={cn(
-                          "w-full justify-start px-2 py-1.5 text-sm font-medium",
-                          pathname + location.hash === item.href
-                            ? "bg-violet-50 text-violet-900 dark:bg-violet-900/50 dark:text-violet-100"
-                            : "text-gray-700 dark:text-gray-300 hover:bg-violet-50 dark:hover:bg-violet-900/50"
-                        )}
-                      >
-                        <Link href={item.href}>
-                          {item.title}
-                        </Link>
-                      </Button>
-                    ))}
+                    {section.items.map((item, itemIndex) => {
+                      // Safely access the hash only in the browser
+                      const currentHash =
+                        typeof window !== "undefined" ? window.location.hash : "";
+
+                      return (
+                        <Button
+                          key={itemIndex}
+                          variant="ghost"
+                          asChild
+                          className={cn(
+                            "w-full justify-start px-2 py-1.5 text-sm font-medium",
+                            pathname + currentHash === item.href
+                              ? "bg-violet-50 text-violet-900 dark:bg-violet-900/50 dark:text-violet-100"
+                              : "text-gray-700 dark:text-gray-300 hover:bg-violet-50 dark:hover:bg-violet-900/50"
+                          )}
+                        >
+                          <Link href={item.href}>
+                            {item.title}
+                          </Link>
+                        </Button>
+                      );
+                    })}
                   </div>
                 </div>
               ))}
@@ -88,13 +99,13 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
       </div>
 
       {/* Main Content */}
-      <div className={cn(
-        "flex-1 transition-all duration-200",
-        sidebarOpen ? "md:ml-72" : ""
-      )}>
-        <main className="container max-w-7xl mx-auto px-6 py-12">
-          {children}
-        </main>
+      <div
+        className={cn(
+          "flex-1 transition-all duration-200",
+          sidebarOpen ? "md:ml-72" : ""
+        )}
+      >
+        <main className="container max-w-7xl mx-auto px-6 py-12">{children}</main>
       </div>
     </div>
   );

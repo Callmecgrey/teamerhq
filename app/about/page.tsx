@@ -37,29 +37,11 @@ const values = [
 
 const team = [
   {
-    name: "Sarah Johnson",
-    role: "CEO & Co-founder",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200&h=200",
-    bio: "Former VP of Product at Slack, passionate about building tools that transform how teams work together."
+    name: "Olalekan Onaolapo",
+    role: "CEO & Founder",
+    image: "https://images.unsplash.com/photo-14947108377-be9c29b29330?auto=format&fit=crop&q=80&w=200&h=200",
+    bio: "Founder of Linconwaves, passionate about building tools that transform how teams work together."
   },
-  {
-    name: "Michael Chen",
-    role: "CTO & Co-founder",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200&h=200",
-    bio: "Ex-Google engineer, focused on creating scalable and secure communication platforms."
-  },
-  {
-    name: "Emily Rodriguez",
-    role: "Head of Design",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=200&h=200",
-    bio: "Award-winning designer with 10+ years of experience in creating intuitive user experiences."
-  },
-  {
-    name: "David Kim",
-    role: "Head of Engineering",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200&h=200",
-    bio: "Seasoned engineering leader, previously built infrastructure at Microsoft and Amazon."
-  }
 ];
 
 export default function About() {

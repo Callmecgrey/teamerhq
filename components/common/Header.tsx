@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Boxes, Menu, X, ChevronDown, CircleHelp, Download, Layers, Bot } from "lucide-react";
+import { Boxes, Menu, X, ChevronDown, CircleHelp, Download, Layers, Bot, BookOpen, GitBranch } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -37,6 +37,18 @@ const resourceItems = [
     icon: <CircleHelp className="w-6 h-6" />,
   },
   {
+    title: "API Documentation",
+    href: "/docs/api",
+    description: "Integrate TeamerHQ into your workflow",
+    icon: <BookOpen className="w-6 h-6" />,
+  },
+  {
+    title: "Changelog",
+    href: "/changelog",
+    description: "See what's new in TeamerHQ",
+    icon: <GitBranch className="w-6 h-6" />,
+  },
+  {
     title: "Download",
     href: "/download",
     description: "Get TeamerHQ custom app for all your devices",
@@ -46,9 +58,17 @@ const resourceItems = [
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [expandedSections, setExpandedSections] = React.useState<{[key: string]: boolean}>({});
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen((prev) => !prev);
+  };
+
+  const toggleSection = (section: string) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
   };
 
   return (
@@ -144,53 +164,69 @@ export function Header() {
             <div>
               <button
                 className="flex items-center justify-between w-full text-left text-blue-600 dark:text-blue-400"
+                onClick={() => toggleSection('product')}
+                aria-expanded={expandedSections['product']}
               >
                 Product
-                <ChevronDown className="w-5 h-5" />
+                <ChevronDown className={cn(
+                  "w-5 h-5 transition-transform duration-200",
+                  expandedSections['product'] ? "transform rotate-180" : ""
+                )} />
               </button>
-              <ul className="mt-2 space-y-2 pl-4">
-                {productItems.map((item) => (
-                  <li key={item.title}>
-                    <Link
-                      href={item.href}
-                      className="text-sm text-gray-700 dark:text-gray-300"
-                    >
-                      {item.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              {expandedSections['product'] && (
+                <ul className="mt-2 space-y-2 pl-4">
+                  {productItems.map((item) => (
+                    <li key={item.title}>
+                      <Link
+                        href={item.href}
+                        className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 py-2"
+                      >
+                        {React.cloneElement(item.icon as React.ReactElement, { className: 'w-4 h-4' })}
+                        {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             {/* Resources Section */}
             <div>
               <button
                 className="flex items-center justify-between w-full text-left text-blue-600 dark:text-blue-400"
+                onClick={() => toggleSection('resources')}
+                aria-expanded={expandedSections['resources']}
               >
                 Resources
-                <ChevronDown className="w-5 h-5" />
+                <ChevronDown className={cn(
+                  "w-5 h-5 transition-transform duration-200",
+                  expandedSections['resources'] ? "transform rotate-180" : ""
+                )} />
               </button>
-              <ul className="mt-2 space-y-2 pl-4">
-                {resourceItems.map((item) => (
-                  <li key={item.title}>
-                    <Link
-                      href={item.href}
-                      className="text-sm text-gray-700 dark:text-gray-300"
-                    >
-                      {item.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              {expandedSections['resources'] && (
+                <ul className="mt-2 space-y-2 pl-4">
+                  {resourceItems.map((item) => (
+                    <li key={item.title}>
+                      <Link
+                        href={item.href}
+                        className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 py-2"
+                      >
+                        {React.cloneElement(item.icon as React.ReactElement, { className: 'w-4 h-4' })}
+                        {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             {/* Pricing */}
-            <Link href="/pricing" className="text-blue-600 dark:text-blue-400">
+            <Link href="/pricing" className="text-blue-600 dark:text-blue-400 py-2">
               Pricing
             </Link>
 
             {/* Call to Actions */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
               <Button variant="ghost" asChild>
                 <Link href="/login">Login</Link>
               </Button>

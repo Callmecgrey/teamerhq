@@ -9,15 +9,17 @@ import { CodeStep } from "@/components/authstep/signup/CodeStep";
 import { TeamStep } from "@/components/authstep/signup/TeamStep";
 import { InviteStep } from "@/components/authstep/signup/InviteStep";
 import { ChannelsStep } from "@/components/authstep/signup/ChannelsStep";
+import { PlanStep } from "@/components/authstep/signup/PlanStep";
 
 export default function SignUpPage() {
   const router = useRouter();
-  const [step, setStep] = useState<"email" | "code" | "team" | "invite" | "channels">("email");
+  const [step, setStep] = useState<"email" | "code" | "team" | "invite" | "channels" | "plan">("email");
   const [email, setEmail] = useState("");
   const [codeParts, setCodeParts] = useState(["", "", "", "", "", ""]);
   const [teamName, setTeamName] = useState("");
   const [teamMembers, setTeamMembers] = useState([""]);
   const [channels, setChannels] = useState([""]);
+  const [selectedPlan, setSelectedPlan] = useState("");
   const [countdown, setCountdown] = useState(30);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const [headerText, setHeaderText] = useState("Create your workspace");
@@ -43,6 +45,10 @@ export default function SignUpPage() {
     } else if (step === "invite") {
       setStep("channels");
       setSubText("Set up your communication channels");
+    } else if (step === "channels") {
+      setStep("plan");
+      setHeaderText("Choose your plan");
+      setSubText("Select the best plan for your team");
     }
   };
 
@@ -145,6 +151,13 @@ export default function SignUpPage() {
               handleRemoveChannel={(index) =>
                 setChannels(channels.filter((_, i) => i !== index))
               }
+              onFinalSubmit={handleContinue}
+            />
+          )}
+          {step === "plan" && (
+            <PlanStep
+              selectedPlan={selectedPlan}
+              setSelectedPlan={setSelectedPlan}
               onFinalSubmit={handleFinalSubmit}
             />
           )}

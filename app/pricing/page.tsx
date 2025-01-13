@@ -1,5 +1,3 @@
-"use client";
-
 import { Check, Crown, Shield, Star, Zap } from "lucide-react";
 import {
   Card,
@@ -9,8 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
+import Link from "next/link";
 
 const plans = [
   {
@@ -196,21 +196,22 @@ export default function PricingPage() {
                 </ul>
               </CardContent>
               <CardFooter className="flex flex-col gap-4">
-                <a
-                    href={plan.ctaLink}
-                      className={`w-full inline-block text-center py-2 px-4 rounded-lg ${
-                        plan.popular
-                        ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700"
-                        : "bg-gray-900 dark:bg-gray-700 text-white hover:bg-gray-800 dark:hover:bg-gray-600"
-                      }`}
-                    >
-                  {plan.ctaText}
-                </a>
+                <Button
+                  asChild
+                  className={`w-full ${
+                    plan.popular
+                      ? "bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
+                      : "bg-gray-900 dark:bg-gray-700 text-white hover:bg-gray-800 dark:hover:bg-gray-600"
+                  }`}
+                >
+                  <Link href={plan.ctaLink}>
+                    {plan.ctaText}
+                  </Link>
+                </Button>
                 <p className="text-xs text-center text-gray-500 dark:text-gray-400">
                   Best for: {plan.bestFor}
                 </p>
               </CardFooter>
-
             </Card>
           ))}
         </div>
@@ -271,12 +272,15 @@ export default function PricingPage() {
             <p className="mt-2 text-blue-100">
               Our team is here to help you find the perfect plan for your needs.
             </p>
-            <a
-              href="/contact"
-              className="mt-6 inline-block text-center py-2 px-4 rounded-lg bg-white text-blue-600 hover:bg-blue-50 text-lg font-medium"
+            <Button
+              asChild
+              variant="secondary"
+              className="mt-6"
             >
-              Contact Sales
-            </a>
+              <Link href="/contact">
+                Contact Sales
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

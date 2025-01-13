@@ -13,6 +13,7 @@ import { Code2, Search, Copy, CheckCircle2, Terminal, Zap, Shield, Database } fr
 const endpoints = [
   {
     category: "Authentication",
+    id: "authentication",
     items: [
       {
         method: "POST",
@@ -54,6 +55,7 @@ const endpoints = [
   },
   {
     category: "Users",
+    id: "users",
     items: [
       {
         method: "GET",
@@ -91,6 +93,7 @@ const endpoints = [
   },
   {
     category: "Data",
+    id: "data",
     items: [
       {
         method: "POST",
@@ -155,153 +158,154 @@ export default function ApiReference() {
   })).filter(category => category.items.length > 0);
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-violet-50 via-gray-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-black">
-      <main className="container max-w-7xl mx-auto px-4 py-16">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
+    <div className="space-y-16">
+      {/* Hero Section */}
+      <div className="text-center">
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="bg-gradient-to-r from-violet-600 to-purple-600 p-4 rounded-2xl inline-block mb-8"
+        >
+          <Code2 className="w-10 h-10 text-white" />
+        </motion.div>
+        <motion.h1
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-4xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-400 dark:to-purple-400 mb-6"
+        >
+          API Reference
+        </motion.h1>
+        <motion.p
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
+        >
+          Comprehensive documentation for our REST API endpoints
+        </motion.p>
+      </div>
+
+      {/* Features Grid */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {features.map((feature, index) => (
           <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="bg-gradient-to-r from-violet-600 to-purple-600 p-3 rounded-2xl inline-block mb-6"
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-200"
           >
-            <Code2 className="w-8 h-8 text-white" />
-          </motion.div>
-          <motion.h1
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-400 dark:to-purple-400 mb-6"
-          >
-            API Reference
-          </motion.h1>
-          <motion.p
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
-          >
-            Comprehensive documentation for our REST API endpoints
-          </motion.p>
-        </div>
-
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg"
-            >
-              <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 flex items-center justify-center">
-                  <feature.icon className="w-6 h-6 text-violet-600 dark:text-violet-400" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {feature.description}
-                  </p>
-                </div>
+            <div className="flex items-center gap-4">
+              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 flex items-center justify-center">
+                <feature.icon className="w-6 h-6 text-violet-600 dark:text-violet-400" />
               </div>
-            </motion.div>
-          ))}
-        </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                  {feature.title}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {feature.description}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
 
-        {/* Search Bar */}
-        <div className="relative max-w-2xl mx-auto mb-12">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+      {/* Search Bar */}
+      <div className="relative max-w-2xl mx-auto">
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
           <Input
             type="text"
             placeholder="Search endpoints..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-white dark:bg-gray-800"
+            className="pl-12 py-6 text-lg bg-white dark:bg-gray-800 border-2 focus:border-violet-500 dark:focus:border-violet-400"
           />
         </div>
+      </div>
 
-        {/* API Documentation */}
-        <div className="grid gap-8">
-          {filteredEndpoints.map((category, categoryIndex) => (
-            <motion.div
-              key={category.category}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
-            >
-              <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-                {category.category}
-              </h2>
-              <div className="grid gap-6">
-                {category.items.map((endpoint, index) => (
-                  <Card key={index} className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className={cn(
-                            "px-2 py-1 rounded-md text-sm font-medium",
-                            {
-                              "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400": endpoint.method === "GET",
-                              "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400": endpoint.method === "POST",
-                              "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400": endpoint.method === "PUT",
-                              "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400": endpoint.method === "DELETE"
-                            }
-                          )}>
-                            {endpoint.method}
-                          </span>
-                          <code className="text-sm bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded">
-                            {endpoint.path}
-                          </code>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleCopy(endpoint.path)}
-                            className="h-8 px-2"
-                          >
-                            {copiedEndpoint === endpoint.path ? (
-                              <CheckCircle2 className="h-4 w-4 text-green-500" />
-                            ) : (
-                              <Copy className="h-4 w-4 text-gray-500" />
-                            )}
-                          </Button>
-                        </div>
-                        <p className="text-gray-600 dark:text-gray-400">
-                          {endpoint.description}
-                        </p>
+      {/* API Documentation */}
+      <div className="space-y-12">
+        {filteredEndpoints.map((category, categoryIndex) => (
+          <motion.div
+            key={category.category}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
+            id={category.id}
+          >
+            <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white border-b pb-4 dark:border-gray-700">
+              {category.category}
+            </h2>
+            <div className="grid gap-8">
+              {category.items.map((endpoint, index) => (
+                <Card key={index} className="p-8 hover:shadow-lg transition-shadow duration-200">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-4 flex-wrap">
+                        <span className={cn(
+                          "px-3 py-1.5 rounded-md text-sm font-medium",
+                          {
+                            "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400": endpoint.method === "GET",
+                            "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400": endpoint.method === "POST",
+                            "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400": endpoint.method === "PUT",
+                            "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400": endpoint.method === "DELETE"
+                          }
+                        )}>
+                          {endpoint.method}
+                        </span>
+                        <code className="text-base bg-gray-100 dark:bg-gray-900 px-4 py-1.5 rounded-md font-mono">
+                          {endpoint.path}
+                        </code>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleCopy(endpoint.path)}
+                          className="h-8 px-3"
+                        >
+                          {copiedEndpoint === endpoint.path ? (
+                            <CheckCircle2 className="h-4 w-4 text-green-500" />
+                          ) : (
+                            <Copy className="h-4 w-4 text-gray-500" />
+                          )}
+                        </Button>
                       </div>
+                      <p className="text-gray-600 dark:text-gray-400 text-lg">
+                        {endpoint.description}
+                      </p>
                     </div>
+                  </div>
 
-                    <Tabs defaultValue="request" className="w-full">
-                      <TabsList className="mb-4">
-                        <TabsTrigger value="request">Request</TabsTrigger>
-                        <TabsTrigger value="response">Response</TabsTrigger>
-                      </TabsList>
-                      <TabsContent value="request">
-                        <pre className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg overflow-x-auto">
-                          <code className="text-sm">
-                            {JSON.stringify(endpoint.request, null, 2)}
-                          </code>
-                        </pre>
-                      </TabsContent>
-                      <TabsContent value="response">
-                        <pre className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg overflow-x-auto">
-                          <code className="text-sm">
-                            {JSON.stringify(endpoint.response, null, 2)}
-                          </code>
-                        </pre>
-                      </TabsContent>
-                    </Tabs>
-                  </Card>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </main>
+                  <Tabs defaultValue="request" className="w-full">
+                    <TabsList className="mb-6">
+                      <TabsTrigger value="request" className="text-base px-6">Request</TabsTrigger>
+                      <TabsTrigger value="response" className="text-base px-6">Response</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="request">
+                      <pre className="bg-gray-100 dark:bg-gray-900 p-6 rounded-lg overflow-x-auto">
+                        <code className="text-sm font-mono">
+                          {JSON.stringify(endpoint.request, null, 2)}
+                        </code>
+                      </pre>
+                    </TabsContent>
+                    <TabsContent value="response">
+                      <pre className="bg-gray-100 dark:bg-gray-900 p-6 rounded-lg overflow-x-auto">
+                        <code className="text-sm font-mono">
+                          {JSON.stringify(endpoint.response, null, 2)}
+                        </code>
+                      </pre>
+                    </TabsContent>
+                  </Tabs>
+                </Card>
+              ))}
+            </div>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }

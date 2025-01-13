@@ -42,7 +42,7 @@ export default function LoginPage() {
       setSubText("Select your workspace");
     } else if (step === "org") {
       setStep("team");
-      setHeaderText(`Create your workspace`);
+      setHeaderText("Create your workspace");
       setSubText("Name your team's workspace");
     } else if (step === "team") {
       setHeaderText(`${teamName} Workspace`);
@@ -50,8 +50,8 @@ export default function LoginPage() {
       setStep("invite");
     } else if (step === "invite") {
       setStep("channels");
-      setHeaderText("Create your Workspace");
-      setSubText("Enter your team's name");
+      setHeaderText("Create your channels");
+      setSubText("Create channels for your team");
     }
   };
 

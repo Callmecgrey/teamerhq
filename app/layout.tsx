@@ -17,11 +17,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const handleAccept = () => {
-    localStorage.setItem("acceptedTerms", "true");
-    console.log("Terms and conditions accepted");
-  };
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -40,7 +35,8 @@ export default function RootLayout({
         >
           <Toaster />
           {children}
-          <TermsAndConditions onAccept={handleAccept} />
+          {/* Render TermsAndConditions Client Component */}
+          <TermsAndConditions />
         </ThemeProvider>
       </body>
     </html>

@@ -1,13 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function TermsAndConditions({ onAccept }: { onAccept: () => void }) {
-  const [isVisible, setIsVisible] = useState(true);
+export default function TermsAndConditions() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Check if terms have already been accepted
+    const hasAccepted = localStorage.getItem("acceptedTerms") === "true";
+    setIsVisible(!hasAccepted);
+  }, []);
 
   const handleAccept = () => {
+    localStorage.setItem("acceptedTerms", "true");
+    console.log("Terms and conditions accepted");
     setIsVisible(false);
-    onAccept();
   };
 
   if (!isVisible) return null;

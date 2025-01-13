@@ -10,7 +10,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function InvitePageClient({ workspaceId }: { workspaceId: string }) {
+export default function InvitePageClient({ workspaceId }: { workspaceId?: string }) {
+  if (!workspaceId) {
+
+    return <div>Error: Missing workspace ID</div>;
+  }
+  
   const router = useRouter();
   const [step, setStep] = useState<"details" | "setup">("details");
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);

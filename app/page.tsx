@@ -8,7 +8,6 @@ import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef } from "react";
-import Marquee from "react-fast-marquee";
 
 const features = [
   {
@@ -110,14 +109,14 @@ const features = [
 ];
 
 const tools = [
-  { name: 'Slack', icon: Slack },
-  { name: 'GitHub', icon: Github },
-  { name: 'Trello', icon: LayoutGrid },
-  { name: 'Notion', icon: FileText },
-  { name: 'Figma', icon: Figma },
-  { name: 'Asana', icon: LayoutGrid },
-  { name: 'Jira', icon: GitPullRequest },
-  { name: 'Zoom', icon: Video }
+  { name: 'Slack', icon: Slack, category: 'Communication' },
+  { name: 'GitHub', icon: Github, category: 'Development' },
+  { name: 'Trello', icon: LayoutGrid, category: 'Project Management' },
+  { name: 'Notion', icon: FileText, category: 'Documentation' },
+  { name: 'Figma', icon: Figma, category: 'Design' },
+  { name: 'Asana', icon: LayoutGrid, category: 'Project Management' },
+  { name: 'Jira', icon: GitPullRequest, category: 'Development' },
+  { name: 'Zoom', icon: Video, category: 'Communication' }
 ];
 
 const testimonials = [
@@ -373,34 +372,97 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Integration Section */}
-      <section className="h-[600px] py-20 bg-gradient-to-b from-transparent to-blue-50/50 dark:to-blue-950/30 overflow-hidden">
-        <div className="container px-4 mx-auto max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">
-              Connects With Your Favorite Tools
-            </h2>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">
-              Seamlessly integrate with the tools your team already loves
-            </p>
-          </div>
-        </div>
-        <Marquee
-          gradient={false}
-          speed={30}
-          className="py-8"
-        >
-          {tools.map((tool) => (
-            <div
-              key={tool.name}
-              className="mx-8 px-8 py-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg min-w-[200px] flex items-center justify-center gap-3"
-            >
-              <tool.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-              <p className="font-medium text-gray-900 dark:text-gray-100">{tool.name}</p>
+      <section className="py-20 bg-gradient-to-b from-transparent to-blue-50/50 dark:to-blue-950/30 overflow-hidden">
+  <div className="container px-4 mx-auto max-w-7xl">
+    <div className="text-center mb-16">
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400"
+      >
+        Connects With Your Favorite Tools
+      </motion.h2>
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        viewport={{ once: true }}
+        className="mt-4 text-gray-600 dark:text-gray-400"
+      >
+        Seamlessly integrate with the tools your team already loves
+      </motion.p>
+    </div>
+
+    <div className="relative">
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="grid grid-cols-2 md:grid-cols-4 gap-6 perspective-1000"
+      >
+        {tools.map((tool, index) => (
+          <motion.div
+            key={tool.name}
+            initial={{ opacity: 0, y: 20, rotateX: -15 }}
+            whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+            whileHover={{ 
+              scale: 1.05, 
+              rotateX: 5,
+              boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+            }}
+            transition={{ 
+              duration: 0.4,
+              delay: index * 0.1,
+              ease: "easeOut"
+            }}
+            viewport={{ once: true }}
+            className="group relative bg-white dark:bg-gray-800 rounded-xl p-6 transform transition-all duration-300 hover:z-10"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300" />
+            
+            <div className="relative flex flex-col items-center space-y-4">
+              <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-800/50 transition-colors duration-300">
+                <tool.icon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              </div>
+              
+              <div className="text-center">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+                  {tool.name}
+                </h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  {tool.category}
+                </p>
+              </div>
             </div>
-          ))}
-        </Marquee>
-      </section>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* Decorative elements */}
+      <div className="absolute -top-10 -left-10 w-40 h-40 bg-blue-200 dark:bg-blue-900/20 rounded-full blur-3xl opacity-20" />
+      <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-cyan-200 dark:bg-cyan-900/20 rounded-full blur-3xl opacity-20" />
+    </div>
+
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.4 }}
+      viewport={{ once: true }}
+      className="mt-16 text-center"
+    >
+      <a
+        href="/integrations"
+        className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
+      >
+        View all integrations
+        <ArrowRight className="ml-2 w-4 h-4" />
+      </a>
+    </motion.div>
+  </div>
+</section>
 
       {/* Testimonials */}
       <section className="py-20">

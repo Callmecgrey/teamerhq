@@ -1,7 +1,21 @@
 import Link from "next/link";
-import { Boxes } from "lucide-react";
+import { Boxes, Download, Globe, ActivitySquare } from "lucide-react";
+import { useState, useEffect } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const footerLinks = {
+type FooterLink = {
+  name: string;
+  href: string;
+  icon?: JSX.Element;
+};
+
+const footerLinks: { [key: string]: FooterLink[] } = {
   Company: [
     { name: "About", href: "/about" },
     { name: "Blog", href: "/blog" },
@@ -16,6 +30,7 @@ const footerLinks = {
     { name: "API Documentation", href: "/documentation" },
     { name: "Changelog", href: "/changelog" },
     { name: "Help Center", href: "/help" },
+    { name: "Download App", href: "/download", icon: <Download className="h-4 w-4" /> },
   ],
   Legal: [
     { name: "Privacy", href: "/privacy" },
@@ -25,7 +40,38 @@ const footerLinks = {
   ],
 };
 
+const languages = [
+  { code: "en", name: "English" },
+  { code: "es", name: "Español" },
+  { code: "fr", name: "Français" },
+  { code: "de", name: "Deutsch" },
+  { code: "pt", name: "Português" },
+  { code: "ja", name: "日本語" },
+  { code: "ko", name: "한국어" },
+  { code: "zh", name: "中文" },
+];
+
 export function Footer() {
+  const [systemStatus, setSystemStatus] = useState<"operational" | "issues">("operational");
+  const [currentLanguage, setCurrentLanguage] = useState("en");
+
+  // Simulate periodic status check
+  useEffect(() => {
+    const checkStatus = async () => {
+      try {
+        // In production, this would be a real API call to status.teamerhq.com
+        const status = Math.random() > 0.1 ? "operational" : "issues";
+        setSystemStatus(status);
+      } catch (error) {
+        setSystemStatus("issues");
+      }
+    };
+
+    checkStatus();
+    const interval = setInterval(checkStatus, 60000); // Check every minute
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <footer className="w-full border-t bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-gray-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-black">
       <div className="container px-4 py-16 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -38,9 +84,25 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground max-w-xs">
-            The all-in-one collaboration platform that bring your team together.
+              The all-in-one collaboration platform that brings your team together.
             </p>
-            
+            <div className="mt-6 flex items-center space-x-4">
+              <Link 
+                href="https://status.teamerhq.com" 
+                target="_blank"
+                className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-foreground"
+              >
+                <div className="flex items-center space-x-2">
+                  <div className={`h-2 w-2 rounded-full animate-pulse ${
+                    systemStatus === "operational" ? "bg-green-500" : "bg-red-500"
+                  }`} />
+                  <span className="flex items-center space-x-1">
+                    <ActivitySquare className="h-4 w-4" />
+                    <span>System Status</span>
+                  </span>
+                </div>
+              </Link>
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4 xl:col-span-4">
             {Object.entries(footerLinks).map(([category, links]) => (
@@ -51,9 +113,10 @@ export function Footer() {
                     <li key={link.name}>
                       <Link
                         href={link.href}
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        {link.name}
+                        {link.icon && <span>{link.icon}</span>}
+                        <span>{link.name}</span>
                       </Link>
                     </li>
                   ))}
@@ -63,12 +126,32 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-sm text-muted-foreground">
+          <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
+            <p className="text-sm text-muted-foreground whitespace-nowrap order-2 sm:order-1">
               © {new Date().getFullYear()} TeamerHQ. All rights reserved.
             </p>
-            <div className="flex gap-4">
-              <Link href="" className="text-muted-foreground hover:text-foreground">
+            
+            <div className="flex items-center space-x-2 order-1 sm:order-2">
+              <Globe className="h-4 w-4 text-muted-foreground" />
+              <Select
+                value={currentLanguage}
+                onValueChange={setCurrentLanguage}
+              >
+                <SelectTrigger className="w-[140px] h-8 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {languages.map((lang) => (
+                    <SelectItem key={lang.code} value={lang.code}>
+                      {lang.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex gap-4 order-3">
+              <Link href="#" className="text-muted-foreground hover:text-foreground">
                 <span className="sr-only">Twitter</span>
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />

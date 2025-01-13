@@ -6,16 +6,20 @@ import { Label } from "@/components/ui/label";
 import { MessageSquare, X } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
+  const router = useRouter();
   const [step, setStep] = useState<"email" | "code" | "team" | "invite" | "channels">("email");
   const [email, setEmail] = useState("");
   const [codeParts, setCodeParts] = useState(["", "", "", "", "", ""]);
   const [teamName, setTeamName] = useState("");
   const [teamMembers, setTeamMembers] = useState([""]);
   const [channels, setChannels] = useState([""]);
-  const [countdown, setCountdown] = useState(30); // Timer for step 2
-  const [isResendDisabled, setIsResendDisabled] = useState(true); // Manage resend state
+  const [countdown, setCountdown] = useState(30);
+  const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const [headerText, setHeaderText] = useState("Create your workspace");
+  const [subText, setSubText] = useState("Get started with TeamerHQ");
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -25,16 +29,21 @@ export default function SignUpPage() {
   const handleContinue = () => {
     if (step === "email" && validateEmail(email)) {
       setStep("code");
-      setCountdown(30); // Start the countdown for code step
-      setIsResendDisabled(true); // Disable resend initially
+      setCountdown(30);
+      setIsResendDisabled(true);
+      setHeaderText("Verify your email");
+      setSubText("Enter the code we sent to your email");
     } else if (step === "code") {
       setStep("team");
+      setHeaderText("Create your workspace");
+      setSubText("Name your team's workspace");
     } else if (step === "team") {
       setStep("invite");
+      setHeaderText(`${teamName} Workspace`);
+      setSubText("Invite your team members");
     } else if (step === "invite") {
       setStep("channels");
-    } else {
-      handleFinalSubmit();
+      setSubText("Set up your communication channels");
     }
   };
 
@@ -73,13 +82,12 @@ export default function SignUpPage() {
   };
 
   const handleCodePartChange = (index: number, value: string) => {
-    const validInput = /^[a-zA-Z0-9]$/.test(value); // Allow only alphanumeric characters
-    if (!validInput && value !== "") return; // Ignore invalid input
+    const validInput = /^[a-zA-Z0-9]$/.test(value);
+    if (!validInput && value !== "") return;
     const updatedCodeParts = [...codeParts];
-    updatedCodeParts[index] = value.slice(0, 1); // Allow only one character
+    updatedCodeParts[index] = value.slice(0, 1);
     setCodeParts(updatedCodeParts);
 
-    // Automatically focus on the next box if input is valid
     if (validInput && index < codeParts.length - 1) {
       const nextInput = document.getElementById(`code-box-${index + 1}`);
       nextInput?.focus();
@@ -88,73 +96,60 @@ export default function SignUpPage() {
 
   const combinedCode = codeParts.join("");
 
-  // Countdown timer logic
   useEffect(() => {
     if (step === "code" && countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
     } else if (countdown === 0) {
-      setIsResendDisabled(false); // Enable resend when countdown reaches 0
+      setIsResendDisabled(false);
     }
   }, [step, countdown]);
 
   const handleResendCode = () => {
-    setCountdown(30); // Restart the timer
-    setIsResendDisabled(true); // Disable the button again
-    // Add logic here to resend the code (e.g., API call)
+    setCountdown(30);
+    setIsResendDisabled(true);
     console.log("Code resent to:", email);
   };
 
   const handleFinalSubmit = () => {
-    window.removeEventListener("beforeunload", handleBeforeUnload);
-    window.location.href = "/dashboard";
+    router.push("/dashboard");
   };
-
-  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-    e.preventDefault();
-    e.returnValue = "Information from this point will not be saved. Are you sure?";
-  };
-
-  useEffect(() => {
-    if (step === "code" || step === "team" || step === "invite") {
-      window.addEventListener("beforeunload", handleBeforeUnload);
-      return () => {
-        window.removeEventListener("beforeunload", handleBeforeUnload);
-      };
-    }
-  }, [step]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-secondary p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-gray-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-black p-4">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <Link href="/" className="inline-flex items-center space-x-2">
             <MessageSquare className="h-8 w-8 text-primary" />
             <span className="text-2xl font-bold">TeamerHQ</span>
           </Link>
-          <h2 className="mt-6 text-3xl font-bold">
-            {step === "invite" || step === "channels" ? `${teamName || "ACME"} Workspace` : "Create your workspace"}
+          <h2 className="mt-6 text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">
+            {headerText}
           </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Get started with TeamerHQ
-          </p>
+          <p className="mt-2 text-sm text-muted-foreground">{subText}</p>
         </div>
 
         <div className="bg-card p-8 rounded-lg shadow-lg">
           {step === "email" && (
             <div className="space-y-4">
-              <Label htmlFor="email">Work email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="name@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {!validateEmail(email) && email.length > 0 && (
-                <p className="text-red-500 text-sm">Please enter a valid email address.</p>
-              )}
-              <Button className="w-full" onClick={handleContinue} disabled={!validateEmail(email)}>
+              <div className="space-y-2">
+                <Label htmlFor="email">Work email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="name@company.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {!validateEmail(email) && email.length > 0 && (
+                  <p className="text-red-500 text-sm">Please enter a valid email address.</p>
+                )}
+              </div>
+              <Button
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
+                onClick={handleContinue}
+                disabled={!validateEmail(email)}
+              >
                 Continue
               </Button>
             </div>
@@ -163,7 +158,7 @@ export default function SignUpPage() {
           {step === "code" && (
             <div className="space-y-4">
               <Label>Verification Code</Label>
-              <div className="flex space-x-4">
+              <div className="grid grid-cols-6 gap-2 sm:gap-4">
                 {codeParts.map((part, index) => (
                   <Input
                     key={index}
@@ -172,29 +167,35 @@ export default function SignUpPage() {
                     value={part}
                     onChange={(e) => handleCodePartChange(index, e.target.value)}
                     maxLength={1}
-                    className="text-center w-12 h-12"
+                    className="text-center w-full h-12 sm:h-14 text-lg font-semibold"
                   />
                 ))}
               </div>
               <p className="text-sm text-muted-foreground">
-                We sent a code to {email}.
+                We sent a code to {email}
               </p>
-              <Button className="w-full" onClick={handleContinue} disabled={combinedCode.length !== 6}>
+              <Button
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
+                onClick={handleContinue}
+                disabled={combinedCode.length !== 6}
+              >
                 Verify
               </Button>
               <div className="mt-4 flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">
                   Resend code in: {countdown}s
                 </span>
-                <span
+                <button
                   onClick={isResendDisabled ? undefined : handleResendCode}
-                  className={`text-sm cursor-pointer ${
-                    isResendDisabled ? "text-muted-foreground cursor-not-allowed" : "text-blue-500 hover:underline"
+                  className={`text-sm ${
+                    isResendDisabled
+                      ? "text-muted-foreground cursor-not-allowed"
+                      : "text-blue-500 hover:text-blue-600 hover:underline"
                   }`}
-                  aria-disabled={isResendDisabled}
+                  disabled={isResendDisabled}
                 >
                   Resend Code
-                </span>
+                </button>
               </div>
             </div>
           )}
@@ -212,7 +213,7 @@ export default function SignUpPage() {
                 />
               </div>
               <Button
-                className="w-full"
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
                 onClick={handleContinue}
                 disabled={!teamName}
               >
@@ -223,44 +224,45 @@ export default function SignUpPage() {
 
           {step === "invite" && (
             <div className="space-y-4">
-              <h3 className="text-xl font-bold">Invite Team Members</h3>
-              {teamMembers.map((member, index) => (
-                <div className="space-y-2" key={index}>
-                  <Label htmlFor={`teamMember${index}`}>Team Member {index + 1}</Label>
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      id={`teamMember${index}`}
-                      type="email"
-                      placeholder="team.member@company.com"
-                      value={member}
-                      onChange={(e) => handleMemberChange(index, e.target.value)}
-                    />
-                    {teamMembers.length > 1 && (
-                      <button
-                        type="button"
-                        className="p-2 text-red-500"
-                        onClick={() => handleRemoveMember(index)}
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    )}
+              <div className="space-y-4">
+                {teamMembers.map((member, index) => (
+                  <div key={index} className="space-y-2">
+                    <Label htmlFor={`teamMember${index}`}>Team Member {index + 1}</Label>
+                    <div className="flex items-center space-x-2">
+                      <Input
+                        id={`teamMember${index}`}
+                        type="email"
+                        placeholder="team.member@company.com"
+                        value={member}
+                        onChange={(e) => handleMemberChange(index, e.target.value)}
+                      />
+                      {teamMembers.length > 1 && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                          onClick={() => handleRemoveMember(index)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
               {teamMembers.length < 4 && (
-                <Button className="w-full" onClick={handleAddMember}>
+                <Button
+                  variant="outline"
+                  onClick={handleAddMember}
+                  className="w-full"
+                >
                   Add Another Member
                 </Button>
               )}
-              {teamMembers.length >= 4 && (
-                <p className="text-sm text-muted-foreground">
-                  Don&apos;t worry, you will be able to add more members once you are all set.
-                </p>
-              )}
               <Button
-                className="w-full mt-4"
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
                 onClick={handleContinue}
-                disabled={teamMembers.some((member) => !member)}
+                disabled={teamMembers.some((member) => !validateEmail(member))}
               >
                 Continue
               </Button>
@@ -269,41 +271,47 @@ export default function SignUpPage() {
 
           {step === "channels" && (
             <div className="space-y-4">
-              <h3 className="text-xl font-bold">Create Channels</h3>
-              {channels.map((channel, index) => (
-                <div className="space-y-2" key={index}>
-                  <Label htmlFor={`channel${index}`}>Channel {index + 1}</Label>
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      id={`channel${index}`}
-                      type="text"
-                      placeholder="e.g., General, Marketing"
-                      value={channel}
-                      onChange={(e) => handleChannelChange(index, e.target.value)}
-                    />
-                    {channels.length > 1 && (
-                      <button
-                        type="button"
-                        className="p-2 text-red-500"
-                        onClick={() => handleRemoveChannel(index)}
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    )}
+              <div className="space-y-4">
+                {channels.map((channel, index) => (
+                  <div key={index} className="space-y-2">
+                    <Label htmlFor={`channel${index}`}>Channel {index + 1}</Label>
+                    <div className="flex items-center space-x-2">
+                      <Input
+                        id={`channel${index}`}
+                        type="text"
+                        placeholder="e.g., General, Marketing"
+                        value={channel}
+                        onChange={(e) => handleChannelChange(index, e.target.value)}
+                      />
+                      {channels.length > 1 && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                          onClick={() => handleRemoveChannel(index)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
               {channels.length < 3 && (
-                <Button className="w-full" onClick={handleAddChannel}>
+                <Button
+                  variant="outline"
+                  onClick={handleAddChannel}
+                  className="w-full"
+                >
                   Add Another Channel
                 </Button>
               )}
               <Button
-                className="w-full mt-4"
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
                 onClick={handleFinalSubmit}
                 disabled={!channels.some((channel) => channel.trim() !== "")}
               >
-                Yay! Let&apos;s Go
+                Create Workspace
               </Button>
             </div>
           )}

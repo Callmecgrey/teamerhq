@@ -6,8 +6,10 @@ import { Label } from "@/components/ui/label";
 import { MessageSquare, Briefcase, Plus, X } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [step, setStep] = useState<"email" | "otp" | "org" | "team" | "invite" | "channels">("email");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -47,7 +49,7 @@ export default function LoginPage() {
 
   const handleFinalSubmit = () => {
     console.log("Workspace Created:", { teamName, teamMembers, channels });
-    // Handle final submission logic here
+    router.push("/dashboard");
   };
 
   const handleOtpChange = (index: number, value: string) => {
@@ -79,6 +81,10 @@ export default function LoginPage() {
     setChannels(updatedChannels);
   };
 
+  const handleOrganizationSelect = (orgName: string) => {
+    router.push("/dashboard");
+  };
+
   const combinedOtp = otp.join("");
 
   useEffect(() => {
@@ -97,14 +103,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-secondary p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-gray-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-black p-4">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <Link href="/" className="inline-flex items-center space-x-2">
             <MessageSquare className="h-8 w-8 text-primary" />
             <span className="text-2xl font-bold">TeamerHQ</span>
           </Link>
-          <h2 className="mt-6 text-3xl font-bold">{headerText}</h2>
+          <h2 className="mt-6 text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">
+            {headerText}
+          </h2>
           <p className="mt-2 text-sm text-muted-foreground">{subText}</p>
         </div>
 
@@ -121,7 +129,11 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <Button className="w-full" onClick={handleContinue} disabled={!email}>
+              <Button 
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white" 
+                onClick={handleContinue} 
+                disabled={!email}
+              >
                 Continue
               </Button>
             </div>
@@ -130,7 +142,7 @@ export default function LoginPage() {
           {step === "otp" && (
             <div className="space-y-4">
               <Label>Enter OTP</Label>
-              <div className="flex space-x-4">
+              <div className="grid grid-cols-6 gap-2 sm:gap-4">
                 {otp.map((part, index) => (
                   <Input
                     key={index}
@@ -139,15 +151,15 @@ export default function LoginPage() {
                     value={part}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     maxLength={1}
-                    className="text-center w-12 h-12"
+                    className="text-center w-full h-12 sm:h-14 text-lg font-semibold"
                   />
                 ))}
               </div>
               <p className="text-sm text-muted-foreground">
-                We sent an OTP to {email}.
+                We sent an OTP to {email}
               </p>
               <Button
-                className="w-full"
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
                 onClick={handleContinue}
                 disabled={combinedOtp.length !== 6}
               >
@@ -157,17 +169,17 @@ export default function LoginPage() {
                 <span className="text-sm text-muted-foreground">
                   Resend code in: {countdown}s
                 </span>
-                <span
+                <button
                   onClick={isResendDisabled ? undefined : handleResendCode}
-                  className={`text-sm cursor-pointer ${
+                  className={`text-sm ${
                     isResendDisabled
                       ? "text-muted-foreground cursor-not-allowed"
-                      : "text-blue-500 hover:underline"
+                      : "text-blue-500 hover:text-blue-600 hover:underline"
                   }`}
-                  aria-disabled={isResendDisabled}
+                  disabled={isResendDisabled}
                 >
                   Resend Code
-                </span>
+                </button>
               </div>
             </div>
           )}
@@ -181,8 +193,8 @@ export default function LoginPage() {
                     <Button
                       key={org.id}
                       variant="outline"
-                      className="w-full justify-start h-auto p-4 flex items-center space-x-4"
-                      onClick={() => console.log(`Selected organization: ${org.name}`)}
+                      className="w-full justify-start h-auto p-4 flex items-center space-x-4 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                      onClick={() => handleOrganizationSelect(org.name)}
                     >
                       <org.icon className="h-8 w-8 text-muted-foreground" />
                       <div>
@@ -201,7 +213,7 @@ export default function LoginPage() {
               <div className="mt-4">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start flex items-center space-x-2"
+                  className="w-full justify-start flex items-center space-x-2 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                   onClick={() => {
                     setStep("team");
                     setHeaderText("Create your workspace");
@@ -212,7 +224,11 @@ export default function LoginPage() {
                   <span>Create a new workspace</span>
                 </Button>
               </div>
-              <Button variant="ghost" className="w-full" onClick={() => setStep("email")}>
+              <Button 
+                variant="ghost" 
+                className="w-full hover:bg-blue-50 dark:hover:bg-blue-900/20" 
+                onClick={() => setStep("email")}
+              >
                 Use a different email
               </Button>
             </div>

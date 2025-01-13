@@ -1,4 +1,3 @@
-// components/chat/Sidebar.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -9,7 +8,6 @@ import { Sidebar as UISidebar, SidebarHeader, SidebarProvider } from "@/componen
 import { TeamSwitcher } from "@/components/switcher/team-switcher";
 import CreateChannelPopover from "@/components/switcher/CreateChannelPopover";
 
-// Sample data for teams
 const teamsData = [
   {
     name: "Acme Inc",
@@ -31,12 +29,12 @@ const teamsData = [
 export default function ChatSidebar({
   onUserClick,
   onChannelClick,
-  onMeClick, // New prop for handling "Me" clicks
+  onMeClick,
 }: {
   onUserClick: (user: any) => void;
   onChannelClick: (channel: any) => void;
   onAddChannelClick: () => void;
-  onMeClick: () => void; // Handler for "Me" clicks
+  onMeClick: () => void;
 }) {
   const router = useRouter();
   const [channelsOpen, setChannelsOpen] = useState(true);
@@ -50,7 +48,7 @@ export default function ChatSidebar({
 
   useEffect(() => {
     const fetchUserRole = async () => {
-      const role = "user"; // Example role, you can replace with actual logic
+      const role = "user";
       setUserRole(role);
     };
     fetchUserRole();
@@ -85,9 +83,9 @@ export default function ChatSidebar({
 
   return (
     <SidebarProvider>
-      <UISidebar>
+      <UISidebar className="bg-gradient-to-b from-purple-50/80 via-gray-50/80 to-white/80 dark:from-gray-800/80 dark:via-gray-900/80 dark:to-black/80 backdrop-blur-sm border-r border-gray-200 dark:border-gray-700">
         {/* Sidebar Header with TeamSwitcher */}
-        <SidebarHeader>
+        <SidebarHeader className="border-b border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
           <TeamSwitcher teams={teamsData} />
         </SidebarHeader>
 
@@ -96,10 +94,15 @@ export default function ChatSidebar({
           {/* Channels */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium cursor-pointer" onClick={toggleChannels}>
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 cursor-pointer hover:text-violet-600 dark:hover:text-violet-400 transition-colors" onClick={toggleChannels}>
                 Channels
               </span>
-              <Button variant="ghost" size="icon" className="h-4 w-4" onClick={() => setIsCreateChannelPopoverOpen(true)}>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-4 w-4 hover:text-violet-600 dark:hover:text-violet-400" 
+                onClick={() => setIsCreateChannelPopoverOpen(true)}
+              >
                 <Plus className="h-3 w-3" />
               </Button>
             </div>
@@ -109,18 +112,18 @@ export default function ChatSidebar({
                   <Button
                     key={index}
                     variant="ghost"
-                    className="w-full justify-start"
+                    className="w-full justify-start hover:bg-violet-100 dark:hover:bg-violet-900/20 text-gray-700 dark:text-gray-300"
                     size="sm"
                     onClick={() => onChannelClick(channel)}
                   >
                     {channel.channelType === "Private" ? (
-                      <Lock className="h-4 w-4 mr-2" />
+                      <Lock className="h-4 w-4 mr-2 text-violet-500 dark:text-violet-400" />
                     ) : (
-                      <Hash className="h-4 w-4 mr-2" />
+                      <Hash className="h-4 w-4 mr-2 text-violet-500 dark:text-violet-400" />
                     )}
                     {channel.name}
                     {unreadChannel && (
-                      <span className="ml-2 text-red-500 text-xs font-bold">• {unreadChannel}</span>
+                      <span className="ml-2 text-violet-600 dark:text-violet-400 text-xs font-bold">• {unreadChannel}</span>
                     )}
                   </Button>
                 ))}
@@ -131,10 +134,14 @@ export default function ChatSidebar({
           {/* Direct Messages */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium cursor-pointer" onClick={toggleUsers}>
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 cursor-pointer hover:text-violet-600 dark:hover:text-violet-400 transition-colors" onClick={toggleUsers}>
                 Direct Messages
               </span>
-              <Button variant="ghost" size="icon" className="h-4 w-4">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-4 w-4 hover:text-violet-600 dark:hover:text-violet-400"
+              >
                 <Plus className="h-3 w-3" />
               </Button>
             </div>
@@ -144,18 +151,18 @@ export default function ChatSidebar({
                   <Button
                     key={index}
                     variant="ghost"
-                    className="w-full justify-start"
+                    className="w-full justify-start hover:bg-violet-100 dark:hover:bg-violet-900/20 text-gray-700 dark:text-gray-300"
                     size="sm"
-                    onClick={() => (user.name === "Me" ? onMeClick() : onUserClick(user))} // Handle "Me" click
+                    onClick={() => (user.name === "Me" ? onMeClick() : onUserClick(user))}
                   >
                     <div
                       className={`w-2 h-2 ${
-                        user.status === "online" ? "bg-green-500" : "bg-gray-500"
+                        user.status === "online" ? "bg-green-500" : "bg-gray-400"
                       } rounded-full mr-2`}
                     />
                     {user.name}
                     {user.name !== "Me" && unreadMessages > 0 && (
-                      <span className="ml-2 text-red-500 text-xs font-bold">• {unreadMessages}</span>
+                      <span className="ml-2 text-violet-600 dark:text-violet-400 text-xs font-bold">• {unreadMessages}</span>
                     )}
                     {user.name === "Me" && drafting && (
                       <span className="ml-2 text-orange-500 text-xs font-bold">Drafting...</span>
@@ -168,15 +175,20 @@ export default function ChatSidebar({
         </div>
 
         {/* Sidebar Footer with Settings and Logout */}
-        <div className="p-4 border-t space-y-2">
-          <Button variant="ghost" size="sm" className="w-full justify-start text-muted-foreground" onClick={handleLogout}>
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm space-y-2">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="w-full justify-start text-gray-700 dark:text-gray-300 hover:bg-violet-100 dark:hover:bg-violet-900/20 hover:text-violet-600 dark:hover:text-violet-400" 
+            onClick={handleLogout}
+          >
             <LogOut className="h-4 w-4 mr-2" />
             Logout
           </Button>
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start text-muted-foreground"
+            className="w-full justify-start text-gray-700 dark:text-gray-300 hover:bg-violet-100 dark:hover:bg-violet-900/20 hover:text-violet-600 dark:hover:text-violet-400"
             onClick={handleSettingsClick}
           >
             <Settings className="h-4 w-4 mr-2" />

@@ -35,7 +35,7 @@ export const PlanStep = ({ selectedPlan, setSelectedPlan, onFinalSubmit }: PlanS
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium">Choose your plan</h3>
         <Link 
-          href="/pricing" 
+          href="/pricing/compare" 
           target="_blank"
           className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
         >

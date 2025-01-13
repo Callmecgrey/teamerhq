@@ -4,14 +4,14 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { FileQuestion, Home, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { notFound } from 'next/navigation';
+// import { notFound } from 'next/navigation';
 
 export default function NotFound() {
-  const shouldShow404 = true;
+  // const shouldShow404 = true;
 
-  if (shouldShow404) {
-    notFound();
-  }
+  // if (shouldShow404) {
+  //   notFound();
+  // }
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4">
       <div className="max-w-2xl w-full text-center">

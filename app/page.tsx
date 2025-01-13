@@ -289,10 +289,12 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-gray-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-black">
-      <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow">
+      <div className="fixed left-0 right-0 top-0 z-50 bg-white dark:bg-gray-900 shadow">
         <Header />
       </div>
       
+      {/* Added padding to account for fixed header */}
+      <div className="pt-16"></div>
       {/* Hero Section */}
       <motion.section
         ref={heroRef}

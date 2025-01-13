@@ -1,95 +1,97 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Calendar, Star, Bug, Sparkles, Wrench, Shield, Zap, Mail, Bell } from "lucide-react";
-import { useState } from "react";
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
+import {
+  Sparkles,
+  Zap,
+  Shield,
+  Wrench,
+  Rocket,
+  Bug,
+  ArrowUpRight,
+  MessageSquare,
+  Users,
+  FileText,
+} from "lucide-react";
+import Link from "next/link";
 
-const changelogData = [
+const releases = [
   {
     version: "2.4.0",
-    date: "April 15, 2024",
-    highlights: true,
+    date: "March 15, 2024",
+    title: "Enhanced Collaboration Features",
+    description:
+      "Major improvements to team collaboration features and performance optimizations.",
     changes: [
       {
         type: "feature",
-        title: "HD Video Conferencing",
-        description: "Introduced high-definition video conferencing with support for up to 100 participants",
         icon: Sparkles,
-        details: [
-          "Crystal clear 1080p video quality",
-          "Background noise suppression",
-          "Virtual backgrounds",
-          "Meeting recording capabilities"
-        ]
+        title: "Real-time Collaboration",
+        description: "Multiple users can now edit documents simultaneously with live cursors and presence indicators.",
       },
       {
         type: "improvement",
-        title: "Enhanced File Sharing",
-        description: "Increased file size limit to 5GB for all plans",
         icon: Zap,
-        details: [
-          "Increased upload speed",
-          "Preview support for more file types",
-          "Improved file organization"
-        ]
+        title: "Performance Boost",
+        description: "50% faster message loading and improved search indexing.",
+      },
+      {
+        type: "security",
+        icon: Shield,
+        title: "Enhanced Security",
+        description: "Added support for SAML SSO and improved 2FA options.",
       },
     ],
   },
   {
     version: "2.3.2",
-    date: "April 1, 2024",
+    date: "March 1, 2024",
+    title: "Bug Fixes and Improvements",
+    description: "Various bug fixes and quality of life improvements.",
     changes: [
       {
-        type: "security",
-        title: "Security Updates",
-        description: "Implemented additional security measures for enterprise workspaces",
-        icon: Shield,
-        details: [
-          "Enhanced encryption protocols",
-          "Advanced threat detection",
-          "Improved audit logging"
-        ]
+        type: "fix",
+        icon: Wrench,
+        title: "Message Threading",
+        description: "Fixed an issue where thread replies weren't properly nested in the mobile view.",
       },
       {
-        type: "bugfix",
-        title: "Message Sync Fix",
-        description: "Resolved message synchronization issues in large team channels",
+        type: "fix",
         icon: Bug,
-        details: [
-          "Fixed message ordering in threads",
-          "Improved real-time delivery",
-          "Resolved notification delays"
-        ]
+        title: "Notification Delivery",
+        description: "Resolved delayed notification delivery on iOS devices.",
       },
     ],
   },
   {
     version: "2.3.0",
-    date: "March 15, 2024",
+    date: "February 15, 2024",
+    title: "New Integration Platform",
+    description: "Introducing our new integration platform and API improvements.",
     changes: [
       {
         type: "feature",
-        title: "Custom Domains",
-        description: "Added support for custom domain configuration",
-        icon: Star,
-        details: [
-          "SSL certificate management",
-          "DNS configuration wizard",
-          "Domain verification system"
-        ]
+        icon: Rocket,
+        title: "Integration Platform",
+        description: "New integration platform with support for custom app development.",
+      },
+      {
+        type: "feature",
+        icon: MessageSquare,
+        title: "Rich Text Editor",
+        description: "Completely redesigned rich text editor with improved formatting options.",
       },
       {
         type: "improvement",
-        title: "Performance Optimization",
-        description: "Improved loading times for large workspaces",
-        icon: Wrench,
-        details: [
-          "Optimized database queries",
-          "Implemented lazy loading",
-          "Reduced initial bundle size"
-        ]
+        icon: Users,
+        title: "User Management",
+        description: "Bulk user operations and improved admin controls.",
+      },
+      {
+        type: "improvement",
+        icon: FileText,
+        title: "File Handling",
+        description: "Increased file size limits and added support for more file types.",
       },
     ],
   },
@@ -98,175 +100,124 @@ const changelogData = [
 const getTypeStyles = (type: string) => {
   switch (type) {
     case "feature":
-      return "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300";
+      return "bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400";
     case "improvement":
-      return "bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300";
-    case "bugfix":
-      return "bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300";
+      return "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
     case "security":
-      return "bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300";
+      return "bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400";
+    case "fix":
+      return "bg-orange-50 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400";
     default:
-      return "bg-gray-50 text-gray-700 dark:bg-gray-900/30 dark:text-gray-300";
+      return "bg-gray-50 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400";
   }
 };
 
 export default function Changelog() {
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-  const [showDetails, setShowDetails] = useState<{[key: string]: boolean}>({});
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically handle the subscription
-    setSubscribed(true);
-    setEmail("");
-  };
-
-  const toggleDetails = (versionIndex: number, changeIndex: number) => {
-    const key = `${versionIndex}-${changeIndex}`;
-    setShowDetails(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
-  };
-
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
-      <Header />
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      {/* Header */}
+      <div className="text-center mb-16">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+          Product Updates
+        </h1>
+        <p className="text-lg text-gray-600 dark:text-gray-400">
+          Stay up to date with all the latest changes and improvements to TeamerHQ.
+        </p>
+      </div>
 
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <div className="relative overflow-hidden bg-gradient-to-b from-blue-600 to-blue-800 dark:from-blue-900 dark:to-gray-900">
-          <div className="absolute inset-0 bg-grid-white/[0.1] bg-[size:3rem_3rem]" />
-          <div className="relative max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
-                Product Updates & Changes
-              </h1>
-              <p className="mt-4 text-xl text-blue-100">
-                Stay up to date with the latest features, improvements, and fixes in TeamerHQ
-              </p>
-              
-              {/* Subscription Form */}
-              <div className="mt-8 max-w-md mx-auto">
-                {!subscribed ? (
-                  <form onSubmit={handleSubscribe} className="flex gap-2">
-                    <div className="flex-grow relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Enter your email"
-                        className="w-full pl-10 pr-4 py-3 rounded-lg border-2 border-transparent focus:border-blue-300 focus:ring-0 bg-white/10 text-white placeholder-blue-200"
-                        required
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="px-6 py-3 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors"
-                    >
-                      Subscribe
-                    </button>
-                  </form>
-                ) : (
-                  <div className="flex items-center justify-center space-x-2 text-white bg-blue-500/20 rounded-lg py-3">
-                    <Bell className="w-5 h-5" />
-                    <span>You're subscribed to updates!</span>
-                  </div>
-                )}
+      {/* Releases */}
+      <div className="space-y-16">
+        {releases.map((release, releaseIndex) => (
+          <motion.div
+            key={release.version}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: releaseIndex * 0.1 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
+            {/* Version header */}
+            <div className="mb-8">
+              <div className="flex items-center gap-4 mb-2">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {release.version}
+                </h2>
+                <span className="text-sm px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
+                  {release.date}
+                </span>
               </div>
+              <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                {release.title}
+              </h3>
+              <p className="mt-2 text-gray-600 dark:text-gray-400">
+                {release.description}
+              </p>
             </div>
-          </div>
-        </div>
 
-        {/* Changelog Content */}
-        <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-          <div className="space-y-16">
-            {changelogData.map((release, releaseIndex) => (
-              <motion.div
-                key={release.version}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: releaseIndex * 0.1 }}
-                viewport={{ once: true }}
-                className="relative"
-              >
-                {/* Version Header */}
-                <div className="flex items-center space-x-4 mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    v{release.version}
-                  </h2>
-                  <div className="flex items-center text-gray-500 dark:text-gray-400">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    {release.date}
-                  </div>
-                  {release.highlights && (
-                    <span className="px-3 py-1 text-sm font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                      Latest Release
-                    </span>
-                  )}
-                </div>
-
-                {/* Changes List */}
-                <div className="space-y-6">
-                  {release.changes.map((change, changeIndex) => {
-                    const Icon = change.icon;
-                    const detailsKey = `${releaseIndex}-${changeIndex}`;
-                    const isExpanded = showDetails[detailsKey];
-
-                    return (
-                      <motion.div
-                        key={changeIndex}
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: changeIndex * 0.1 }}
-                        viewport={{ once: true }}
-                        className="group"
+            {/* Changes grid */}
+            <div className="grid gap-6 md:grid-cols-2">
+              {release.changes.map((change, changeIndex) => {
+                const Icon = change.icon;
+                return (
+                  <motion.div
+                    key={changeIndex}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: changeIndex * 0.1 + releaseIndex * 0.1,
+                    }}
+                    viewport={{ once: true }}
+                    className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700"
+                  >
+                    <div className="flex gap-4">
+                      <div
+                        className={`p-2 rounded-lg ${getTypeStyles(change.type)}`}
                       >
-                        <div 
-                          className="flex space-x-4 cursor-pointer"
-                          onClick={() => toggleDetails(releaseIndex, changeIndex)}
-                        >
-                          <div className={`p-2 rounded-lg ${getTypeStyles(change.type)}`}>
-                            <Icon className="w-5 h-5" />
-                          </div>
-                          <div className="flex-grow">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                              {change.title}
-                            </h3>
-                            <p className="mt-1 text-gray-600 dark:text-gray-400">
-                              {change.description}
-                            </p>
-                            {change.details && (
-                              <motion.div
-                                initial={false}
-                                animate={{ height: isExpanded ? "auto" : 0 }}
-                                className="overflow-hidden"
-                              >
-                                <ul className="mt-3 space-y-2 text-sm text-gray-500 dark:text-gray-400">
-                                  {change.details.map((detail, i) => (
-                                    <li key={i} className="flex items-center">
-                                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2" />
-                                      {detail}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </motion.div>
-                            )}
-                          </div>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">
+                            {change.title}
+                          </h4>
+                          <span
+                            className={`text-xs px-2 py-1 rounded-full capitalize ${getTypeStyles(
+                              change.type
+                            )}`}
+                          >
+                            {change.type}
+                          </span>
                         </div>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </main>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">
+                          {change.description}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        ))}
+      </div>
 
-      <Footer />
+      {/* Subscribe section */}
+      <div className="mt-16 bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-8 text-center">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          Stay Updated
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">
+          Want to be notified about new releases? Subscribe to our updates.
+        </p>
+        <Link
+          href="/newsletter"
+          className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
+        >
+          Subscribe to Updates
+          <ArrowUpRight className="ml-2 h-4 w-4" />
+        </Link>
+      </div>
     </div>
   );
 }

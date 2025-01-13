@@ -1,44 +1,46 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-interface CodeStepProps {
+interface OtpStepProps {
+  otp: string[];
   email: string;
-  codeParts: string[];
   countdown: number;
   isResendDisabled: boolean;
-  handleCodePartChange: (index: number, value: string) => void;
-  handleResendCode: () => void;
+  onOtpChange: (index: number, value: string) => void;
+  onResend: () => void;
   onContinue: () => void;
 }
 
-export const CodeStep = ({
+export default function OtpStep({
+  otp,
   email,
-  codeParts,
   countdown,
   isResendDisabled,
-  handleCodePartChange,
-  handleResendCode,
+  onOtpChange,
+  onResend,
   onContinue,
-}: CodeStepProps) => {
-  const combinedCode = codeParts.join("");
+}: OtpStepProps) {
+  const combinedOtp = otp.join("");
 
   const handleInputChange = (index: number, value: string) => {
-    if (value.length > 1) return; // Ensure only single-character input
-    handleCodePartChange(index, value);
+    if (value.length > 1) return; // Ignore input longer than 1 character
+    onOtpChange(index, value);
 
-    // Move to the next input box if a value is entered
-    if (value && index < codeParts.length - 1) {
-      const nextInput = document.getElementById(`code-box-${index + 1}`);
+    // Move to the next input if a value is entered
+    if (value && index < otp.length - 1) {
+      const nextInput = document.getElementById(`otp-box-${index + 1}`);
       nextInput?.focus();
     }
   };
 
   const handleKeyDown = (index: number, event: React.KeyboardEvent) => {
-    if (event.key === "Backspace" && !codeParts[index]) {
+    if (event.key === "Backspace" && !otp[index]) {
       // Move to the previous input on backspace if the current box is empty
       if (index > 0) {
-        const prevInput = document.getElementById(`code-box-${index - 1}`);
+        const prevInput = document.getElementById(`otp-box-${index - 1}`);
         prevInput?.focus();
       }
     }
@@ -46,12 +48,12 @@ export const CodeStep = ({
 
   return (
     <div className="space-y-4">
-      <Label>Verification Code</Label>
+      <Label>Enter OTP</Label>
       <div className="grid grid-cols-6 gap-2 sm:gap-4">
-        {codeParts.map((part, index) => (
+        {otp.map((part, index) => (
           <Input
             key={index}
-            id={`code-box-${index}`}
+            id={`otp-box-${index}`}
             type="text"
             value={part}
             onChange={(e) => handleInputChange(index, e.target.value)}
@@ -61,18 +63,22 @@ export const CodeStep = ({
           />
         ))}
       </div>
-      <p className="text-sm text-muted-foreground">We sent a code to {email}</p>
+      <p className="text-sm text-muted-foreground">
+        We sent an OTP to {email}
+      </p>
       <Button
         className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
         onClick={onContinue}
-        disabled={combinedCode.length !== 6}
+        disabled={combinedOtp.length !== 6}
       >
         Verify
       </Button>
       <div className="mt-4 flex justify-between items-center">
-        <span className="text-sm text-muted-foreground">Resend code in: {countdown}s</span>
+        <span className="text-sm text-muted-foreground">
+          Resend code in: {countdown}s
+        </span>
         <button
-          onClick={isResendDisabled ? undefined : handleResendCode}
+          onClick={isResendDisabled ? undefined : onResend}
           className={`text-sm ${
             isResendDisabled
               ? "text-muted-foreground cursor-not-allowed"
@@ -85,4 +91,4 @@ export const CodeStep = ({
       </div>
     </div>
   );
-};
+}

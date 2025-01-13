@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation"; // To read query parameters
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +11,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const InvitePageClient = ({ workspaceId }: { workspaceId?: string }) => {
+const InvitePage = () => {
+  const searchParams = useSearchParams();
+  const workspaceId = searchParams.get("workspaceId");
+
   if (!workspaceId) {
     return <div>Error: Missing workspace ID</div>;
   }
@@ -32,35 +36,20 @@ const InvitePageClient = ({ workspaceId }: { workspaceId?: string }) => {
     role: "Team Member",
   });
 
-  // Placeholder function to handle API call when declining an invite
   const handleDeclineInvite = async () => {
-    try {
-      console.log("Declining invite...");
-      // await declineInviteAPI(workspaceId); // Example API call
-      router.push("/");
-    } catch (error) {
-      console.error("Error declining invite:", error);
-    }
+    console.log("Invite declined.");
+    router.push("/");
   };
 
-  // Placeholder function to handle API call when accepting an invite
   const handleAcceptInvite = async () => {
     if (isTermsAccepted) {
-      console.log("Terms accepted. Proceeding to setup...");
       setStep("setup");
-      // Optionally, add an API call here to confirm acceptance
     }
   };
 
-  // Placeholder function to handle API call after profile setup
   const handleProceedToDashboard = async () => {
-    try {
-      console.log("Profile setup complete:", profile);
-      // await updateProfileAPI(profile); // Example API call
-      router.push("/dashboard");
-    } catch (error) {
-      console.error("Error completing profile setup:", error);
-    }
+    console.log("Profile setup complete:", profile);
+    router.push("/dashboard");
   };
 
   const toggleModal = () => {
@@ -147,35 +136,68 @@ const InvitePageClient = ({ workspaceId }: { workspaceId?: string }) => {
                 Setting up your profile for <strong>{workspaceDetails.name}</strong>
               </p>
               <div className="space-y-4">
-                <InputField
-                  label="Display Name"
-                  id="displayName"
-                  value={profile.displayName}
-                  onChange={(value) => setProfile((prev) => ({ ...prev, displayName: value }))}
-                />
-                <InputField
-                  label="Username"
-                  id="username"
-                  value={profile.username}
-                  onChange={(value) => setProfile((prev) => ({ ...prev, username: value }))}
-                />
-                <InputField
-                  label="Full Name"
-                  id="fullName"
-                  value={profile.fullName}
-                  onChange={(value) => setProfile((prev) => ({ ...prev, fullName: value }))}
-                />
-                <InputField
-                  label="Position"
-                  id="position"
-                  value={profile.position}
-                  onChange={(value) => setProfile((prev) => ({ ...prev, position: value }))}
-                />
-                <SelectField
-                  label="Department"
-                  value={profile.department}
-                  onValueChange={(value) => setProfile((prev) => ({ ...prev, department: value }))}
-                />
+                <div>
+                  <Label htmlFor="displayName">Display Name</Label>
+                  <Input
+                    id="displayName"
+                    placeholder="Enter your display name"
+                    value={profile.displayName}
+                    onChange={(e) =>
+                      setProfile((prev) => ({ ...prev, displayName: e.target.value }))
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="username">Username</Label>
+                  <Input
+                    id="username"
+                    placeholder="Enter your username"
+                    value={profile.username}
+                    onChange={(e) =>
+                      setProfile((prev) => ({ ...prev, username: e.target.value }))
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="fullName">Full Name</Label>
+                  <Input
+                    id="fullName"
+                    placeholder="Enter your full name"
+                    value={profile.fullName}
+                    onChange={(e) =>
+                      setProfile((prev) => ({ ...prev, fullName: e.target.value }))
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="position">Position</Label>
+                  <Input
+                    id="position"
+                    placeholder="Enter your position"
+                    value={profile.position}
+                    onChange={(e) =>
+                      setProfile((prev) => ({ ...prev, position: e.target.value }))
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="department">Department</Label>
+                  <Select
+                    onValueChange={(value) =>
+                      setProfile((prev) => ({ ...prev, department: value }))
+                    }
+                  >
+                    <SelectTrigger id="department">
+                      <SelectValue placeholder="Select your department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="engineering">Engineering</SelectItem>
+                      <SelectItem value="marketing">Marketing</SelectItem>
+                      <SelectItem value="sales">Sales</SelectItem>
+                      <SelectItem value="hr">Human Resources</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <Button
                 className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
@@ -215,52 +237,4 @@ const InvitePageClient = ({ workspaceId }: { workspaceId?: string }) => {
   );
 };
 
-export default InvitePageClient;
-
-// InputField and SelectField components can be modularized for reuse
-const InputField = ({
-  label,
-  id,
-  value,
-  onChange,
-}: {
-  label: string;
-  id: string;
-  value: string;
-  onChange: (value: string) => void;
-}) => (
-  <div>
-    <Label htmlFor={id}>{label}</Label>
-    <Input
-      id={id}
-      placeholder={`Enter your ${label.toLowerCase()}`}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-    />
-  </div>
-);
-
-const SelectField = ({
-  label,
-  value,
-  onValueChange,
-}: {
-  label: string;
-  value: string;
-  onValueChange: (value: string) => void;
-}) => (
-  <div>
-    <Label>{label}</Label>
-    <Select onValueChange={onValueChange}>
-      <SelectTrigger>
-        <SelectValue placeholder={`Select your ${label.toLowerCase()}`} />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="engineering">Engineering</SelectItem>
-        <SelectItem value="marketing">Marketing</SelectItem>
-        <SelectItem value="sales">Sales</SelectItem>
-        <SelectItem value="hr">Human Resources</SelectItem>
-      </SelectContent>
-    </Select>
-  </div>
-);
+export default InvitePage;

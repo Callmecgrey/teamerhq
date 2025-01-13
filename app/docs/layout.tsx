@@ -7,7 +7,7 @@ import { MenuIcon } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { docsConfig } from "@/app/documentation/docsConfigs";
+import { docsConfig } from "@/app/docs/docsConfigs";
 
 interface DocsLayoutProps {
   children: React.ReactNode;

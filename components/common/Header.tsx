@@ -37,8 +37,8 @@ const resourceItems = [
     icon: <CircleHelp className="w-6 h-6" />,
   },
   {
-    title: "API Documentation",
-    href: "/docs/api",
+    title: "API Docs",
+    href: "/docs",
     description: "Integrate TeamerHQ into your workflow",
     icon: <BookOpen className="w-6 h-6" />,
   },

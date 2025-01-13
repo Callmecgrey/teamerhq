@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MessageSquare, X } from "lucide-react";
+import { Boxes, X } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -120,7 +120,7 @@ export default function SignUpPage() {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <Link href="/" className="inline-flex items-center space-x-2">
-            <MessageSquare className="h-8 w-8 text-primary" />
+            <Boxes className="h-8 w-8 text-primary" />
             <span className="text-2xl font-bold">TeamerHQ</span>
           </Link>
           <h2 className="mt-6 text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">

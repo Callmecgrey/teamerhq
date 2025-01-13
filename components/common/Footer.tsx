@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Boxes, Download, Globe, ActivitySquare } from "lucide-react";
+import { Boxes, DownloadCloud, Globe, ActivitySquare } from "lucide-react";
 import { useState, useEffect } from "react";
 import {
   Select,
@@ -29,10 +29,10 @@ const footerLinks: { [key: string]: FooterLink[] } = {
     { name: "Customer Stories", href: "/customers" },
   ],
   Resources: [
-    { name: "API Documentation", href: "/documentation" },
+    { name: "API Docs", href: "/docs" },
     { name: "Changelog", href: "/changelog" },
     { name: "Help Center", href: "/help" },
-    { name: "Download App", href: "/download", icon: <Download className="h-4 w-4" /> },
+    { name: "Download App", href: "/download", icon: <DownloadCloud className="h-4 w-4" /> },
   ],
   Legal: [
     { name: "Privacy", href: "/privacy" },
@@ -57,11 +57,11 @@ export function Footer() {
   const [systemStatus, setSystemStatus] = useState<"operational" | "issues">("operational");
   const [currentLanguage, setCurrentLanguage] = useState("en");
 
-  // Simulate periodic status check
+  // Periodic status check
   useEffect(() => {
     const checkStatus = async () => {
       try {
-        // In production, this would be a real API call to status.teamerhq.com
+        // API call to status.teamerhq.com
         const status = Math.random() > 0.1 ? "operational" : "issues";
         setSystemStatus(status);
       } catch (error) {

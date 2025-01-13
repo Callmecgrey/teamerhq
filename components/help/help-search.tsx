@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { DialogProps } from "@radix-ui/react-dialog";
-import { Search } from "lucide-react";
+import { Search, ArrowRight } from "lucide-react";
 import { Command, Command as CommandPrimitive } from "cmdk";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
@@ -115,10 +115,8 @@ export function HelpSearch({ ...props }: DialogProps) {
     command();
   }, []);
 
-  // Generate searchable items based on the sidebarItems
   const searchableItems = generateSearchableItems(sidebarItems);
 
-  // Filter items based on the search query
   const filteredItems = searchableItems.filter((item) => {
     const lowerCaseQuery = value.toLowerCase();
     return (
@@ -131,27 +129,34 @@ export function HelpSearch({ ...props }: DialogProps) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center w-full gap-2 px-3 py-2 text-sm text-gray-500 transition-colors duration-200 border rounded-lg dark:text-gray-400 border-gray-200/70 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800"
+        className="relative flex items-center w-full gap-3 px-4 py-2.5 text-left text-sm text-gray-500 transition-colors duration-200 border rounded-xl dark:text-gray-400 border-gray-200/70 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 group"
       >
-        <Search className="w-4 h-4" />
-        <span className="flex-1 text-left">Search docs</span>
-        <kbd className="hidden px-2 py-1 text-xs font-mono text-gray-500 bg-gray-100 rounded dark:bg-gray-800 dark:text-gray-400 sm:inline-block">
-          ⌘K
-        </kbd>
+        <Search className="w-4 h-4 text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400" />
+        <span className="flex-1 text-sm text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300">
+          Search ...
+        </span>
+        <div className="hidden sm:flex items-center gap-1">
+          <kbd className="hidden sm:inline-flex h-5 select-none items-center gap-1 rounded border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-1.5 font-mono text-[10px] font-medium text-gray-500 dark:text-gray-400">
+            ⌘
+          </kbd>
+          <kbd className="hidden sm:inline-flex h-5 select-none items-center gap-1 rounded border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-1.5 font-mono text-[10px] font-medium text-gray-500 dark:text-gray-400">
+            K
+          </kbd>
+        </div>
       </button>
       <Dialog open={open} onOpenChange={setOpen} {...props}>
-        <DialogContent className="gap-0 p-0 overflow-hidden">
+        <DialogContent className="gap-0 p-0 overflow-hidden shadow-2xl dark:shadow-2xl-dark sm:rounded-xl">
           <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-gray-500 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
             <div className="flex items-center border-b border-gray-200 dark:border-gray-800 px-3">
-              <Search className="w-4 h-4 mr-2 shrink-0 opacity-50" />
+              <Search className="w-4 h-4 mr-2 shrink-0 text-gray-500 dark:text-gray-400" />
               <CommandPrimitive.Input
                 value={value}
                 onValueChange={setValue}
-                className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 disabled:cursor-not-allowed disabled:opacity-50"
-                placeholder="Type to search..."
+                className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder="Search documentation..."
               />
             </div>
-            <CommandPrimitive.List className="max-h-[500px] overflow-y-auto overflow-x-hidden">
+            <CommandPrimitive.List className="max-h-[min(70vh,400px)] overflow-y-auto overflow-x-hidden">
               <CommandPrimitive.Empty className="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
                 No results found.
               </CommandPrimitive.Empty>
@@ -162,24 +167,27 @@ export function HelpSearch({ ...props }: DialogProps) {
                     onSelect={() => {
                       runCommand(() => router.push(group.href));
                     }}
-                    className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 aria-selected:bg-gray-100 dark:aria-selected:bg-gray-800 aria-selected:text-gray-900 dark:aria-selected:text-gray-100"
+                    className="relative flex cursor-pointer select-none items-center rounded-lg px-3 py-2.5 text-sm outline-none aria-selected:bg-gray-100 dark:aria-selected:bg-gray-800 aria-selected:text-gray-900 dark:aria-selected:text-gray-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 group"
                   >
-                    <div className="flex flex-col">
-                      <span>
-                        {group.title.split(new RegExp(`(${value})`, "gi")).map((part, index) => {
-                          return part.toLowerCase() === value.toLowerCase() ? (
-                            <span key={index} className="font-semibold text-blue-500 dark:text-blue-400">
-                              {part}
-                            </span>
-                          ) : (
-                            part
-                          );
-                        })}
-                      </span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">
+                          {group.title.split(new RegExp(`(${value})`, "gi")).map((part, index) => {
+                            return part.toLowerCase() === value.toLowerCase() ? (
+                              <span key={index} className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-900 dark:text-yellow-200">
+                                {part}
+                              </span>
+                            ) : (
+                              part
+                            );
+                          })}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
                         {group.category}
-                      </span>
+                      </p>
                     </div>
+                    <ArrowRight className="ml-2 h-4 w-4 text-gray-400 dark:text-gray-600 group-aria-selected:text-gray-800 dark:group-aria-selected:text-gray-200" />
                   </CommandPrimitive.Item>
                 </CommandPrimitive.Group>
               ))}

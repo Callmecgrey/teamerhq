@@ -1,5 +1,4 @@
 // components/chat/ChannelHeader.tsx
-// components/chat/ChannelHeader.tsx
 import { Button } from "@/components/ui/button";
 import { Phone, Video, Search, MoreVertical } from "lucide-react";
 import { Input } from "@/components/ui/input";

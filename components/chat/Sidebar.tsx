@@ -31,7 +31,6 @@ const teamsData = [
 export default function ChatSidebar({
   onUserClick,
   onChannelClick,
-  onAddChannelClick,
   onMeClick,
 }: {
   onUserClick: (user: any) => void;

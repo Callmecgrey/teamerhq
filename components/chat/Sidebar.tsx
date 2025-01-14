@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus, Hash, LogOut, Settings, Lock, Zap } from "lucide-react";
+import { Plus, Hash, LogOut, Settings, Lock, Zap, Users, UserPlus, Puzzle } from "lucide-react";
 import { Sidebar as UISidebar, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
 import { TeamSwitcher } from "@/components/switcher/team-switcher";
 import CreateChannelPopover from "@/components/switcher/CreateChannelPopover";
 import DirectMessagePopover from "@/components/switcher/DirectMessagePopover";
+import InviteTeamPopover from "../switcher/InviteTeamPopover";
 
 const teamsData = [
   {
@@ -42,6 +43,7 @@ export default function ChatSidebar({
   const router = useRouter();
   const [channelsOpen, setChannelsOpen] = useState(true);
   const [usersOpen, setUsersOpen] = useState(true);
+  const [integrationsOpen, setIntegrationsOpen] = useState(true);
   const [userRole, setUserRole] = useState<"owner" | "user" | null>(null);
   const [userLogo, setUserLogo] = useState<React.ElementType>(Plus);
   const [unreadMessages, setUnreadMessages] = useState<number>(3);
@@ -70,8 +72,15 @@ export default function ChatSidebar({
     { name: "Me", position: "Software Engineer", dept: "Engineering", status: "online" },
   ];
 
+  const mockIntegrations = [
+    { name: "GitHub", status: "connected", icon: Puzzle },
+    { name: "Slack", status: "connected", icon: Puzzle },
+    { name: "Jira", status: "connected", icon: Puzzle },
+  ];
+
   const toggleChannels = () => setChannelsOpen(!channelsOpen);
   const toggleUsers = () => setUsersOpen(!usersOpen);
+  const toggleIntegrations = () => setIntegrationsOpen(!integrationsOpen);
 
   const handleSettingsClick = () => {
     if (userRole === "owner") {
@@ -97,7 +106,7 @@ export default function ChatSidebar({
           <TeamSwitcher teams={teamsData} />
         </SidebarHeader>
 
-        {/* Channels and Direct Messages */}
+        {/* Channels, Direct Messages, and Integrations */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {/* Channels */}
           <div>
@@ -181,11 +190,65 @@ export default function ChatSidebar({
               </div>
             )}
           </div>
+
+          {/* Integrations */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 cursor-pointer hover:text-violet-600 dark:hover:text-violet-400 transition-colors" onClick={toggleIntegrations}>
+                Integrations
+              </span>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-4 w-4 hover:text-violet-600 dark:hover:text-violet-400"
+                onClick={() => router.push("/integrations")}
+              >
+                <Plus className="h-3 w-3" />
+              </Button>
+            </div>
+            {integrationsOpen && (
+              <div className="space-y-1">
+                {mockIntegrations.map((integration, index) => (
+                  <Button
+                    key={index}
+                    variant="ghost"
+                    className="w-full justify-start hover:bg-violet-100 dark:hover:bg-violet-900/20 text-gray-700 dark:text-gray-300"
+                    size="sm"
+                  >
+                    <integration.icon className="h-4 w-4 mr-2 text-violet-500 dark:text-violet-400" />
+                    {integration.name}
+                    <span className="ml-auto text-xs text-green-500">Connected</span>
+                  </Button>
+                ))}
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start hover:bg-violet-100 dark:hover:bg-violet-900/20 text-violet-600 dark:text-violet-400"
+                  size="sm"
+                  onClick={() => router.push("/integrations")}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add New
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Invite Team Button (Sticky) */}
+        <div className="sticky bottom-[144px] border-t border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm p-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-violet-600 dark:text-violet-400 hover:bg-violet-100 dark:hover:bg-violet-900/20"
+            onClick={() => setIsInviteTeamPopoverOpen(true)}
+          >
+            <UserPlus className="h-4 w-4 mr-2" />
+            Invite Team
+          </Button>
         </div>
 
         {/* Sidebar Footer with Upgrade, Settings and Logout */}
         <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm space-y-2">
-          {/* Upgrade Plan Button */}
           <Button 
             size="sm" 
             className="w-full justify-start bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all duration-200"

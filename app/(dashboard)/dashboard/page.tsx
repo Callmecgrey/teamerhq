@@ -15,6 +15,7 @@ import FilesSidebar from "@/components/chat/FilesSidebar";
 import CreateChannelPopover from "@/components/switcher/CreateChannelPopover";
 import UserPersonalHeader from "@/components/chat/UserPersonalHeader";
 import UserMessageList from "@/components/chat/UserMessageList";
+import DirectMessagePopover from "@/components/switcher/DirectMessagePopover";
 
 type Message = {
   id: number;
@@ -60,6 +61,7 @@ export default function DashboardPage() {
   );
 
   const [isCreateChannelPopoverOpen, setIsCreateChannelPopoverOpen] = useState(false);
+  const [isDirectMessagePopoverOpen, setisDirectMessagePopoverOpen] = useState(false);
 
   useEffect(() => {
     const query: Record<string, string> = {};
@@ -127,6 +129,7 @@ export default function DashboardPage() {
         onChannelClick={handleChannelSelect}
         onUserClick={handleUserSelect}
         onAddChannelClick={() => setIsCreateChannelPopoverOpen(true)}
+        onDirectMessageClick={() => setisDirectMessagePopoverOpen(true)}
         onMeClick={handleMeSelect} // Handle "Me" clicks
       />
 
@@ -248,6 +251,10 @@ export default function DashboardPage() {
       {/* Create Channel Popover */}
       {isCreateChannelPopoverOpen && (
         <CreateChannelPopover onClose={() => setIsCreateChannelPopoverOpen(false)} />
+      )}
+      {/* Direct Message Popover */}
+      {isDirectMessagePopoverOpen && (
+        <DirectMessagePopover onClose={() => setisDirectMessagePopoverOpen(false)} />
       )}
     </div>
   );

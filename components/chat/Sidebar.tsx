@@ -7,6 +7,7 @@ import { Plus, Hash, LogOut, Settings, Lock, Zap } from "lucide-react";
 import { Sidebar as UISidebar, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
 import { TeamSwitcher } from "@/components/switcher/team-switcher";
 import CreateChannelPopover from "@/components/switcher/CreateChannelPopover";
+import DirectMessagePopover from "@/components/switcher/DirectMessagePopover";
 
 const teamsData = [
   {
@@ -35,6 +36,7 @@ export default function ChatSidebar({
   onUserClick: (user: any) => void;
   onChannelClick: (channel: any) => void;
   onAddChannelClick: () => void;
+  onDirectMessageClick: () => void;
   onMeClick: () => void;
 }) {
   const router = useRouter();
@@ -46,6 +48,7 @@ export default function ChatSidebar({
   const [unreadChannel, setUnreadChannel] = useState<number>(205);
   const [drafting, setDrafting] = useState(true);
   const [isCreateChannelPopoverOpen, setIsCreateChannelPopoverOpen] = useState(false);
+  const [isDirectMessagePopoverOpen, setisDirectMessagePopoverOpen] = useState(false);
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -146,6 +149,7 @@ export default function ChatSidebar({
                 variant="ghost" 
                 size="icon" 
                 className="h-4 w-4 hover:text-violet-600 dark:hover:text-violet-400"
+                onClick={() => setisDirectMessagePopoverOpen(true)}
               >
                 <Plus className="h-3 w-3" />
               </Button>
@@ -216,6 +220,11 @@ export default function ChatSidebar({
         {/* Create Channel Popover */}
         {isCreateChannelPopoverOpen && (
           <CreateChannelPopover onClose={() => setIsCreateChannelPopoverOpen(false)} />
+        )}
+
+        {/* Direct Message Popover */}
+        {isDirectMessagePopoverOpen && (
+          <DirectMessagePopover onClose={() => setisDirectMessagePopoverOpen(false)} />
         )}
       </UISidebar>
     </SidebarProvider>

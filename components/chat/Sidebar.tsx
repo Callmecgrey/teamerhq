@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus, Hash, LogOut, Settings, Lock } from "lucide-react";
+import { Plus, Hash, LogOut, Settings, Lock, Zap } from "lucide-react";
 import { Sidebar as UISidebar, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
 import { TeamSwitcher } from "@/components/switcher/team-switcher";
 import CreateChannelPopover from "@/components/switcher/CreateChannelPopover";
@@ -29,6 +29,7 @@ const teamsData = [
 export default function ChatSidebar({
   onUserClick,
   onChannelClick,
+  onAddChannelClick,
   onMeClick,
 }: {
   onUserClick: (user: any) => void;
@@ -79,6 +80,10 @@ export default function ChatSidebar({
 
   const handleLogout = () => {
     router.push("/login");
+  };
+
+  const handleUpgradeClick = () => {
+    router.push("/pricing");
   };
 
   return (
@@ -174,8 +179,19 @@ export default function ChatSidebar({
           </div>
         </div>
 
-        {/* Sidebar Footer with Settings and Logout */}
+        {/* Sidebar Footer with Upgrade, Settings and Logout */}
         <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm space-y-2">
+          {/* Upgrade Plan Button */}
+          <Button 
+            size="sm" 
+            className="w-full justify-start bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all duration-200"
+            onClick={handleUpgradeClick}
+          >
+            <Zap className="h-4 w-4 mr-2" />
+            Upgrade Plan
+            <span className="ml-auto text-xs bg-white/20 px-2 py-0.5 rounded-full">PRO</span>
+          </Button>
+          
           <Button 
             variant="ghost" 
             size="sm" 
@@ -185,6 +201,7 @@ export default function ChatSidebar({
             <LogOut className="h-4 w-4 mr-2" />
             Logout
           </Button>
+          
           <Button
             variant="ghost"
             size="sm"
@@ -195,12 +212,12 @@ export default function ChatSidebar({
             <span className="ml-2">Settings</span>
           </Button>
         </div>
-      </UISidebar>
 
-      {/* Create Channel Popover */}
-      {isCreateChannelPopoverOpen && (
-        <CreateChannelPopover onClose={() => setIsCreateChannelPopoverOpen(false)} />
-      )}
+        {/* Create Channel Popover */}
+        {isCreateChannelPopoverOpen && (
+          <CreateChannelPopover onClose={() => setIsCreateChannelPopoverOpen(false)} />
+        )}
+      </UISidebar>
     </SidebarProvider>
   );
 }

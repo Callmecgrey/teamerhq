@@ -1,4 +1,3 @@
-// app/(dashboard)/dashboard/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -16,6 +15,7 @@ import CreateChannelPopover from "@/components/switcher/CreateChannelPopover";
 import UserPersonalHeader from "@/components/chat/UserPersonalHeader";
 import UserMessageList from "@/components/chat/UserMessageList";
 import DirectMessagePopover from "@/components/switcher/DirectMessagePopover";
+import UserPersonalSidebar from "@/components/chat/UserPersonalSidebar";
 
 type Message = {
   id: number;
@@ -56,7 +56,7 @@ export default function DashboardPage() {
 
   const [isViewingMe, setIsViewingMe] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
-  const [activeSidebar, setActiveSidebar] = useState<"user" | "channel" | "message" | "files">(
+  const [activeSidebar, setActiveSidebar] = useState<"user" | "channel" | "message" | "files" | "personal">(
     "files"
   );
 
@@ -110,6 +110,7 @@ export default function DashboardPage() {
 
   const openUserProfileSidebar = () => setActiveSidebar("user");
   const openChannelInfoSidebar = () => setActiveSidebar("channel");
+  const openPersonalSidebar = () => setActiveSidebar("personal");
 
   const closeSidebar = () => setActiveSidebar("files");
 
@@ -122,6 +123,14 @@ export default function DashboardPage() {
     setActiveSidebar("user");
   };
 
+  const currentUser = {
+    name: "John Doe",
+    position: "Software Engineer",
+    dept: "Engineering",
+    status: "online",
+    lastUpdated: new Date().toLocaleDateString()
+  };
+
   return (
     <div className="h-screen flex">
       {/* Sidebar */}
@@ -130,7 +139,7 @@ export default function DashboardPage() {
         onUserClick={handleUserSelect}
         onAddChannelClick={() => setIsCreateChannelPopoverOpen(true)}
         onDirectMessageClick={() => setisDirectMessagePopoverOpen(true)}
-        onMeClick={handleMeSelect} // Handle "Me" clicks
+        onMeClick={handleMeSelect}
       />
 
       {/* Main Content */}
@@ -138,8 +147,8 @@ export default function DashboardPage() {
         {isViewingMe ? (
           <>
             <UserPersonalHeader
-              user={{ name: "John Doe", position: "Software Engineer" }} // Example user details to replaced with api
-              onProfileClick={() => console.log("Profile clicked!")}
+              user={currentUser}
+              onProfileClick={openPersonalSidebar}
             />
             <UserMessageList />
             <MessageInput
@@ -245,6 +254,13 @@ export default function DashboardPage() {
       )}
       {activeSidebar === "user" && selectedUser && (
         <UserProfileSidebar user={selectedUser} onClose={closeSidebar} />
+      )}
+      {activeSidebar === "personal" && isViewingMe && (
+        <UserPersonalSidebar
+          user={currentUser}
+          onClose={closeSidebar}
+          onEdit={() => console.log("Edit profile clicked")}
+        />
       )}
       {activeSidebar === "files" && <FilesSidebar onClose={() => {}} />}
 

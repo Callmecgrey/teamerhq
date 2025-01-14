@@ -55,7 +55,7 @@ const Sidebar = ({ selectedTab, onSelectTab }: SidebarProps) => {
           variant="outline"
           size="sm"
           className="w-full justify-start"
-          onClick={() => window.location.href = "/dashboard"} // Update with your actual dashboard route
+          onClick={() => window.location.href = "/dashboard"}
         >
           <Grid className="h-4 w-4 mr-2" />
           Go to Workspace

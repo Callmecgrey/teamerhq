@@ -16,6 +16,7 @@ import UserPersonalHeader from "@/components/chat/UserPersonalHeader";
 import UserMessageList from "@/components/chat/UserMessageList";
 import DirectMessagePopover from "@/components/switcher/DirectMessagePopover";
 import UserPersonalSidebar from "@/components/chat/UserPersonalSidebar";
+import InviteTeamPopover from "@/components/switcher/InviteTeamPopover";
 
 type Message = {
   id: number;
@@ -62,6 +63,7 @@ export default function DashboardPage() {
 
   const [isCreateChannelPopoverOpen, setIsCreateChannelPopoverOpen] = useState(false);
   const [isDirectMessagePopoverOpen, setisDirectMessagePopoverOpen] = useState(false);
+  const [isInviteTeamPopoverOpen, setIsInviteTeamPopoverOpen] = useState(false);
 
   useEffect(() => {
     const query: Record<string, string> = {};
@@ -139,6 +141,7 @@ export default function DashboardPage() {
         onUserClick={handleUserSelect}
         onAddChannelClick={() => setIsCreateChannelPopoverOpen(true)}
         onDirectMessageClick={() => setisDirectMessagePopoverOpen(true)}
+        onInviteTeamClick={() => setIsInviteTeamPopoverOpen(true)}
         onMeClick={handleMeSelect}
       />
 
@@ -271,6 +274,10 @@ export default function DashboardPage() {
       {/* Direct Message Popover */}
       {isDirectMessagePopoverOpen && (
         <DirectMessagePopover onClose={() => setisDirectMessagePopoverOpen(false)} />
+      )}
+      {/* Invite Team Popover */}
+      {isInviteTeamPopoverOpen && (
+        <InviteTeamPopover onClose={() => setIsInviteTeamPopoverOpen(false)} />
       )}
     </div>
   );

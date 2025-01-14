@@ -38,6 +38,7 @@ export default function ChatSidebar({
   onChannelClick: (channel: any) => void;
   onAddChannelClick: () => void;
   onDirectMessageClick: () => void;
+  onInviteTeamClick: () => void
   onMeClick: () => void;
 }) {
   const router = useRouter();
@@ -51,6 +52,7 @@ export default function ChatSidebar({
   const [drafting, setDrafting] = useState(true);
   const [isCreateChannelPopoverOpen, setIsCreateChannelPopoverOpen] = useState(false);
   const [isDirectMessagePopoverOpen, setisDirectMessagePopoverOpen] = useState(false);
+  const [isInviteTeamPopoverOpen, setIsInviteTeamPopoverOpen] = useState(false);
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -288,6 +290,11 @@ export default function ChatSidebar({
         {/* Direct Message Popover */}
         {isDirectMessagePopoverOpen && (
           <DirectMessagePopover onClose={() => setisDirectMessagePopoverOpen(false)} />
+        )}
+
+        {/* Invite Team Popover */}
+        {isInviteTeamPopoverOpen && (
+          <InviteTeamPopover onClose={() => setIsInviteTeamPopoverOpen(false)} />
         )}
       </UISidebar>
     </SidebarProvider>

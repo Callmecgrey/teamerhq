@@ -17,6 +17,8 @@ import UserMessageList from "@/components/chat/UserMessageList";
 import DirectMessagePopover from "@/components/switcher/DirectMessagePopover";
 import UserPersonalSidebar from "@/components/chat/UserPersonalSidebar";
 import InviteTeamPopover from "@/components/switcher/InviteTeamPopover";
+import PreviewFile from "@/components/chat/PreviewFile";
+import FileChangeDialog from "@/components/switcher/FileChangeDialog";
 
 type Message = {
   id: number;
@@ -57,9 +59,10 @@ export default function DashboardPage() {
 
   const [isViewingMe, setIsViewingMe] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
-  const [activeSidebar, setActiveSidebar] = useState<"user" | "channel" | "message" | "files" | "personal">(
-    "files"
-  );
+  const [activeSidebar, setActiveSidebar] = useState<"user" | "channel" | "message" | "files" | "personal">("files");
+  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [showFileChangeDialog, setShowFileChangeDialog] = useState(false);
+  const [nextFile, setNextFile] = useState<any>(null);
 
   const [isCreateChannelPopoverOpen, setIsCreateChannelPopoverOpen] = useState(false);
   const [isDirectMessagePopoverOpen, setisDirectMessagePopoverOpen] = useState(false);
@@ -79,7 +82,39 @@ export default function DashboardPage() {
     router.replace(`?${search}`);
   }, [selectedChannel, selectedUser, selectedMessage, activeSidebar]);
 
+  const handleFileSelect = (file: any) => {
+    const dontShowDialog = localStorage.getItem('dontShowFileChangeDialog') === 'true';
+
+    if (selectedFile) {
+      if (dontShowDialog) {
+        setSelectedFile(file);
+      } else {
+        setNextFile(file);
+        setShowFileChangeDialog(true);
+      }
+    } else {
+      setSelectedFile(file);
+      setSelectedChannel(null);
+      setSelectedUser(null);
+      setIsViewingMe(false);
+    }
+  };
+
+  const handleFileChange = () => {
+    setSelectedFile(nextFile);
+    setShowFileChangeDialog(false);
+    setNextFile(null);
+  };
+
+  const handleClosePreview = () => {
+    setSelectedFile(null);
+  };
+
   const handleChannelSelect = (channel: any) => {
+    if (selectedFile) {
+      setShowFileChangeDialog(true);
+      return;
+    }
     const wasInMessageSidebar = activeSidebar === "message";
     setSelectedChannel(channel);
     setSelectedUser(null);
@@ -89,6 +124,10 @@ export default function DashboardPage() {
   };
 
   const handleUserSelect = (user: any) => {
+    if (selectedFile) {
+      setShowFileChangeDialog(true);
+      return;
+    }
     const wasInMessageSidebar = activeSidebar === "message";
     setSelectedUser(user);
     setSelectedChannel(null);
@@ -98,6 +137,10 @@ export default function DashboardPage() {
   };
 
   const handleMeSelect = () => {
+    if (selectedFile) {
+      setShowFileChangeDialog(true);
+      return;
+    }
     setIsViewingMe(true);
     setSelectedChannel(null);
     setSelectedUser(null);
@@ -147,7 +190,9 @@ export default function DashboardPage() {
 
       {/* Main Content */}
       <div className={`flex-1 flex flex-col ${activeSidebar !== "files" ? "max-w-[75%]" : ""}`}>
-        {isViewingMe ? (
+        {selectedFile ? (
+          <PreviewFile file={selectedFile} onClose={handleClosePreview} />
+        ) : isViewingMe ? (
           <>
             <UserPersonalHeader
               user={currentUser}
@@ -265,7 +310,9 @@ export default function DashboardPage() {
           onEdit={() => console.log("Edit profile clicked")}
         />
       )}
-      {activeSidebar === "files" && <FilesSidebar onClose={() => {}} />}
+      {activeSidebar === "files" && (
+        <FilesSidebar onClose={() => {}} onFileSelect={handleFileSelect} />
+      )}
 
       {/* Create Channel Popover */}
       {isCreateChannelPopoverOpen && (
@@ -279,6 +326,17 @@ export default function DashboardPage() {
       {isInviteTeamPopoverOpen && (
         <InviteTeamPopover onClose={() => setIsInviteTeamPopoverOpen(false)} />
       )}
+
+      {/* File Change Dialog */}
+      <FileChangeDialog
+      open={showFileChangeDialog}
+      onOpenChange={setShowFileChangeDialog}
+      onConfirm={handleFileChange}
+      onCancel={() => {
+      setShowFileChangeDialog(false);
+      setNextFile(null);
+      }}
+      />
     </div>
   );
 }
